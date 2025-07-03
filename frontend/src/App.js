@@ -172,7 +172,6 @@ const handleEditExchangeRate = async () => {
             className="edit-btn"
             onClick={handleEditExchangeRate}
             aria-label="Редактировать курс"
-            style={{ marginLeft: 8 }}
           >
             <BiEditAlt />
           </button>
