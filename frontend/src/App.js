@@ -21,7 +21,6 @@ function App() {
   useEffect(() => {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
     fetchExpenses();
-  }, []);
 
     fetch('/api/currency-rate')
       .then(res => res.json())
