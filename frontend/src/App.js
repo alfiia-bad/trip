@@ -25,7 +25,15 @@ function App() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const isFormValid = () =>
+    Object.values(form).every(field => field.trim() !== '');
+
   const handleSubmit = async () => {
+    if (!isFormValid()) {
+      alert('Пожалуйста, заполните все поля!');
+      return;
+    }
+
     await fetch('/api/expenses', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -37,7 +45,9 @@ function App() {
 
   return (
     <div>
-      <h1>Гамарджоба, тут наши расходы на поездку друг ♥</h1>
+      <div className="header">
+        <h1>Гамарджоба, тут наши расходы на поездку друг ♥</h1>
+      </div>
       <div>
         <input name="who" placeholder="Кто платил" value={form.who} onChange={handleChange} />
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
