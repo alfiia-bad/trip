@@ -6,6 +6,7 @@ import SettingsModal from './components/SettingsModal'; // ✅ импортир�
 
 function App() {
   const [expenses, setExpenses] = useState([]);
+  const [currencyRate, setCurrencyRate] = useState(null);
   const [form, setForm] = useState({
     who: '',
     what: '',
@@ -20,6 +21,16 @@ function App() {
   useEffect(() => {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
     fetchExpenses();
+  }, []);
+
+    fetch('/api/currency-rate')
+      .then(res => res.json())
+      .then(data => {
+        if (data.rate) {
+          setCurrencyRate(data.rate);
+        }
+      })
+      .catch(console.error);
   }, []);
 
   const fetchExpenses = async () => {
@@ -97,6 +108,10 @@ function App() {
       </table>
 
       <button className="settings-btn" onClick={() => setShowSettings(true)}>Настройки</button>
+
+      {currencyRate !== null && (
+        <p>В 1 лари {currencyRate.toFixed(2)} рублей</p>
+      )}
 
       {showSettings && (
         <SettingsModal onClose={closeSettings} />
