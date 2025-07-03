@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaEdit, FaTrash } from 'react-icons/fa';  // импорт иконок
 import '../index.css';
 
 export default function SettingsModal({ onClose }) {
@@ -12,29 +13,29 @@ export default function SettingsModal({ onClose }) {
     fetchCurrencies();
   }, []);
 
-const fetchParticipants = async () => {
-  try {
-    const res = await fetch('/api/participants');
-    if (!res.ok) throw new Error(`Ошибка загрузки участников: ${res.status}`);
-    const data = await res.json();
-    setParticipants(data);
-  } catch (err) {
-    console.error('Ошибка при получении участников:', err);
-    setParticipants([]); // безопасное значение по умолчанию
-  }
-};
+  const fetchParticipants = async () => {
+    try {
+      const res = await fetch('/api/participants');
+      if (!res.ok) throw new Error(`Ошибка загрузки участников: ${res.status}`);
+      const data = await res.json();
+      setParticipants(data);
+    } catch (err) {
+      console.error('Ошибка при получении участников:', err);
+      setParticipants([]);
+    }
+  };
 
-const fetchCurrencies = async () => {
-  try {
-    const res = await fetch('/api/currencies');
-    if (!res.ok) throw new Error(`Ошибка загрузки валют: ${res.status}`);
-    const data = await res.json();
-    setCurrencies(data);
-  } catch (err) {
-    console.error('Ошибка при получении валют:', err);
-    setCurrencies([]);
-  }
-};
+  const fetchCurrencies = async () => {
+    try {
+      const res = await fetch('/api/currencies');
+      if (!res.ok) throw new Error(`Ошибка загрузки валют: ${res.status}`);
+      const data = await res.json();
+      setCurrencies(data);
+    } catch (err) {
+      console.error('Ошибка при получении валют:', err);
+      setCurrencies([]);
+    }
+  };
 
   const deleteParticipant = async (name) => {
     await fetch(`/api/participants/${name}`, { method: 'DELETE' });
@@ -88,8 +89,8 @@ const fetchCurrencies = async () => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal">
-        <div className="modal-header">
+      <div className="modal" style={{ paddingLeft: 8, paddingRight: 8 }}>
+        <div className="modal-header" style={{ paddingLeft: 8, paddingRight: 8 }}>
           <h3>Настройки</h3>
           <button onClick={onClose} className="close-btn">&times;</button>
         </div>
@@ -109,8 +110,20 @@ const fetchCurrencies = async () => {
               ) : (
                 <>
                   <span>{p}</span>
-                  <button onClick={() => editParticipant(p)}>редактировать</button>
-                  <button onClick={() => deleteParticipant(p)}>удалить</button>
+                  <button 
+                    onClick={() => editParticipant(p)} 
+                    style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
+                    aria-label={`Редактировать участника ${p}`}
+                  >
+                    <FaEdit />
+                  </button>
+                  <button 
+                    onClick={() => deleteParticipant(p)} 
+                    style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'red' }}
+                    aria-label={`Удалить участника ${p}`}
+                  >
+                    <FaTrash />
+                  </button>
                 </>
               )}
             </div>
@@ -123,7 +136,13 @@ const fetchCurrencies = async () => {
           {currencies.map((c, idx) => (
             <div key={idx} className="settings-row">
               <span>{c}</span>
-              <button onClick={() => deleteCurrency(c)}>удалить</button>
+              <button 
+                onClick={() => deleteCurrency(c)} 
+                style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'red' }}
+                aria-label={`Удалить валюту ${c}`}
+              >
+                <FaTrash />
+              </button>
             </div>
           ))}
           <button onClick={addCurrency}>добавить валюту</button>
