@@ -142,7 +142,7 @@ function App() {
         </table>
       </div>
 
-      <button className="settings-btn" onClick={() => setShowSettings(true)}>Настройки</button>
+      <button className="settings-btn" onClick={openSettings}>Настройки</button>
 
       {currencyRate !== null && (
         <div style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}>
@@ -158,8 +158,13 @@ function App() {
         </div>
       )}
 
-      {showSettings && (
-        <SettingsModal onClose={closeSettings} />
+      {showSettings && participants && currencies && (
+        <SettingsModal
+          onClose={closeSettings}
+          participants={participants}
+          currencies={currencies}
+          refreshParticipants={openSettings} // Можно использовать при добавлении новых
+        />
       )}
     </div>
   );
