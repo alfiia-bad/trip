@@ -199,7 +199,15 @@ tr:last-child td {
   margin-left: auto;
 }
 
+.exchange-rate {
+  margin: 24px 8px 0 8px;
+  font-size: 1.5rem;
+  color: white;
+  line-height: 1.2;
+}
+
 .edit-btn {
+  margin: 24px 8px 0 8px;
   background-color: transparent;
   border: none;
   cursor: pointer;
