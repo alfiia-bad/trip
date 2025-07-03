@@ -145,7 +145,7 @@ export default function SettingsModal({ onClose }) {
               </button>
             </div>
           ))}
-          <button onClick={addCurrency}>добавить валюту</button>
+          <button onClick={addCurrency}>Добавить валюту</button>
         </div>
 
         <div className="modal-actions">
