@@ -181,6 +181,14 @@ tr:last-child td {
   display: block;
 }
 
+.icon-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
 .edit-btn {
   background-color: transparent;
   border: none;
