@@ -37,7 +37,7 @@ function App() {
 
   return (
     <div>
-      <h1>Гамарджоба, тут наши расходы на поездку друг <3</h1>
+      <h1>Гамарджоба, тут наши расходы на поездку друг ♥</h1>
       <div>
         <input name="who" placeholder="Кто платил" value={form.who} onChange={handleChange} />
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
