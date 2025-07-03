@@ -53,7 +53,7 @@ const handleEditExchangeRate = async () => {
 
     try {
       const response = await fetch('/api/currency-rate', {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
