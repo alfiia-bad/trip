@@ -1,4 +1,3 @@
-// frontend/src/App.js
 import React, { useState, useEffect } from 'react';
 import mountainImage from './assets/montain2.jpg';
 import './index.css';
@@ -18,6 +17,9 @@ function App() {
   });
 
   const [showSettings, setShowSettings] = useState(false);
+  const [participants, setParticipants] = useState(null);
+  const [currencies, setCurrencies] = useState(null);
+  const [loadingSettings, setLoadingSettings] = useState(false);
 
   useEffect(() => {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
@@ -67,6 +69,30 @@ function App() {
     setForm({ who: '', what: '', amount: '', currency: '', date: '', forWhom: '' });
     fetchExpenses();
   };
+
+  const openSettings = async () => {
+    setLoadingSettings(true);
+    try {
+      // Загрузка участников
+      const participantsRes = await fetch('/api/participants');
+      if (!participantsRes.ok) throw new Error('Ошибка загрузки участников');
+      const participantsData = await participantsRes.json();
+
+      // Загрузка валют
+      const currenciesRes = await fetch('/api/currencies');
+      if (!currenciesRes.ok) throw new Error('Ошибка загрузки валют');
+      const currenciesData = await currenciesRes.json();
+
+      setParticipants(participantsData);
+      setCurrencies(currenciesData);
+      setShowSettings(true);
+    } catch (error) {
+      console.error(error);
+      alert('Ошибка загрузки данных настроек');
+    } finally {
+      setLoadingSettings(false);
+    }
+  };  
 
   const closeSettings = () => {
     setShowSettings(false);
