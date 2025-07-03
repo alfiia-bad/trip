@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import mountainImage from './assets/montain2.jpg';
 import './index.css';
-import SettingsModal from './components/SettingsModal'; // ✅ импортируем модалку
+import SettingsModal from './components/SettingsModal'; 
+import { BiEditAlt } from "react-icons/bi";
 
 function App() {
   const [expenses, setExpenses] = useState([]);
