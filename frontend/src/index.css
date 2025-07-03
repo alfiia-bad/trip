@@ -40,13 +40,22 @@ body {
 
 input {
   margin: 0.5rem;
-  padding: 0.5rem;
-  border: none;
-  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;      
+  border-radius: 8px;          
   font-size: 16px;
   width: 300px;
   max-width: none;
   display: block;
+  outline: none;               
+  box-shadow: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus {
+  border-color: #007bff;       
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+  outline: none;
 }
 
 button {
