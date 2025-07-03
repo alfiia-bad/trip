@@ -65,7 +65,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="app-container">
       <div className="header">
         <h1 className="header-title">Гамарджоба, тут наши расходы на поездку, друг ♥</h1>
       </div>
