@@ -1,19 +1,32 @@
-// frontend/src/components/SettingsModal.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../index.css';
 
-export default function SettingsModal({
-  participants,
-  setParticipants,
-  currencies,
-  setCurrencies,
-  onClose
-}) {
+export default function SettingsModal({ onClose }) {
+  const [participants, setParticipants] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
   const [editingName, setEditingName] = useState(null);
   const [editedName, setEditedName] = useState('');
 
-  const deleteParticipant = (name) => {
-    setParticipants(participants.filter(p => p !== name));
+  useEffect(() => {
+    fetchParticipants();
+    fetchCurrencies();
+  }, []);
+
+  const fetchParticipants = async () => {
+    const res = await fetch('/api/participants');
+    const data = await res.json();
+    setParticipants(data);
+  };
+
+  const fetchCurrencies = async () => {
+    const res = await fetch('/api/currencies');
+    const data = await res.json();
+    setCurrencies(data);
+  };
+
+  const deleteParticipant = async (name) => {
+    await fetch(`/api/participants/${name}`, { method: 'DELETE' });
+    fetchParticipants();
   };
 
   const editParticipant = (name) => {
@@ -21,27 +34,43 @@ export default function SettingsModal({
     setEditedName(name);
   };
 
-  const saveParticipantEdit = () => {
-    setParticipants(participants.map(p => (p === editingName ? editedName : p)));
+  const saveParticipantEdit = async () => {
+    await fetch(`/api/participants/${editingName}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: editedName })
+    });
     setEditingName(null);
     setEditedName('');
+    fetchParticipants();
   };
 
-  const addParticipant = () => {
+  const addParticipant = async () => {
     const name = prompt('Введите имя нового участника');
-    if (name && !participants.includes(name)) {
-      setParticipants([...participants, name]);
+    if (name) {
+      await fetch('/api/participants', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      fetchParticipants();
     }
   };
 
-  const deleteCurrency = (cur) => {
-    setCurrencies(currencies.filter(c => c !== cur));
+  const deleteCurrency = async (currency) => {
+    await fetch(`/api/currencies/${currency}`, { method: 'DELETE' });
+    fetchCurrencies();
   };
 
-  const addCurrency = () => {
-    const cur = prompt('Введите название валюты');
-    if (cur && !currencies.includes(cur)) {
-      setCurrencies([...currencies, cur]);
+  const addCurrency = async () => {
+    const name = prompt('Введите название валюты');
+    if (name) {
+      await fetch('/api/currencies', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+      fetchCurrencies();
     }
   };
 
@@ -89,8 +118,7 @@ export default function SettingsModal({
         </div>
 
         <div className="modal-actions">
-          <button onClick={onClose}>Отмена</button>
-          <button onClick={onClose}>Сохранить</button>
+          <button onClick={onClose}>Закрыть</button>
         </div>
       </div>
     </div>
