@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import mountainImage from './assets/montain2.jpg';
 import './index.css';
+import SettingsModal from './components/SettingsModal'; // ✅ импортируем модалку
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -49,44 +50,8 @@ function App() {
     fetchExpenses();
   };
 
-  // --- Settings modal logic ---
-  const deleteParticipant = (name) => {
-    setParticipants(participants.filter(p => p !== name));
-  };
-
-  const editParticipant = (name) => {
-    setEditingName(name);
-    setEditedName(name);
-  };
-
-  const saveParticipantEdit = () => {
-    setParticipants(participants.map(p => p === editingName ? editedName : p));
-    setEditingName(null);
-    setEditedName('');
-  };
-
-  const addParticipant = () => {
-    const name = prompt('Введите имя нового участника');
-    if (name && !participants.includes(name)) {
-      setParticipants([...participants, name]);
-    }
-  };
-
-  const deleteCurrency = (cur) => {
-    setCurrencies(currencies.filter(c => c !== cur));
-  };
-
-  const addCurrency = () => {
-    const cur = prompt('Введите название валюты');
-    if (cur && !currencies.includes(cur)) {
-      setCurrencies([...currencies, cur]);
-    }
-  };
-
   const closeSettings = () => {
     setShowSettings(false);
-    setEditingName(null);
-    setEditedName('');
   };
 
   return (
@@ -134,54 +99,7 @@ function App() {
       <button className="settings-btn" onClick={() => setShowSettings(true)}>Настройки</button>
 
       {showSettings && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <div className="modal-header">
-              <h3>Настройки</h3>
-              <button onClick={closeSettings} className="close-btn">&times;</button>
-            </div>
-
-            <div>
-              <h4>Участники:</h4>
-              {participants.map((p, idx) => (
-                <div key={idx} className="settings-row">
-                  {editingName === p ? (
-                    <>
-                      <input
-                        value={editedName}
-                        onChange={(e) => setEditedName(e.target.value)}
-                      />
-                      <button onClick={saveParticipantEdit}>Сохранить</button>
-                    </>
-                  ) : (
-                    <>
-                      <span>{p}</span>
-                      <button onClick={() => editParticipant(p)}>редактировать</button>
-                      <button onClick={() => deleteParticipant(p)}>удалить</button>
-                    </>
-                  )}
-                </div>
-              ))}
-              <button onClick={addParticipant}>Добавить нового участника</button>
-            </div>
-
-            <div style={{ marginTop: '1rem' }}>
-              <h4>Валюты:</h4>
-              {currencies.map((c, idx) => (
-                <div key={idx} className="settings-row">
-                  <span>{c}</span>
-                  <button onClick={() => deleteCurrency(c)}>удалить</button>
-                </div>
-              ))}
-              <button onClick={addCurrency}>добавить валюту</button>
-            </div>
-
-            <div className="modal-actions">
-              <button onClick={closeSettings}>Отмена</button>
-              <button onClick={closeSettings}>Сохранить</button>
-            </div>
-          </div>
-        </div>
+        <SettingsModal onClose={closeSettings} />
       )}
     </div>
   );
