@@ -45,12 +45,35 @@ function App() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleEditExchangeRate = () => {
-    const newRate = prompt('Введите новый курс лари к рублю', currencyRate);
-    if (newRate && !isNaN(newRate)) {
-      setCurrencyRate(parseFloat(newRate));
+const handleEditExchangeRate = async () => {
+  const newRate = prompt('Введите новый курс лари к рублю', currencyRate);
+  if (newRate && !isNaN(newRate)) {
+    const parsedRate = parseFloat(newRate);
+    setCurrencyRate(parsedRate);
+
+    try {
+      const response = await fetch('/api/currency-rate', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from_currency: 'GEL',
+          to_currency: 'RUB',
+          rate: parsedRate
+        })
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        alert('Ошибка при сохранении курса: ' + err.detail);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Ошибка при сохранении курса');
     }
-  };
+  }
+};
 
   const isFormValid = () =>
     Object.values(form).every(field => field.trim() !== '');
