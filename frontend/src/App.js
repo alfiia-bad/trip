@@ -164,9 +164,7 @@ const handleEditExchangeRate = async () => {
           </tbody>
         </table>
       </div>
-
-      <button className="settings-btn" onClick={openSettings}>Настройки</button>
-
+      
       {currencyRate !== null && (
         <div style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}>
           <h2 className="exchange-rate">В 1 лари {currencyRate.toFixed(2)} рублей</h2>
@@ -180,6 +178,8 @@ const handleEditExchangeRate = async () => {
           </button>
         </div>
       )}
+
+      <button className="settings-btn" onClick={openSettings}>Настройки</button>
 
       {showSettings && participants && currencies && (
         <SettingsModal
