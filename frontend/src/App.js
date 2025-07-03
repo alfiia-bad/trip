@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import mountain2Image from './assets/montain2.jpg';
+import './index.css';
+import SettingsModal from './components/SettingsModal';
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -12,19 +14,23 @@ function App() {
     forWhom: ''
   });
 
+  const [showSettings, setShowSettings] = useState(false);
+  const [participants, setParticipants] = useState(['Альфия', 'Ляйсан', 'Маша']);
+  const [currencies, setCurrencies] = useState(['Рубли', 'Лари']);
+
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--background-image', `url(${mountain2Image})`);
+  }, []);
+
   const fetchExpenses = async () => {
     const res = await fetch('/api/expenses');
     const data = await res.json();
     setExpenses(data);
   };
-
-  useEffect(() => {
-    fetchExpenses();
-  }, []);
-  
-  useEffect(() => {
-   document.documentElement.style.setProperty('--background-image', `url(${mountain2Image})`);
-  }, []);
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,16 +50,25 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
     });
-    setForm({ who: '', what: '', amount: '', currency: '', date: '', forWhom: '' });
+
+    setForm({
+      who: '',
+      what: '',
+      amount: '',
+      currency: '',
+      date: '',
+      forWhom: ''
+    });
     fetchExpenses();
   };
 
   return (
-    <div>
+    <div className="app-container">
       <div className="header">
-        <h1>Гамарджоба, тут наши расходы на поездку, друг ♥</h1>
+        <h1 className="header-title">Гамарджоба, тут наши расходы на поездку, друг ♥</h1>
       </div>
-      <div>
+
+      <div className="form">
         <input name="who" placeholder="Кто платил" value={form.who} onChange={handleChange} />
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
         <input name="amount" placeholder="Сколько" value={form.amount} onChange={handleChange} />
@@ -64,7 +79,7 @@ function App() {
       </div>
 
       <h2>Таблица расходов</h2>
-      <table border="1" cellPadding="5">
+      <table className="expense-table">
         <thead>
           <tr>
             <th>Кто платил</th>
@@ -88,8 +103,11 @@ function App() {
           ))}
         </tbody>
       </table>
-    </div>
-  );
-}
 
-export default App;
+      <button className="settings-btn" onClick={() => setShowSettings(true)}>Настройки</button>
+
+      {showSettings && (
+        <SettingsModal
+          participants={participants}
+          setParticipants={setParticipants}
+          curren
