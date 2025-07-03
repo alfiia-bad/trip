@@ -1,7 +1,7 @@
+// frontend/src/App.js
 import React, { useState, useEffect } from 'react';
-import mountain2Image from './assets/montain2.jpg';
+import mountainImage from './assets/montain2.jpg';
 import './index.css';
-import SettingsModal from './components/SettingsModal';
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -17,13 +17,12 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [participants, setParticipants] = useState(['Альфия', 'Ляйсан', 'Маша']);
   const [currencies, setCurrencies] = useState(['Рубли', 'Лари']);
+  const [editingName, setEditingName] = useState(null);
+  const [editedName, setEditedName] = useState('');
 
   useEffect(() => {
+    document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
     fetchExpenses();
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.style.setProperty('--background-image', `url(${mountain2Image})`);
   }, []);
 
   const fetchExpenses = async () => {
@@ -50,25 +49,57 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
     });
-
-    setForm({
-      who: '',
-      what: '',
-      amount: '',
-      currency: '',
-      date: '',
-      forWhom: ''
-    });
+    setForm({ who: '', what: '', amount: '', currency: '', date: '', forWhom: '' });
     fetchExpenses();
   };
 
+  // --- Settings modal logic ---
+  const deleteParticipant = (name) => {
+    setParticipants(participants.filter(p => p !== name));
+  };
+
+  const editParticipant = (name) => {
+    setEditingName(name);
+    setEditedName(name);
+  };
+
+  const saveParticipantEdit = () => {
+    setParticipants(participants.map(p => p === editingName ? editedName : p));
+    setEditingName(null);
+    setEditedName('');
+  };
+
+  const addParticipant = () => {
+    const name = prompt('Введите имя нового участника');
+    if (name && !participants.includes(name)) {
+      setParticipants([...participants, name]);
+    }
+  };
+
+  const deleteCurrency = (cur) => {
+    setCurrencies(currencies.filter(c => c !== cur));
+  };
+
+  const addCurrency = () => {
+    const cur = prompt('Введите название валюты');
+    if (cur && !currencies.includes(cur)) {
+      setCurrencies([...currencies, cur]);
+    }
+  };
+
+  const closeSettings = () => {
+    setShowSettings(false);
+    setEditingName(null);
+    setEditedName('');
+  };
+
   return (
-    <div className="app-container">
+    <div>
       <div className="header">
-        <h1 className="header-title">Гамарджоба, тут наши расходы на поездку, друг ♥</h1>
+        <h1 className="header-title">Гамарджоба, тут наши расходы на поездку друг ♥</h1>
       </div>
 
-      <div className="form">
+      <div>
         <input name="who" placeholder="Кто платил" value={form.who} onChange={handleChange} />
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
         <input name="amount" placeholder="Сколько" value={form.amount} onChange={handleChange} />
@@ -107,7 +138,57 @@ function App() {
       <button className="settings-btn" onClick={() => setShowSettings(true)}>Настройки</button>
 
       {showSettings && (
-        <SettingsModal
-          participants={participants}
-          setParticipants={setParticipants}
-          curren
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h3>Настройки</h3>
+              <button onClick={closeSettings} className="close-btn">&times;</button>
+            </div>
+
+            <div>
+              <h4>Участники:</h4>
+              {participants.map((p, idx) => (
+                <div key={idx} className="settings-row">
+                  {editingName === p ? (
+                    <>
+                      <input
+                        value={editedName}
+                        onChange={(e) => setEditedName(e.target.value)}
+                      />
+                      <button onClick={saveParticipantEdit}>Сохранить</button>
+                    </>
+                  ) : (
+                    <>
+                      <span>{p}</span>
+                      <button onClick={() => editParticipant(p)}>редактировать</button>
+                      <button onClick={() => deleteParticipant(p)}>удалить</button>
+                    </>
+                  )}
+                </div>
+              ))}
+              <button onClick={addParticipant}>Добавить нового участника</button>
+            </div>
+
+            <div style={{ marginTop: '1rem' }}>
+              <h4>Валюты:</h4>
+              {currencies.map((c, idx) => (
+                <div key={idx} className="settings-row">
+                  <span>{c}</span>
+                  <button onClick={() => deleteCurrency(c)}>удалить</button>
+                </div>
+              ))}
+              <button onClick={addCurrency}>добавить валюту</button>
+            </div>
+
+            <div className="modal-actions">
+              <button onClick={closeSettings}>Отмена</button>
+              <button onClick={closeSettings}>Сохранить</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
