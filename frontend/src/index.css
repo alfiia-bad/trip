@@ -189,13 +189,13 @@ tr:last-child td {
   border: none;
   cursor: pointer;
   font-size: 1.2rem;
-  color: #d9534f; /* красный */
+  color: #b30000; 
   padding: 4px 8px;
   border-radius: 6px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .delete-btn:hover {
-  background-color: #f8d7da; /* светло-красный фон при наведении */
-  color: #a94442; /* более тёмный красный */
+  background-color: #fbeaea; 
+  color: #800000; 
 }
