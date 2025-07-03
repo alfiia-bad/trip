@@ -21,7 +21,6 @@ body {
 .header {
   padding: 2rem 1rem; /* ← добавили горизонтальные отступы */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  margin-bottom: 2rem;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
