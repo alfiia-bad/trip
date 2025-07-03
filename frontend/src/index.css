@@ -79,6 +79,11 @@ table {
   overflow: hidden;
 }
 
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* плавный скролл на iOS */
+}
+
 .app-container {
   padding: 0 8px;
 }
