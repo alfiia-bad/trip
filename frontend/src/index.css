@@ -79,6 +79,10 @@ table {
   overflow: hidden;
 }
 
+.app-container {
+  padding: 0 8px;
+}
+
 th, td {
   padding: 10px;
   border-bottom: 1px solid #ccc;
