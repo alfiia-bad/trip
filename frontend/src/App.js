@@ -15,10 +15,6 @@ function App() {
   });
 
   const [showSettings, setShowSettings] = useState(false);
-  const [participants, setParticipants] = useState(['Альфия', 'Ляйсан', 'Маша']);
-  const [currencies, setCurrencies] = useState(['Рубли', 'Лари']);
-  const [editingName, setEditingName] = useState(null);
-  const [editedName, setEditedName] = useState('');
 
   useEffect(() => {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
