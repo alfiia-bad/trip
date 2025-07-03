@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import mountainImage from './assets/montain.jpg';
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -19,6 +20,10 @@ function App() {
 
   useEffect(() => {
     fetchExpenses();
+  }, []);
+  
+  useEffect(() => {
+   document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
   }, []);
 
   const handleChange = e => {
