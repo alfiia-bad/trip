@@ -112,14 +112,14 @@ export default function SettingsModal({ onClose }) {
                   <span>{p}</span>
                   <button 
                     onClick={() => editParticipant(p)} 
-                    style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
+                    className="edit-btn"
                     aria-label={`Редактировать участника ${p}`}
                   >
                     <FaEdit />
                   </button>
                   <button 
                     onClick={() => deleteParticipant(p)} 
-                    style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'red' }}
+                    className="delete-btn"
                     aria-label={`Удалить участника ${p}`}
                   >
                     <FaTrash />
@@ -138,7 +138,7 @@ export default function SettingsModal({ onClose }) {
               <span>{c}</span>
               <button 
                 onClick={() => deleteCurrency(c)} 
-                style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'red' }}
+                className="delete-btn"
                 aria-label={`Удалить валюту ${c}`}
               >
                 <FaTrash />
