@@ -110,20 +110,22 @@ export default function SettingsModal({ onClose }) {
               ) : (
                 <>
                   <span>{p}</span>
-                  <button 
-                    onClick={() => editParticipant(p)} 
-                    className="edit-btn"
-                    aria-label={`Редактировать участника ${p}`}
-                  >
-                    <BiEditAlt />
-                  </button>
-                  <button 
-                    onClick={() => deleteParticipant(p)} 
-                    className="delete-btn"
-                    aria-label={`Удалить участника ${p}`}
-                  >
-                    <BiTrash />
-                  </button>
+                  <div className="icon-buttons">
+                    <button 
+                      onClick={() => editParticipant(p)} 
+                      className="edit-btn"
+                      aria-label={`Редактировать участника ${p}`}
+                    >
+                      <BiEditAlt />
+                    </button>
+                    <button 
+                      onClick={() => deleteParticipant(p)} 
+                      className="delete-btn"
+                      aria-label={`Удалить участника ${p}`}
+                    >
+                      <BiTrash />
+                    </button>
+                  </div>
                 </>
               )}
             </div>
@@ -136,13 +138,15 @@ export default function SettingsModal({ onClose }) {
           {currencies.map((c, idx) => (
             <div key={idx} className="settings-row">
               <span>{c}</span>
-              <button 
-                onClick={() => deleteCurrency(c)} 
-                className="delete-btn"
-                aria-label={`Удалить валюту ${c}`}
-              >
-                <BiTrash />
-              </button>
+              <div className="icon-buttons">
+                <button 
+                  onClick={() => deleteCurrency(c)} 
+                  className="delete-btn"
+                  aria-label={`Удалить валюту ${c}`}
+                >
+                  <BiTrash />
+                </button>
+              </div>
             </div>
           ))}
           <button onClick={addCurrency}>Добавить валюту</button>
