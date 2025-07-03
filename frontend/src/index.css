@@ -31,12 +31,12 @@ body {
 
 .header-title {
   font-size: 24px;
-  white-space: normal;       /* разрешаем переносы */
-  overflow-wrap: break-word; /* переносим длинные слова */
-  word-wrap: break-word;     /* для кроссбраузерности */
-  hyphens: auto;             /* опционально — переносы по слогам */
-  margin: 0;                 /* если нужно убрать лишние отступы */
-  line-height: 1.2;          /* удобочитаемость */
+  white-space: normal;       
+  overflow-wrap: break-word; 
+  word-wrap: break-word;     
+  hyphens: auto;             
+  margin: 0;                 
+  line-height: 1.2;          
 }
 
 input {
@@ -111,12 +111,12 @@ tr:last-child td {
 
 .modal {
   background: white;
-  padding: 2rem;
+  padding: 16px 8px;
   border-radius: 1rem;
   max-width: 500px;
   width: 100%;
   position: relative;
-  color: black; /* ← сделали весь текст модалки чёрным */
+  color: black; 
 }
 
 .modal-header {
@@ -125,11 +125,17 @@ tr:last-child td {
   align-items: center;
 }
 
+.modal-header, .modal-content {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
 .close-btn {
   background: none;
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+  color: black;
 }
 
 .settings-row {
@@ -159,3 +165,33 @@ tr:last-child td {
   width: calc(100% - 1rem);
   display: block;
 }
+
+.edit-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #718583;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.delete-btn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #d9534f; /* красный */
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: #f8d7da; /* светло-красный фон при наведении */
+  color: #a94442; /* более тёмный красный */
