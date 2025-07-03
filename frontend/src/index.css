@@ -128,14 +128,19 @@ tr:last-child td {
 }
 
 .modal-header {
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Центруем заголовок */
   align-items: center;
+  padding: 0.5rem 1rem;
 }
 
-.modal-header, .modal-content {
-  padding-left: 8px;
-  padding-right: 8px;
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: bold;
+  flex: 1;
+  text-align: center;
 }
 
 .close-btn {
