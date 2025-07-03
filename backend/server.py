@@ -2,6 +2,7 @@ from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
 import os
 import psycopg2
+from currency.currency_rate import get_google_currency_rate
 
 app = Flask(__name__, static_folder="build", static_url_path="")
 CORS(app)
@@ -122,6 +123,14 @@ def delete_currency(code):
                 return jsonify({"message": "Currency deleted"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/api/currency-rate')
+def currency_rate():
+    rate = get_google_currency_rate("лари", "рублях")
+    if rate is not None:
+        return jsonify({"rate": rate})
+    else:
+        return jsonify({"error": "Не удалось получить курс"}), 500
 
 @app.route("/")
 def serve_index():
