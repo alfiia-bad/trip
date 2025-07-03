@@ -1,22 +1,31 @@
+:root {
+  --background-image: url('./assets/montain2.jpg');
+}
+
 body {
+  margin: 0;
+  padding: 0;
   font-family: Arial, sans-serif;
-  padding: 2rem;
-  background-color: #EAE4D4;
+  background-image: var(--background-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  color: #fff;
 }
 
 .header {
-  background-image: var(--mountain-image);
-  background-size: cover;
-  background-position: center;
   padding: 2rem;
-  color: white;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
   margin-bottom: 2rem;
+  text-align: center;
 }
 
 input {
   margin: 0.5rem;
   padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
 }
 
 button {
@@ -25,5 +34,6 @@ button {
   background-color: #718583;
   color: white;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
 }
