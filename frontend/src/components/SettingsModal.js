@@ -12,17 +12,29 @@ export default function SettingsModal({ onClose }) {
     fetchCurrencies();
   }, []);
 
-  const fetchParticipants = async () => {
+const fetchParticipants = async () => {
+  try {
     const res = await fetch('/api/participants');
+    if (!res.ok) throw new Error(`Ошибка загрузки участников: ${res.status}`);
     const data = await res.json();
     setParticipants(data);
-  };
+  } catch (err) {
+    console.error('Ошибка при получении участников:', err);
+    setParticipants([]); // безопасное значение по умолчанию
+  }
+};
 
-  const fetchCurrencies = async () => {
+const fetchCurrencies = async () => {
+  try {
     const res = await fetch('/api/currencies');
+    if (!res.ok) throw new Error(`Ошибка загрузки валют: ${res.status}`);
     const data = await res.json();
     setCurrencies(data);
-  };
+  } catch (err) {
+    console.error('Ошибка при получении валют:', err);
+    setCurrencies([]);
+  }
+};
 
   const deleteParticipant = async (name) => {
     await fetch(`/api/participants/${name}`, { method: 'DELETE' });
