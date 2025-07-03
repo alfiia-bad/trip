@@ -19,13 +19,21 @@ body {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
   margin-bottom: 2rem;
   text-align: center;
+  white-space: nowrap; /* В одну строку */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.5rem;
 }
 
 input {
   margin: 0.5rem;
   padding: 0.5rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 16px; /* для iPhone */
+  width: calc(100% - 1rem);
+  max-width: 300px;
+  display: block;
 }
 
 button {
@@ -34,6 +42,37 @@ button {
   background-color: #718583;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 16px; /* тоже для iPhone */
   cursor: pointer;
+  max-width: 300px;
+  width: calc(100% - 1rem);
+  display: block;
+}
+
+/* Таблица */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 2rem;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+
+th {
+  background-color: #718583;
+  color: white;
+}
+
+tr:last-child td {
+  border-bottom: none;
 }
