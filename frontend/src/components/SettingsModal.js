@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';  // импорт иконок
+import { BiEditAlt, BiTrash } from "react-icons/bi";
 import '../index.css';
 
 export default function SettingsModal({ onClose }) {
@@ -115,14 +115,14 @@ export default function SettingsModal({ onClose }) {
                     className="edit-btn"
                     aria-label={`Редактировать участника ${p}`}
                   >
-                    <FaEdit />
+                    <BiEditAlt />
                   </button>
                   <button 
                     onClick={() => deleteParticipant(p)} 
                     className="delete-btn"
                     aria-label={`Удалить участника ${p}`}
                   >
-                    <FaTrash />
+                    <BiTrash />
                   </button>
                 </>
               )}
@@ -141,7 +141,7 @@ export default function SettingsModal({ onClose }) {
                 className="delete-btn"
                 aria-label={`Удалить валюту ${c}`}
               >
-                <FaTrash />
+                <BiTrash />
               </button>
             </div>
           ))}
