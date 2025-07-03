@@ -162,8 +162,9 @@ function App() {
         <SettingsModal
           onClose={closeSettings}
           participants={participants}
+          setParticipants={setParticipants}
           currencies={currencies}
-          refreshParticipants={openSettings} // Можно использовать при добавлении новых
+          setCurrencies={setCurrencies}
         />
       )}
     </div>
