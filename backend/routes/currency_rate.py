@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
-from db import database  # или как у тебя называется модуль
+from fastapi import APIRouter, HTTPException, Request
+from db import database
 from sqlalchemy import text
+from datetime import datetime
 
 router = APIRouter()
 
@@ -18,3 +19,27 @@ async def get_currency_rate(from_currency: str = "GEL", to_currency: str = "RUB"
     if not result:
         raise HTTPException(status_code=404, detail="Курс не найден")
     return {"rate": result["rate"]}
+
+
+@router.put("/api/currency-rate")
+async def update_currency_rate(request: Request):
+    data = await request.json()
+    from_currency = data.get("from_currency", "GEL")
+    to_currency = data.get("to_currency", "RUB")
+    rate = data.get("rate")
+
+    if rate is None:
+        raise HTTPException(status_code=400, detail="Не указан курс")
+
+    query = text("""
+        INSERT INTO currency_rates (from_currency, to_currency, rate, updated_at)
+        VALUES (:from_currency, :to_currency, :rate, :updated_at)
+    """)
+    await database.execute(query, values={
+        "from_currency": from_currency,
+        "to_currency": to_currency,
+        "rate": rate,
+        "updated_at": datetime.utcnow()
+    })
+
+    return {"message": "Курс обновлён"}
