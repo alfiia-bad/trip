@@ -79,10 +79,11 @@ function App() {
   // Для чекбоксов "За кого платил"
   const toggleForWhom = (name) => {
     setForm(f => {
-      if (f.forWhom.includes(name)) {
-        return { ...f, forWhom: f.forWhom.filter(p => p !== name) };
+      const current = Array.isArray(f.forWhom) ? f.forWhom : [];
+      if (current.includes(name)) {
+        return { ...f, forWhom: current.filter(p => p !== name) };
       } else {
-        return { ...f, forWhom: [...f.forWhom, name] };
+        return { ...f, forWhom: [...current, name] };
       }
     });
   };
@@ -117,8 +118,18 @@ function App() {
   }
 };
 
-  const isFormValid = () =>
-    Object.values(form).every(field => field.trim() !== '');
+  const isFormValid = () => {
+    const { who, what, amount, currency, date, forWhom } = form;
+    return (
+      who.trim() !== '' &&
+      what.trim() !== '' &&
+      amount.trim() !== '' &&
+      currency.trim() !== '' &&
+      date.trim() !== '' &&
+      Array.isArray(forWhom) &&
+      forWhom.length > 0
+    );
+  };
 
   const handleSubmit = async () => {
     if (!isFormValid()) {
@@ -134,7 +145,7 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...form, forWhom: forWhomStr })
     });
-    setForm({ who: '', what: '', amount: '', currency: '', date: '', forWhom: '' });
+    setForm({ who: '', what: '', amount: '', currency: '', date: new Date().toISOString().slice(0, 10), forWhom: [] });
     fetchExpenses();
   };
 
