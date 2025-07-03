@@ -29,6 +29,16 @@ body {
   font-size: 24px; /* ← уменьшили для iPhone */
 }
 
+.header-title {
+  font-size: 24px;
+  white-space: normal;       /* разрешаем переносы */
+  overflow-wrap: break-word; /* переносим длинные слова */
+  word-wrap: break-word;     /* для кроссбраузерности */
+  hyphens: auto;             /* опционально — переносы по слогам */
+  margin: 0;                 /* если нужно убрать лишние отступы */
+  line-height: 1.2;          /* удобочитаемость */
+}
+
 input {
   margin: 0.5rem;
   padding: 0.5rem;
