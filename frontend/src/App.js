@@ -109,7 +109,7 @@ function App() {
       <button className="settings-btn" onClick={() => setShowSettings(true)}>Настройки</button>
 
       {currencyRate !== null && (
-        <p>В 1 лари {currencyRate.toFixed(2)} рублей</p>
+        <h2 className="exchange-rate">В 1 лари {currencyRate.toFixed(2)} рублей</h2>
       )}
 
       {showSettings && (
