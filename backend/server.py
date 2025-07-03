@@ -70,6 +70,23 @@ def handle_participants():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/participants/<old_name>", methods=["PUT"])
+def update_participant(old_name):
+    try:
+        data = request.json
+        new_name = data["name"]
+        with conn:
+            with conn.cursor() as cur:
+                # Обновим имя в таблице participants
+                cur.execute("UPDATE participants SET name = %s WHERE name = %s", (new_name, old_name))
+                # И, возможно, обновим связанные расходы
+                cur.execute("UPDATE expenses SET who = %s WHERE who = %s", (new_name, old_name))
+                cur.execute("UPDATE expenses SET for_whom = REPLACE(for_whom, %s, %s) WHERE for_whom LIKE %s",
+                            (old_name, new_name, f'%{old_name}%'))
+                return jsonify({"message": "Participant updated"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/api/participants/<name>", methods=["DELETE"])
 def delete_participant(name):
     try:
