@@ -54,6 +54,59 @@ def handle_expenses():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/participants", methods=["GET", "POST"])
+def handle_participants():
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                if request.method == "POST":
+                    data = request.json
+                    cur.execute("INSERT INTO participants (name) VALUES (%s) ON CONFLICT DO NOTHING", (data["name"],))
+                    return jsonify({"message": "Participant added"}), 201
+                else:
+                    cur.execute("SELECT name FROM participants ORDER BY name")
+                    rows = cur.fetchall()
+                    return jsonify([r[0] for r in rows])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/participants/<name>", methods=["DELETE"])
+def delete_participant(name):
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM participants WHERE name = %s", (name,))
+                return jsonify({"message": "Participant deleted"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/currencies", methods=["GET", "POST"])
+def handle_currencies():
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                if request.method == "POST":
+                    data = request.json
+                    cur.execute("INSERT INTO currencies (code) VALUES (%s) ON CONFLICT DO NOTHING", (data["code"],))
+                    return jsonify({"message": "Currency added"}), 201
+                else:
+                    cur.execute("SELECT code FROM currencies ORDER BY code")
+                    rows = cur.fetchall()
+                    return jsonify([r[0] for r in rows])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/currencies/<code>", methods=["DELETE"])
+def delete_currency(code):
+    try:
+        with conn:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM currencies WHERE code = %s", (code,))
+                return jsonify({"message": "Currency deleted"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/")
 def serve_index():
     return send_from_directory(app.static_folder, "index.html")
