@@ -81,30 +81,32 @@ function App() {
       </div>
 
       <h2>Таблица расходов</h2>
-      <table className="expense-table">
-        <thead>
-          <tr>
-            <th>Кто платил</th>
-            <th>За что платил</th>
-            <th>Сколько</th>
-            <th>Валюта</th>
-            <th>Дата</th>
-            <th>За кого платил</th>
-          </tr>
-        </thead>
-        <tbody>
-          {expenses.map((e, i) => (
-            <tr key={i}>
-              <td>{e.who}</td>
-              <td>{e.what}</td>
-              <td>{e.amount}</td>
-              <td>{e.currency}</td>
-              <td>{e.date}</td>
-              <td>{e.forWhom}</td>
+      <div className="table-wrapper">
+        <table className="expense-table">
+          <thead>
+            <tr>
+              <th>Кто платил</th>
+              <th>За что платил</th>
+              <th>Сколько</th>
+              <th>Валюта</th>
+              <th>Дата</th>
+              <th>За кого платил</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {expenses.map((e, i) => (
+              <tr key={i}>
+                <td>{e.who}</td>
+                <td>{e.what}</td>
+                <td>{e.amount}</td>
+                <td>{e.currency}</td>
+                <td>{e.date}</td>
+                <td>{e.forWhom}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <button className="settings-btn" onClick={() => setShowSettings(true)}>Настройки</button>
 
