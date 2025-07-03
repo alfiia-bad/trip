@@ -9,14 +9,13 @@ CORS(app)
 # Получаем URL базы данных из переменных окружения
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
-# Подключаемся к базе
-conn = psycopg2.connect(DATABASE_URL, sslmode="require")
-cur = conn.cursor()
+def get_conn():
+    return psycopg2.connect(DATABASE_URL, sslmode="require")
 
 @app.route("/api/expenses", methods=["GET", "POST"])
 def handle_expenses():
     try:
-        with conn:
+        with get_conn() as conn:
             with conn.cursor() as cur:
                 if request.method == "POST":
                     data = request.json
@@ -57,7 +56,7 @@ def handle_expenses():
 @app.route("/api/participants", methods=["GET", "POST"])
 def handle_participants():
     try:
-        with conn:
+        with get_conn() as conn:
             with conn.cursor() as cur:
                 if request.method == "POST":
                     data = request.json
@@ -75,7 +74,7 @@ def update_participant(old_name):
     try:
         data = request.json
         new_name = data["name"]
-        with conn:
+        with get_conn() as conn:
             with conn.cursor() as cur:
                 # Обновим имя в таблице participants
                 cur.execute("UPDATE participants SET name = %s WHERE name = %s", (new_name, old_name))
@@ -90,7 +89,7 @@ def update_participant(old_name):
 @app.route("/api/participants/<name>", methods=["DELETE"])
 def delete_participant(name):
     try:
-        with conn:
+        with get_conn() as conn:
             with conn.cursor() as cur:
                 cur.execute("DELETE FROM participants WHERE name = %s", (name,))
                 return jsonify({"message": "Participant deleted"})
@@ -101,7 +100,7 @@ def delete_participant(name):
 @app.route("/api/currencies", methods=["GET", "POST"])
 def handle_currencies():
     try:
-        with conn:
+        with get_conn() as conn:
             with conn.cursor() as cur:
                 if request.method == "POST":
                     data = request.json
@@ -117,7 +116,7 @@ def handle_currencies():
 @app.route("/api/currencies/<code>", methods=["DELETE"])
 def delete_currency(code):
     try:
-        with conn:
+        with get_conn() as conn:
             with conn.cursor() as cur:
                 cur.execute("DELETE FROM currencies WHERE code = %s", (code,))
                 return jsonify({"message": "Currency deleted"})
