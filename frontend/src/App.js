@@ -51,7 +51,7 @@ function App() {
   return (
     <div>
       <div className="header">
-        <h1>Гамарджоба, тут наши расходы на поездку друг ♥</h1>
+        <h1>Гамарджоба, тут наши расходы на поездку, друг ♥</h1>
       </div>
       <div>
         <input name="who" placeholder="Кто платил" value={form.who} onChange={handleChange} />
