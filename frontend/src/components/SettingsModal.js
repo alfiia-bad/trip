@@ -1,47 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BiEditAlt, BiTrash } from "react-icons/bi";
 import '../index.css';
 
-export default function SettingsModal({ onClose }) {
-  const [participants, setParticipants] = useState([]);
-  const [currencies, setCurrencies] = useState([]);
+export default function SettingsModal({ onClose, participants, setParticipants, currencies, setCurrencies }) {
   const [editingName, setEditingName] = useState(null);
   const [editedName, setEditedName] = useState('');
 
-  useEffect(() => {
-    fetchParticipants();
-    fetchCurrencies();
-  }, []);
-
-  const fetchParticipants = async () => {
-    try {
-      const res = await fetch('/api/participants');
-      if (!res.ok) throw new Error(`Ошибка загрузки участников: ${res.status}`);
-      const data = await res.json();
-      setParticipants(data);
-    } catch (err) {
-      console.error('Ошибка при получении участников:', err);
-      setParticipants([]);
-    }
-  };
-
-  const fetchCurrencies = async () => {
-    try {
-      const res = await fetch('/api/currencies');
-      if (!res.ok) throw new Error(`Ошибка загрузки валют: ${res.status}`);
-      const data = await res.json();
-      setCurrencies(data);
-    } catch (err) {
-      console.error('Ошибка при получении валют:', err);
-      setCurrencies([]);
-    }
-  };
-
+  // Удаление участника
   const deleteParticipant = async (name) => {
     await fetch(`/api/participants/${name}`, { method: 'DELETE' });
-    fetchParticipants();
+    // Обновляем участников
+    const res = await fetch('/api/participants');
+    const data = await res.json();
+    setParticipants(data);
   };
 
+  // Редактирование участника
   const editParticipant = (name) => {
     setEditingName(name);
     setEditedName(name);
@@ -55,7 +29,10 @@ export default function SettingsModal({ onClose }) {
     });
     setEditingName(null);
     setEditedName('');
-    fetchParticipants();
+    // Обновляем участников
+    const res = await fetch('/api/participants');
+    const data = await res.json();
+    setParticipants(data);
   };
 
   const addParticipant = async () => {
@@ -66,15 +43,22 @@ export default function SettingsModal({ onClose }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name })
       });
-      fetchParticipants();
+      // Обновляем участников
+      const res = await fetch('/api/participants');
+      const data = await res.json();
+      setParticipants(data);
     }
   };
 
+  // Удаление валюты
   const deleteCurrency = async (currency) => {
     await fetch(`/api/currencies/${currency}`, { method: 'DELETE' });
-    fetchCurrencies();
+    const res = await fetch('/api/currencies');
+    const data = await res.json();
+    setCurrencies(data);
   };
 
+  // Добавление валюты
   const addCurrency = async () => {
     const name = prompt('Введите название валюты');
     if (name) {
@@ -83,7 +67,9 @@ export default function SettingsModal({ onClose }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name })
       });
-      fetchCurrencies();
+      const res = await fetch('/api/currencies');
+      const data = await res.json();
+      setCurrencies(data);
     }
   };
 
@@ -150,10 +136,6 @@ export default function SettingsModal({ onClose }) {
             </div>
           ))}
           <button onClick={addCurrency}>Добавить валюту</button>
-        </div>
-
-        <div className="modal-actions">
-          <button onClick={onClose}>Закрыть</button>
         </div>
       </div>
     </div>
