@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BiEditAlt, BiTrash } from "react-icons/bi";
 import '../index.css';
 
 export default function SettingsModal({ onClose, participants, setParticipants, currencies, setCurrencies }) {
+    useEffect(() => {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }, []);
+  
   const [editingName, setEditingName] = useState(null);
   const [editedName, setEditedName] = useState('');
 
