@@ -42,6 +42,13 @@ function App() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleEditExchangeRate = () => {
+    const newRate = prompt('Введите новый курс лари к рублю', currencyRate);
+    if (newRate && !isNaN(newRate)) {
+      setCurrencyRate(parseFloat(newRate));
+    }
+  };
+
   const isFormValid = () =>
     Object.values(form).every(field => field.trim() !== '');
 
@@ -111,7 +118,17 @@ function App() {
       <button className="settings-btn" onClick={() => setShowSettings(true)}>Настройки</button>
 
       {currencyRate !== null && (
-        <h2 className="exchange-rate">В 1 лари {currencyRate.toFixed(2)} рублей</h2>
+        <div style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}>
+          <h2 className="exchange-rate">В 1 лари {currencyRate.toFixed(2)} рублей</h2>
+          <button
+            className="edit-btn"
+            onClick={handleEditExchangeRate}
+            aria-label="Редактировать курс"
+            style={{ marginLeft: 8 }}
+          >
+            <BiEditAlt />
+          </button>
+        </div>
       )}
 
       {showSettings && (
