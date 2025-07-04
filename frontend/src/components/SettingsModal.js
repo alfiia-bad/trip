@@ -110,72 +110,73 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" style={{ paddingLeft: 16, paddingRight: 16 }} onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header" style={{ paddingLeft: 8, paddingRight: 8 }}>
-          <h3>Настройки</h3>
-          <button onClick={onClose} className="close-btn">&times;</button>
-        </div>
+    <>
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal" style={{ paddingLeft: 16, paddingRight: 16 }} onClick={(e) => e.stopPropagation()}>
+          <div className="modal-header" style={{ paddingLeft: 8, paddingRight: 8 }}>
+            <h3>Настройки</h3>
+            <button onClick={onClose} className="close-btn">&times;</button>
+          </div>
 
-        <div>
-          <h4>Участники:</h4>
-          {participants.map((p, idx) => (
-            <div key={idx} className="settings-row">
-              {editingName === p ? (
-                <>
-                  <input
-                    className="edit-participant-input"
-                    value={editedName}
-                    onChange={(e) => setEditedName(e.target.value)}
-                  />
-                  <button className="edit-participant-save-btn" onClick={saveParticipantEdit}>Сохранить</button>
-                </>
-              ) : (
-                <>
-                  <div className="participant-name">{p}</div>
-                  <div className="icon-buttons">
-                    <button 
-                      onClick={() => editParticipant(p)} 
-                      className="edit-btn"
-                      aria-label={`Редактировать участника ${p}`}
-                    >
-                      <BiEditAlt />
-                    </button>
-                    <button 
-                      onClick={() => promptDeleteParticipant(p)} 
-                      className="delete-btn"
-                      aria-label={`Удалить участника ${p}`}
-                    >
-                      <BiTrash />
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
-          <button onClick={addParticipant}>Добавить нового участника</button>
-        </div>
-
-        <div style={{ marginTop: '1rem' }}>
-          <h4>Валюты:</h4>
-          {currencies.map((c, idx) => (
-            <div key={idx} className="settings-row">
-              <span>{c}</span>
-              <div className="icon-buttons">
-                <button 
-                  onClick={() => promptDeleteCurrency(c)}  
-                  className="delete-btn"
-                  aria-label={`Удалить валюту ${c}`}
-                >
-                  <BiTrash />
-                </button>
+          <div>
+            <h4>Участники:</h4>
+            {participants.map((p, idx) => (
+              <div key={idx} className="settings-row">
+                {editingName === p ? (
+                  <>
+                    <input
+                      className="edit-participant-input"
+                      value={editedName}
+                      onChange={(e) => setEditedName(e.target.value)}
+                    />
+                    <button className="edit-participant-save-btn" onClick={saveParticipantEdit}>Сохранить</button>
+                  </>
+                ) : (
+                  <>
+                    <div className="participant-name">{p}</div>
+                    <div className="icon-buttons">
+                      <button 
+                        onClick={() => editParticipant(p)} 
+                        className="edit-btn"
+                        aria-label={`Редактировать участника ${p}`}
+                      >
+                        <BiEditAlt />
+                      </button>
+                      <button 
+                        onClick={() => promptDeleteParticipant(p)} 
+                        className="delete-btn"
+                        aria-label={`Удалить участника ${p}`}
+                      >
+                        <BiTrash />
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
-            </div>
-          ))}
-          <button onClick={addCurrency}>Добавить валюту</button>
+            ))}
+            <button onClick={addParticipant}>Добавить нового участника</button>
+          </div>
+
+          <div style={{ marginTop: '1rem' }}>
+            <h4>Валюты:</h4>
+            {currencies.map((c, idx) => (
+              <div key={idx} className="settings-row">
+                <span>{c}</span>
+                <div className="icon-buttons">
+                  <button 
+                    onClick={() => promptDeleteCurrency(c)}  
+                    className="delete-btn"
+                    aria-label={`Удалить валюту ${c}`}
+                  >
+                    <BiTrash />
+                  </button>
+                </div>
+              </div>
+            ))}
+            <button onClick={addCurrency}>Добавить валюту</button>
+          </div>
         </div>
       </div>
-    </div>
 
       {/* Диалог подтверждения удаления */}
       {toDelete && (
