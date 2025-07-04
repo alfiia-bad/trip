@@ -438,6 +438,49 @@ function App() {
         </div>
       )}
 
+      {expenses.length > 0 && participants && currencies && (
+        <div style={{ marginTop: '2rem' }}>
+          <h2>Расчетный листок</h2>
+          <div className="table-wrapper">
+            <table className="expense-table">
+              <thead>
+                <tr>
+                  <th>Что происходило</th>
+                  {currencies.map((cur, idx) => (
+                    <th key={idx}>{cur}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(
+                  expenses.reduce((acc, exp) => {
+                    const key = `${exp.who} → ${exp.forWhom}`;
+                    if (!acc[key]) acc[key] = {};
+                    if (!acc[key][exp.currency]) acc[key][exp.currency] = 0;
+                    const amount = parseFloat(exp.amount.replace(',', '.'));
+                    acc[key][exp.currency] += isNaN(amount) ? 0 : amount;
+                    return acc;
+                  }, {})
+                ).map(([key, currencyAmounts], idx) => {
+                  const [who, forWhom] = key.split(' → ');
+                  const text = `${who} платила за ${forWhom}`;
+                  return (
+                    <tr key={idx}>
+                      <td>{text}</td>
+                      {currencies.map(cur => (
+                        <td key={cur}>
+                          {currencyAmounts[cur] ? currencyAmounts[cur].toFixed(2) : '—'}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       {showSettings && participants && currencies && (
         <SettingsModal
           onClose={closeSettings}
