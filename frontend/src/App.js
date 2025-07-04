@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import mountainImage from './assets/montain2.jpg';
 import './index.css';
 import SettingsModal from './components/SettingsModal'; 
-import { BiEditAlt } from "react-icons/bi";
+import { BiEditAlt, BiTrash } from 'react-icons/bi';
 
 function App() {
   const [expenses, setExpenses] = useState([]);
@@ -20,8 +20,7 @@ function App() {
   const [participants, setParticipants] = useState(null);
   const [currencies, setCurrencies] = useState(null);
   const [loadingSettings, setLoadingSettings] = useState(false);
-  
-  // Для мультиселекта "За кого платил"
+  const [deleteIndex, setDeleteIndex] = useState(null);
   const [forWhomDropdownOpen, setForWhomDropdownOpen] = useState(false);
   const forWhomRef = useRef(null);
 
@@ -55,6 +54,42 @@ function App() {
     const res = await fetch('/api/expenses');
     const data = await res.json();
     setExpenses(data);
+  };
+
+  const openDeleteModal = (index) => {
+    setDeleteIndex(index);
+  };
+  
+  const closeDeleteModal = () => {
+    setDeleteIndex(null);
+  };
+  
+  const confirmDelete = async () => {
+    const expenseToDelete = expenses[deleteIndex];
+    if (!expenseToDelete) return;
+  
+    await fetch(`/api/expenses/${expenseToDelete.id}`, {
+      method: 'DELETE'
+    });
+  
+    setDeleteIndex(null);
+    fetchExpenses();
+  };
+  
+  const handleEdit = (index) => {
+    const item = expenses[index];
+    const forWhomParsed = item.forWhom.split(' + '); // если хранишь как строку
+  
+    setForm({
+      who: item.who,
+      what: item.what,
+      amount: item.amount,
+      currency: item.currency,
+      date: item.date,
+      forWhom: forWhomParsed
+    });
+  
+    // optionally можно сделать флаг `isEditing`, если ты хочешь редактировать и обновлять существующую строку, а не добавлять новую
   };
 
   // В useEffect при монтировании
@@ -276,6 +311,7 @@ function App() {
               <th>Валюта</th>
               <th>Дата</th>
               <th>За кого платил</th>
+              <th>Действие</th>
             </tr>
           </thead>
           <tbody>
@@ -287,6 +323,22 @@ function App() {
                 <td>{e.currency}</td>
                 <td>{e.date}</td>
                 <td>{e.forWhom}</td>
+                      <td>
+                        <button
+                          className="edit-btn icon-btn"
+                          onClick={() => handleEdit(i)}
+                          title="Редактировать"
+                        >
+                          <BiEditAlt />
+                        </button>
+                        <button
+                          className="delete-btn icon-btn"
+                          onClick={() => openDeleteModal(i)}
+                          title="Удалить"
+                        >
+                          <BiTrash />
+                        </button>
+                      </td>
               </tr>
             ))}
           </tbody>
