@@ -156,7 +156,7 @@ select:invalid {
 
 .forWhom-multiselect {
   margin: 0 8px 8px 8px;
-  padding: 0.25rem 0.5rem;
+  padding: 0;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 16px;
@@ -179,7 +179,7 @@ select:invalid {
 
 .forWhom-display {
   cursor: pointer;
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 0.5rem 0.25rem 0;
   font-size: 16px;
   color: #333;
   display: flex;
