@@ -95,10 +95,11 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
               {editingName === p ? (
                 <>
                   <input
+                    className="edit-participant-input"
                     value={editedName}
                     onChange={(e) => setEditedName(e.target.value)}
                   />
-                  <button onClick={saveParticipantEdit}>Сохранить</button>
+                  <button className="edit-participant-save-btn" onClick={saveParticipantEdit}>Сохранить</button>
                 </>
               ) : (
                 <>
