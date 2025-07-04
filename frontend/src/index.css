@@ -73,6 +73,9 @@ input[type="date"] {
   outline: none;
   box-shadow: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  text-align: left;
+  text-align-last: left;
+  direction: ltr; 
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -80,6 +83,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0.6;
   cursor: pointer;
   margin-right: 8px;
+  text-align: left;
+  text-align-last: left;
 }
 
 input[type="date"]:focus {
