@@ -107,11 +107,11 @@ function App() {
   };
 
   const handleAmountChange = (e) => {
-    const value = e.target.value;
+    const raw = e.target.value;
     
-    // Разрешаем только положительные числа или пустую строку
-    if (value === '' || (/^\d*\.?\d*$/.test(value) && parseFloat(value) >= 0)) {
-      setForm(f => ({ ...f, amount: value }));
+    // Разрешаем ввод: 123, 5.4, 5,44, 0.99
+    if (/^\d*([.,]\d{0,2})?$/.test(raw) || raw === '') {
+      setForm(f => ({ ...f, amount: raw }));
     }
   };
 
@@ -238,7 +238,7 @@ function App() {
           ))}
         </select>
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
-        <input name="amount" placeholder="Сколько" type="number" min="0" step="0.01" value={form.amount} onChange={handleAmountChange} />
+        <input name="amount" placeholder="Сколько" inputMode="decimal" pattern="^\d+([.,]\d{0,2})?$" value={form.amount} onChange={handleAmountChange} />
         {/* Валюта - селект */}
         <select name="currency" value={form.currency} onChange={handleSelectChange}>
           <option value="" disabled>Валюта</option>
