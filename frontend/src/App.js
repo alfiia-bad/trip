@@ -380,7 +380,7 @@ function App() {
         <div className="modal-overlay">
           <div className="modal">
             <div className="modal-header">
-              <h3>Вы уверены, что хотите удалить строку?</h3>
+              <h3>Вы уверены, что хотите удалить строку? Действие необратимо</h3>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
               <button
