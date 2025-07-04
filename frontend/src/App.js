@@ -28,6 +28,7 @@ function App() {
   useEffect(() => {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
     fetchExpenses();
+    fetchInitialSettings();
 
     fetch('/api/currency-rate')
       .then(res => res.json())
@@ -158,29 +159,27 @@ function App() {
     fetchExpenses();
   };
 
-  const openSettings = async () => {
-    setLoadingSettings(true);
+  const fetchInitialSettings = async () => {
     try {
-      // Загрузка участников
       const participantsRes = await fetch('/api/participants');
       if (!participantsRes.ok) throw new Error('Ошибка загрузки участников');
       const participantsData = await participantsRes.json();
-
-      // Загрузка валют
+  
       const currenciesRes = await fetch('/api/currencies');
       if (!currenciesRes.ok) throw new Error('Ошибка загрузки валют');
       const currenciesData = await currenciesRes.json();
-
+  
       setParticipants(participantsData);
       setCurrencies(currenciesData);
-      setShowSettings(true);
     } catch (error) {
       console.error(error);
-      alert('Ошибка загрузки данных настроек');
-    } finally {
-      setLoadingSettings(false);
+      alert('Ошибка при начальной загрузке данных участников/валют');
     }
-  };  
+  };
+
+  const openSettings = () => {
+    setShowSettings(true);
+  };
 
   const closeSettings = () => {
     setShowSettings(false);
