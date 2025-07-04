@@ -294,7 +294,7 @@ function App() {
       </div>
       
       {currencyRate !== null && (
-        <div style={{ display: 'flex', alignItems: 'center', marginLeft: 8 }}>
+        <div className="exchange-rate-container">
           <h2 className="exchange-rate">В 1 лари {currencyRate.toFixed(2)} рублей</h2>
           <button
             className="edit-btn"
