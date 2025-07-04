@@ -63,9 +63,9 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: editedName })
     });
-    setParticipants(prev =>
-      prev.map(p => (p === editingName ? editedName : p))
-    );
+    const res = await fetch('/api/participants');
+    const updatedParticipants = await res.json();
+    setParticipants(updatedParticipants);
     setEditingName(null);
     setEditedName('');
   };
