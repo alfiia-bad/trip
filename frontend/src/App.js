@@ -242,15 +242,21 @@ function App() {
               {participants.map(p => (
                 <label
                   key={p}
-                  style={{ display: 'block', padding: '0.25rem 0.5rem', cursor: 'pointer' }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '0.5rem',
+                    cursor: 'pointer',
+                    gap: '0.5rem'
+                  }}
                 >
                   <input
                     type="checkbox"
                     checked={form.forWhom.includes(p)}
                     onChange={() => toggleForWhom(p)}
-                    style={{ marginRight: 8 }}
+                    style={{ margin: 0 }}
                   />
-                  {p}
+                  <span>{p}</span>
                 </label>
               ))}
             </div>
