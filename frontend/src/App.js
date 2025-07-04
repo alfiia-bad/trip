@@ -253,13 +253,10 @@ function App() {
           ref={forWhomRef}
           style={{ position: 'relative', display: 'inline-block', width: 300, marginTop: 8 }}
         >
-          <input
-            readOnly
-            placeholder="За кого платил"
-            value={forWhomDisplay}
-            onClick={() => setForWhomDropdownOpen(o => !o)}
-            style={{ cursor: 'pointer' }}
-          />
+          <div className="forWhom-display" onClick={() => setForWhomDropdownOpen(o => !o)}>
+            {forWhomDisplay || 'За кого платил'}
+          </div>
+
           {forWhomDropdownOpen && participants && (
             <div style={{
               position: 'absolute',
