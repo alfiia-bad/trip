@@ -123,13 +123,27 @@ def delete_currency(code):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/api/currency-rate')
+@app.route('/api/currency-rate', methods=["GET", "POST"])
 def currency_rate():
     try:
-        from_currency = request.args.get("from_currency", "GEL")
-        to_currency = request.args.get("to_currency", "RUB")
         with get_conn() as conn:
             with conn.cursor() as cur:
+                if request.method == "POST":
+                    data = request.json
+                    from_currency = data["from_currency"]
+                    to_currency = data["to_currency"]
+                    rate = data["rate"]
+
+                    cur.execute("""
+                        INSERT INTO currency_rates (from_currency, to_currency, rate, updated_at)
+                        VALUES (%s, %s, %s, NOW())
+                    """, (from_currency, to_currency, rate))
+
+                    return jsonify({"message": "Rate updated"}), 201
+
+                # GET-запрос
+                from_currency = request.args.get("from_currency", "GEL")
+                to_currency = request.args.get("to_currency", "RUB")
                 cur.execute("""
                     SELECT rate FROM currency_rates
                     WHERE from_currency = %s AND to_currency = %s
