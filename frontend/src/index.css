@@ -124,6 +124,10 @@ select:focus {
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
+select:invalid {
+  color: #999; /* Серый текст, как у placeholder */
+}
+
 .forWhom-multiselect {
   margin: 0.5rem;
   padding: 0.25rem 0.5rem;
