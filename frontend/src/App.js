@@ -325,7 +325,7 @@ function App() {
                 <td>{e.forWhom}</td>
                       <td>
                         <button
-                          className="delete-btn icon-btn"
+                          className="delete-btn icon-btn table-delete-btn"
                           onClick={() => openDeleteModal(i)}
                           title="Удалить"
                         >
