@@ -364,11 +364,15 @@ tr:last-child td {
   gap: 8px;
 }
 
-.exchange-rate {
-  margin: 24px 0px 0 0px;
+.exchange-rate .edit-btn {
+  margin: 0 !important;
+  padding: 0 !important;
   font-size: 1.5rem;
   color: white;
-  line-height: 1.2;
+  height: auto;
+  width: auto;
+  line-height: 1;
+  align-self: flex-end;
 }
 
 .edit-btn {
