@@ -68,6 +68,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
     setParticipants(updatedParticipants);
     setEditingName(null);
     setEditedName('');
+    onClose();
   };
 
   const addParticipant = async () => {
@@ -82,6 +83,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
       const res = await fetch('/api/participants');
       const data = await res.json();
       setParticipants(data);
+      onClose(); 
     }
   };
 
