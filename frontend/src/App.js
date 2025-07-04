@@ -4,6 +4,12 @@ import './index.css';
 import SettingsModal from './components/SettingsModal'; 
 import { BiEditAlt, BiTrash } from 'react-icons/bi';
 
+function formatDate(dateString) {
+  if (!dateString) return '';
+  const [year, month, day] = dateString.split('-');
+  return `${day}.${month}.${year}`;
+}
+
 function App() {
   const [expenses, setExpenses] = useState([]);
   const [currencyRate, setCurrencyRate] = useState(null);
@@ -323,7 +329,7 @@ function App() {
                 <td>{e.what}</td>
                 <td>{e.amount}</td>
                 <td>{e.currency}</td>
-                <td>{e.date}</td>
+                <td>{formatDate(e.date)}</td>
                 <td>{e.forWhom}</td>
                       <td>
                         <button
