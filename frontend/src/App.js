@@ -249,8 +249,10 @@ function App() {
     setShowSettings(true);
   };
 
-  const closeSettings = () => {
+  const closeSettings = async () => {
     setShowSettings(false);
+    await fetchInitialSettings();
+    await fetchExpenses();
   };
 
     // Отображение выбранных участников через +
