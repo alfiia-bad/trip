@@ -53,6 +53,16 @@ def handle_expenses():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/expenses/<int:expense_id>", methods=["DELETE"])
+def delete_expense(expense_id):
+    try:
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM expenses WHERE id = %s", (expense_id,))
+                return jsonify({"message": "Expense deleted"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/api/participants", methods=["GET", "POST"])
 def handle_participants():
     try:
