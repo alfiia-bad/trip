@@ -3,6 +3,7 @@ import mountainImage from './assets/montain2.jpg';
 import './index.css';
 import SettingsModal from './components/SettingsModal'; 
 import { BiEditAlt, BiTrash } from 'react-icons/bi';
+import { IoSettingsOutline } from "react-icons/io5";
 
 function formatDate(dateString) {
   if (!dateString) return '';
@@ -263,12 +264,28 @@ function App() {
 
       <div>
         {/* Кто платил - селект */}
-        <select name="who" value={form.who} onChange={handleSelectChange} required>
-          <option value="" disabled hidden>Кто платил</option>
-          {participants && participants.map(p => (
-            <option key={p} value={p}>{p}</option>
-          ))}
-        </select>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <select name="who" value={form.who} onChange={handleSelectChange} required>
+            <option value="" disabled hidden>Кто платил</option>
+            {participants && participants.map(p => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
+          <button
+            onClick={openSettings}
+            title="Настройки"
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0,
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            <IoSettingsOutline size={32} color="#718583" />
+          </button>
+        </div> 
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
         <input name="amount" placeholder="Сколько" inputMode="decimal" pattern="^\d+([.,]\d{0,2})?$" value={form.amount} onChange={handleAmountChange} />
         {/* Валюта - селект */}
@@ -420,8 +437,6 @@ function App() {
           )}
         </div>
       )}
-
-      <button className="settings-btn" onClick={openSettings}>Настройки</button>
 
       {showSettings && participants && currencies && (
         <SettingsModal
