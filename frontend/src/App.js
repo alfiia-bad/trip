@@ -256,38 +256,43 @@ function App() {
     // Отображение выбранных участников через +
   const forWhomDisplay = form.forWhom.length > 0 ? form.forWhom.join(' + ') : '';
 
-  // 1. Считаем raw‑долги: debtsRaw[должник][кредитор][валюта]
-  const debtsRaw = {};
-  expenses.forEach(exp => {
-    const share = parseFloat(exp.amount.replace(',', '.')) 
-                / exp.forWhom.split(' + ').length;
-    exp.forWhom.split(' + ').forEach(person => {
-      if (person === exp.who) return;
-      debtsRaw[person] ||= {};
-      debtsRaw[person][exp.who] ||= {};
-      debtsRaw[person][exp.who][exp.currency] =
-        (debtsRaw[person][exp.who][exp.currency] || 0) + share;
-    });
-  });
-  
-  // 2. Нормализуем взаимные долги в debts:
-  const debts = JSON.parse(JSON.stringify(debtsRaw));
-  currencies.forEach(cur => {
-    participants.forEach(a => {
-      participants.forEach(b => {
-        if (a === b) return;
-        const ab = debtsRaw[a]?.[b]?.[cur] || 0;
-        const ba = debtsRaw[b]?.[a]?.[cur] || 0;
-        const diff = ab - ba;
-        debts[a] ||= {};
-        debts[a][b] ||= {};
-        debts[b] ||= {};
-        debts[b][a] ||= {};
-        debts[a][b][cur] = diff > 0 ? diff : 0;
-        debts[b][a][cur] = diff < 0 ? -diff : 0;
+
+  let debts = {};
+  if (expenses.length > 0 && participants.length > 0 && currencies.length > 0) {
+    // 1) raw‑долги
+    const debtsRaw = {};
+    expenses.forEach(exp => {
+      const ppl = exp.forWhom.split(' + ');
+      const share = parseFloat(exp.amount.replace(',', '.')) / ppl.length;
+      ppl.forEach(person => {
+        if (person === exp.who) return;
+        debtsRaw[person] ||= {};
+        debtsRaw[person][exp.who] ||= {};
+        debtsRaw[person][exp.who][exp.currency] =
+          (debtsRaw[person][exp.who][exp.currency] || 0) + share;
       });
     });
-  });
+  
+    // 2) нормализация
+    debts = JSON.parse(JSON.stringify(debtsRaw));
+    currencies.forEach(cur => {
+      participants.forEach(a => {
+        participants.forEach(b => {
+          if (a === b) return;
+          const ab = debtsRaw[a]?.[b]?.[cur] || 0;
+          const ba = debtsRaw[b]?.[a]?.[cur] || 0;
+          const diff = ab - ba;
+          debts[a] ||= {};
+          debts[a][b] ||= {};
+          debts[b] ||= {};
+          debts[b][a] ||= {};
+          debts[a][b][cur] = diff > 0 ? diff : 0;
+          debts[b][a][cur] = diff < 0 ? -diff : 0;
+        });
+      });
+    });
+  }
+  
 
   return (
     <div className="app-container">
