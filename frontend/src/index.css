@@ -113,6 +113,28 @@ select:focus {
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
+.forWhom-multiselect {
+  margin: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 300px;
+  max-width: none;
+  display: block;
+  outline: none;
+  box-shadow: none;
+  background-color: white;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* При фокусе */
+.forWhom-multiselect:focus-within {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
 button {
   margin: 0.5rem;
   padding: 0.5rem 1rem;
