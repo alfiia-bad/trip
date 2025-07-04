@@ -496,12 +496,6 @@ tr:last-child td {
   cursor: pointer;
 }
 
-.edit-participant-save-btn:hover {
-  background-color: #5d6e6d;
-  background-repeat: no-repeat;
-  min-height: 100vh;
-}
-
 .body {
   margin: 0;
   padding: 0;
