@@ -983,22 +983,3 @@ tr:last-child td {
   background-color: #5d6e6d;
 }
 
-.footer {
-  height: 50px;
-  background-color: #111; /* тёмный фон для контраста */
-  color: white;
-  font-size: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-}
-
-.footer a {
-  color: white;
-  text-decoration: underline;
-}
