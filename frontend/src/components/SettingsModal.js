@@ -17,7 +17,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
           document.body.style.overflowY = '';
           window.scrollTo(0, scrollY);
         }; 
-    }, []);
+      }, []);
   
   const [editingName, setEditingName] = useState(null);
   const [editedName, setEditedName] = useState('');
