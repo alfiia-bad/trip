@@ -265,7 +265,7 @@ function App() {
       <div>
         {/* Кто платил - селект */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <select name="who" value={form.who} onChange={handleSelectChange} required>
+          <select name="who" className="who-select" value={form.who} onChange={handleSelectChange} required>
             <option value="" disabled hidden>Кто платил</option>
             {participants && participants.map(p => (
               <option key={p} value={p}>{p}</option>
