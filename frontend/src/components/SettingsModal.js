@@ -82,7 +82,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" style={{ paddingLeft: 8, paddingRight: 8 }}>
+      <div className="modal" style={{ paddingLeft: 16, paddingRight: 16 }} onClick={(e) => e.stopPropagation()}>
         <div className="modal-header" style={{ paddingLeft: 8, paddingRight: 8 }}>
           <h3>Настройки</h3>
           <button onClick={onClose} className="close-btn">&times;</button>
