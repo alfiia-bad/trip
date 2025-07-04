@@ -24,8 +24,8 @@ function App() {
   });
 
   const [showSettings, setShowSettings] = useState(false);
-  const [participants, setParticipants] = useState(null);
-  const [currencies, setCurrencies] = useState(null);
+  const [participants, setParticipants] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
   const [loadingSettings, setLoadingSettings] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [forWhomDropdownOpen, setForWhomDropdownOpen] = useState(false);
