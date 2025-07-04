@@ -339,7 +339,19 @@ function App() {
           </tbody>
         </table>
       </div>
-      
+
+      {/* Общая сумма */}
+      <div style={{ marginTop: '1rem', fontSize: '1.2rem', fontWeight: 'bold' }}>
+        Общая сумма в рублях:&nbsp;
+        {expenses.length > 0
+          ? expenses.reduce((sum, item) => {
+              const amount = parseFloat(item.amount.replace(',', '.'));
+              const rate = item.currency === 'GEL' ? currencyRate || 0 : 1;
+              return sum + amount * rate;
+            }, 0).toFixed(2)
+          : '0.00'} ₽
+      </div>
+
       {currencyRate !== null && (
         <div className="exchange-rate-container">
           <h2 className="exchange-rate">В 1 лари {currencyRate.toFixed(2)} рублей</h2>
