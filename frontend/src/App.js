@@ -325,13 +325,6 @@ function App() {
                 <td>{e.forWhom}</td>
                       <td>
                         <button
-                          className="edit-btn icon-btn"
-                          onClick={() => handleEdit(i)}
-                          title="Редактировать"
-                        >
-                          <BiEditAlt />
-                        </button>
-                        <button
                           className="delete-btn icon-btn"
                           onClick={() => openDeleteModal(i)}
                           title="Удалить"
