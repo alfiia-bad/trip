@@ -311,7 +311,7 @@ function App() {
               <th>Валюта</th>
               <th>Дата</th>
               <th>За кого платил</th>
-              <th>Действие</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
