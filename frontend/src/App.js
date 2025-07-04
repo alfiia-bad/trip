@@ -341,7 +341,7 @@ function App() {
       </div>
 
       {/* Общая сумма */}
-      <div style={{ marginTop: '1rem', margin-left: '8px', fontSize: '1.2rem', fontWeight: 'bold' }}>
+      <div style={{ marginTop: '1rem', marginLeft: '8px', fontSize: '1.2rem', fontWeight: 'bold', textShadow: '1px 1px 4px rgba(0, 0, 0, 0.5)' }}>
         Общая сумма в рублях:&nbsp;
         {expenses.length > 0
           ? expenses.reduce((sum, item) => {
