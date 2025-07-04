@@ -238,31 +238,26 @@ tr:last-child td {
   border-bottom: none;
 }
 
+/* 1) фиксированная раскладка таблицы: колонки не будут сами «расти» под содержимое */
 .expense-table {
-  width: max-content; /* Позволяет таблице быть шире контейнера при необходимости */
-  border-collapse: collapse;
-  min-width: 100%;
+  table-layout: fixed;
+  width: 100%;
 }
 
-.expense-table th,
-.expense-table td {
+/* 2) первая колонка (описание) остаётся без переноса */
+.expense-table th:first-child,
+.expense-table td:first-child {
   white-space: nowrap;
-  padding: 0.5rem;
-  border: 1px solid #eee;
-  text-align: left;
+  width: 150px;    /* подстройте под вашу максимальную длину «Что происходило» */
 }
 
-.expense-table td:nth-child(2) {
-  white-space: normal;      /* Разрешить перенос текста */
+/* 3) все остальные колонки (именно ваши валютные) получают одинаковое ограничение и обтекание */
+.expense-table th:not(:first-child),
+.expense-table td:not(:first-child) {
+  max-width: 120px;        /* или 100–150px, как вам удобнее */
+  white-space: normal;     /* разрешаем перенос */
   word-break: break-word;
-  width: 200px;
-  max-width: 200px;
-}
-
-.expense-table tbody td:not(:first-child) {
-  max-width: 80px;
-  white-space: normal;
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Модалка */
