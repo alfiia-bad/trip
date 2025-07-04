@@ -998,3 +998,15 @@ tr:last-child td {
 .who-select {
   margin-bottom: 0 !important;
 }
+
+.footer-note {
+  color: #fff;
+  font-size: 8px;
+  margin: 40px 0 40px; 
+  text-align: center; 
+}
+
+.footer-note a {
+  color: #fff;
+  text-decoration: underline;
+}
