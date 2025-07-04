@@ -29,6 +29,8 @@ function App() {
   const [deleteIndex, setDeleteIndex] = useState(null);
   const [forWhomDropdownOpen, setForWhomDropdownOpen] = useState(false);
   const forWhomRef = useRef(null);
+  const [editingRate, setEditingRate] = React.useState(null);
+  const [editingRateInput, setEditingRateInput] = React.useState('');
 
   useEffect(() => {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
@@ -139,35 +141,59 @@ function App() {
     });
   };
   
-  const handleEditExchangeRate = async () => {
-  const newRate = prompt('Введите новый курс лари к рублю', currencyRate);
-  if (newRate && !isNaN(newRate)) {
-    const parsedRate = parseFloat(newRate);
-    setCurrencyRate(parsedRate);
-
+  // Открыть поле ввода курса
+  const handleEditExchangeRate = () => {
+    setEditingRateInput(currencyRate.toString().replace('.', ','));
+    setEditingRate(true);
+  };
+  
+  // Обработка изменения в input курса
+  const handleEditingRateChange = (e) => {
+    const val = e.target.value;
+    // Разрешаем цифры, точку или запятую, максимум 2 знака после запятой
+    if (/^\d*([.,]\d{0,2})?$/.test(val) || val === '') {
+      setEditingRateInput(val);
+    }
+  };
+  
+  // Сохранение нового курса с валидацией
+  const saveNewRate = async () => {
+    if (!editingRateInput) {
+      alert('Введите курс');
+      return;
+    }
+    // Заменяем запятую на точку для парсинга
+    const normalized = editingRateInput.replace(',', '.');
+    const parsed = parseFloat(normalized);
+  
+    if (isNaN(parsed) || parsed <= 0) {
+      alert('Введите корректное положительное число с максимум двумя знаками после запятой');
+      return;
+    }
+  
+    // Сохраняем
     try {
       const response = await fetch('/api/currency-rate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        method: 'PUT', // PUT, т.к. в бэке используется PUT
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           from_currency: 'GEL',
           to_currency: 'RUB',
-          rate: parsedRate
+          rate: parsed
         })
       });
-
       if (!response.ok) {
         const err = await response.json();
         alert('Ошибка при сохранении курса: ' + err.detail);
+        return;
       }
+      setCurrencyRate(parsed);
+      setEditingRate(false);
     } catch (err) {
-      console.error(err);
       alert('Ошибка при сохранении курса');
+      console.error(err);
     }
-  }
-};
+  };
 
   const isFormValid = () => {
     const { who, what, amount, currency, date, forWhom } = form;
