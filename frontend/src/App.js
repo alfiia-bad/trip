@@ -373,16 +373,23 @@ function App() {
       </div>
 
       {/* Общая сумма */}
-      <div style={{ marginTop: '1rem', marginLeft: '8px', fontSize: '1.2rem', fontWeight: 'bold', textShadow: '1px 1px 4px rgba(0, 0, 0, 0.5)' }}>
-        Общая сумма в рублях:&nbsp;
-        {expenses.length > 0
-          ? expenses.reduce((sum, item) => {
-              const amount = parseFloat(item.amount.replace(',', '.'));
-              const rate = item.currency === 'GEL' ? currencyRate || 0 : 1;
-              return sum + amount * rate;
-            }, 0).toFixed(2)
-          : '0.00'} ₽
-      </div>
+      {currencies && currencies.length > 0 && (
+        <div style={{ marginTop: '1rem', marginLeft: '8px', fontSize: '1.2rem', fontWeight: 'bold', textShadow: '1px 1px 4px rgba(0, 0, 0, 0.5)' }}>
+          {currencies.map(currency => {
+            const total = expenses
+              .filter(e => e.currency === currency)
+              .reduce((sum, item) => {
+                const amount = parseFloat(item.amount.replace(',', '.'));
+                return sum + (isNaN(amount) ? 0 : amount);
+              }, 0);
+            return (
+              <div key={currency}>
+                Итого в "{currency}": {total.toFixed(2)}
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {currencyRate !== null && (
         <div className="exchange-rate-container">
