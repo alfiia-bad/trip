@@ -259,6 +259,12 @@ tr:last-child td {
   max-width: 200px;
 }
 
+.expense-table tbody td:not(:first-child) {
+  max-width: 80px;
+  white-space: normal;
+  word-break: break-word;
+}
+
 /* Модалка */
 .modal-overlay {
   position: fixed;
