@@ -81,7 +81,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
   };
 
   return (
-    <div className="modal-overlay">
+    <div className="modal-overlay" onClick={onClose}>
       <div className="modal" style={{ paddingLeft: 8, paddingRight: 8 }}>
         <div className="modal-header" style={{ paddingLeft: 8, paddingRight: 8 }}>
           <h3>Настройки</h3>
