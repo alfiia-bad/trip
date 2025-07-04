@@ -33,19 +33,20 @@ def handle_expenses():
                     return jsonify({"message": "Expense added"}), 201
                 else:
                     cur.execute("""
-                        SELECT who, what, amount, currency, date, for_whom
+                        SELECT id, who, what, amount, currency, date, for_whom
                         FROM expenses
                         ORDER BY id DESC
                     """)
                     rows = cur.fetchall()
                     expenses = [
                         {
-                            "who": r[0],
-                            "what": r[1],
-                            "amount": r[2],
-                            "currency": r[3],
-                            "date": r[4],
-                            "forWhom": r[5]
+                            "id": r[0],      
+                            "who": r[1],
+                            "what": r[2],
+                            "amount": r[3],
+                            "currency": r[4],
+                            "date": r[5],
+                            "forWhom": r[6] 
                         }
                         for r in rows
                     ]
