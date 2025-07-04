@@ -278,6 +278,7 @@ function App() {
                     display: 'flex',
                     alignItems: 'center',
                     padding: '0.5rem',
+                    justifyContent: 'flex-start',
                     cursor: 'pointer',
                     gap: '0.5rem'
                   }}
@@ -286,9 +287,13 @@ function App() {
                     type="checkbox"
                     checked={form.forWhom.includes(p)}
                     onChange={() => toggleForWhom(p)}
-                    style={{ margin: 0 }}
+                    style={{ 
+                      margin: 0,
+                      marginRight: '0.5rem',
+                      flexShrink: 0 
+                    }}
                   />
-                  <span>{p}</span>
+                  <span style={{ textAlign: 'left' }}>{p}</span>
                 </label>
               ))}
             </div>
