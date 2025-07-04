@@ -238,11 +238,12 @@ tr:last-child td {
 
 .close-btn {
   position: absolute;
-  top: 10px;
+  top: 0px;
   right: 10px;
   width: 32px;
   height: 32px;
   background: none;
+  margin-top: 0;
   border: none;
   font-size: 1.5rem;
   line-height: 1;
