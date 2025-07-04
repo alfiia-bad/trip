@@ -503,7 +503,7 @@ tr:last-child td {
   min-height: 100vh;
 }
 
-body {
+.body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
