@@ -116,6 +116,13 @@ input[type="date"]::placeholder {
   color: #999;
 }
 
+.app-container input[name="what"],
+.app-container input[name="amount"] {
+  height: 36px;               
+  box-sizing: border-box;     
+  line-height: normal;        
+}
+
 select {
   margin: 8px;
   padding: 4px 8px;
