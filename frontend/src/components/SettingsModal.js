@@ -101,7 +101,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
       await fetch('/api/currencies', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name })
+        body: JSON.stringify({ code: name })
       });
       const res = await fetch('/api/currencies');
       const data = await res.json();
