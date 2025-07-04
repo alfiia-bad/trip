@@ -984,3 +984,6 @@ tr:last-child td {
   background-color: #5d6e6d;
 }
 
+.who-select {
+  margin-bottom: 0 !important;
+}
