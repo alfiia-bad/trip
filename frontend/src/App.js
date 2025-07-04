@@ -283,7 +283,7 @@ function App() {
         <div
           className="forWhom-multiselect"
           ref={forWhomRef}
-          style={{ position: 'relative', display: 'inline-block', width: 300, marginTop: 8 }}
+          style={{ position: 'relative', display: 'inline-block', width: 300 }}
         >
           <div className="forWhom-display" onClick={() => setForWhomDropdownOpen(o => !o)} style={{color: form.forWhom.length === 0 ? '#999' : '#333'}}>
             {forWhomDisplay || 'За кого платил'}
