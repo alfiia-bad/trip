@@ -64,11 +64,13 @@ input[type="date"] {
   background-color: white;
   color: #333;
   position: relative;
-  padding: 0.5rem 0.75rem;
+  padding: 4px 8px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 16px;
   width: 300px;
+  height: 36px;
+  margin: 8px;
   display: block;
   outline: none;
   box-shadow: none;
@@ -96,6 +98,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"]:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+input[type="date"]::placeholder {
+  color: #999;
 }
 
 select {
