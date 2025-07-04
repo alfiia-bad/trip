@@ -274,14 +274,8 @@ function App() {
           <button
             onClick={openSettings}
             title="Настройки"
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 0,
-              display: 'flex',
-              alignItems: 'center'
-            }}
+            className="settings-icon-btn"
+            aria-label="Настройки"  
           >
             <IoSettingsOutline size={32} color="#718583" />
           </button>
