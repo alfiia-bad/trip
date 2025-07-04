@@ -475,6 +475,11 @@ function App() {
         </div>
       )}
 
+      <p className="footer-note">
+        Разработано с любовью, вопросы и пожелания в тг 
+        <a href="https://t.me/alfeikaa" target="_blank" rel="noopener noreferrer">@alfeikaa</a>
+      </p>
+
       {showSettings && participants && currencies && (
         <SettingsModal
           onClose={closeSettings}
