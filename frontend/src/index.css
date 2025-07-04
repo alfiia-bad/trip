@@ -248,7 +248,7 @@ tr:last-child td {
 .expense-table td {
   white-space: nowrap;
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  border: 1px solid #eee;
   text-align: left;
 }
 
