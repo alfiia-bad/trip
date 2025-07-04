@@ -153,13 +153,15 @@ tr:last-child td {
 }
 
 .modal {
-  background: white;
-  padding: 16px 16px;
-  border-radius: 1rem;
+  background-color: #fff;
+  color: #000;
+  border-radius: 12px;
+  padding: 1rem;
+  width: 90%;
   max-width: 500px;
-  width: 100%;
-  position: relative;
-  color: black; 
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .modal-header {
