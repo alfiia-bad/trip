@@ -70,6 +70,15 @@ function App() {
     setForm(f => ({ ...f, [name]: value }));
   };
 
+  const handleAmountChange = (e) => {
+    const value = e.target.value;
+    
+    // Разрешаем только положительные числа или пустую строку
+    if (value === '' || (/^\d*\.?\d*$/.test(value) && parseFloat(value) >= 0)) {
+      setForm(f => ({ ...f, amount: value }));
+    }
+  };
+
   // Для select "Кто платил" и "Валюта"
   const handleSelectChange = e => {
     const { name, value } = e.target;
@@ -195,7 +204,7 @@ function App() {
           ))}
         </select>
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
-        <input name="amount" placeholder="Сколько" type="number" value={form.amount} onChange={handleChange} />
+        <input name="amount" placeholder="Сколько" type="number" min="0" step="0.01" value={form.amount} onChange={handleAmountChange} />
         {/* Валюта - селект */}
         <select name="currency" value={form.currency} onChange={handleSelectChange}>
           <option value="" disabled>Валюта</option>
