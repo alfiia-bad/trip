@@ -22,13 +22,33 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
   const [editingName, setEditingName] = useState(null);
   const [editedName, setEditedName] = useState('');
 
-  // Удаление участника
-  const deleteParticipant = async (name) => {
-    await fetch(`/api/participants/${name}`, { method: 'DELETE' });
-    // Обновляем участников
-    const res = await fetch('/api/participants');
-    const data = await res.json();
-    setParticipants(data);
+  const [toDelete, setToDelete] = useState(null); 
+
+  const confirmDelete = async () => {
+    if (!toDelete) return;
+
+    if (toDelete.type === 'participant') {
+      await fetch(`/api/participants/${encodeURIComponent(toDelete.name)}`, { method: 'DELETE' });
+      const res = await fetch('/api/participants');
+      setParticipants(await res.json());
+    } else {
+      await fetch(`/api/currencies/${encodeURIComponent(toDelete.name)}`, { method: 'DELETE' });
+      const res = await fetch('/api/currencies');
+      setCurrencies(await res.json());
+    }
+
+    setToDelete(null);
+  };
+  const cancelDelete = () => setToDelete(null);
+
+
+  // Вместо прямого удаления теперь открываем диалог
+  const promptDeleteParticipant = (name) => {
+    setToDelete({ type: 'participant', name });
+  };
+
+  const promptDeleteCurrency = (code) => {
+    setToDelete({ type: 'currency', name: code });
   };
 
   // Редактирование участника
@@ -122,7 +142,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
                       <BiEditAlt />
                     </button>
                     <button 
-                      onClick={() => deleteParticipant(p)} 
+                      onClick={() => promptDeleteParticipant(p)} 
                       className="delete-btn"
                       aria-label={`Удалить участника ${p}`}
                     >
@@ -143,7 +163,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
               <span>{c}</span>
               <div className="icon-buttons">
                 <button 
-                  onClick={() => deleteCurrency(c)} 
+                  onClick={() => promptDeleteCurrency(c)}  
                   className="delete-btn"
                   aria-label={`Удалить валюту ${c}`}
                 >
@@ -156,5 +176,35 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
         </div>
       </div>
     </div>
+
+      {/* Диалог подтверждения удаления */}
+      {toDelete && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h3>
+                {toDelete.type === 'participant'
+                  ? `Вы уверены, что хотите удалить участника "${toDelete.name}"? Действие необратимо`
+                  : `Вы уверены, что хотите удалить валюту "${toDelete.name}"? Действие необратимо`}
+              </h3>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
+              <button
+                style={{ backgroundColor: '#b00020', color: 'white', flex: 1, marginRight: '0.5rem' }}
+                onClick={confirmDelete}
+              >
+                Удалить
+              </button>
+              <button
+                style={{ backgroundColor: '#ccc', color: '#333', flex: 1, marginLeft: '0.5rem' }}
+                onClick={cancelDelete}
+              >
+                Отмена
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
