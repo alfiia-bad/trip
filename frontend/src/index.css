@@ -274,10 +274,20 @@ tr:last-child td {
 
 .settings-row {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
-  align-items: flex-end; 
-  height: 30px;           
+  height: 40px;
   margin-bottom: 0.5rem;
+}
+
+.participant-name {
+  width: 150px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  color: #333;
 }
 
 .modal-actions {
@@ -303,11 +313,8 @@ tr:last-child td {
 
 .icon-buttons {
   display: flex;
-  gap: 8px;
   align-items: center;
-  justify-content: flex-end;
-  margin: 0;
-  padding: 0;
+  gap: 8px;
 }
 
 .exchange-rate {
@@ -318,7 +325,6 @@ tr:last-child td {
 }
 
 .edit-btn {
-  margin: 24px 8px 0 8px;
   background-color: transparent;
   border: none;
   cursor: pointer;
