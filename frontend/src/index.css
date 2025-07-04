@@ -58,6 +58,7 @@ input {
   box-shadow: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   color: #333;
+  box-sizing: border-box;
 }
 
 input:focus {
