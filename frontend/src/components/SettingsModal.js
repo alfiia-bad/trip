@@ -103,7 +103,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
                 </>
               ) : (
                 <>
-                  <span>{p}</span>
+                  <div className="participant-name">{p}</div>
                   <div className="icon-buttons">
                     <button 
                       onClick={() => editParticipant(p)} 
