@@ -63,12 +63,11 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: editedName })
     });
+    setParticipants(prev =>
+      prev.map(p => (p === editingName ? editedName : p))
+    );
     setEditingName(null);
     setEditedName('');
-    // Обновляем участников
-    const res = await fetch('/api/participants');
-    const data = await res.json();
-    setParticipants(data);
   };
 
   const addParticipant = async () => {
