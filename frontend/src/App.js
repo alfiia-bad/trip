@@ -231,8 +231,8 @@ function App() {
 
       <div>
         {/* Кто платил - селект */}
-        <select name="who" value={form.who} onChange={handleSelectChange}>
-          <option value="" disabled>Кто платил</option>
+        <select name="who" value={form.who} onChange={handleSelectChange} required>
+          <option value="" disabled hidden>Кто платил</option>
           {participants && participants.map(p => (
             <option key={p} value={p}>{p}</option>
           ))}
@@ -240,8 +240,8 @@ function App() {
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
         <input name="amount" placeholder="Сколько" inputMode="decimal" pattern="^\d+([.,]\d{0,2})?$" value={form.amount} onChange={handleAmountChange} />
         {/* Валюта - селект */}
-        <select name="currency" value={form.currency} onChange={handleSelectChange}>
-          <option value="" disabled>Валюта</option>
+        <select name="currency" value={form.currency} onChange={handleSelectChange} required>
+          <option value="" disabled hidden>Валюта</option>
           {currencies && currencies.map(c => (
             <option key={c} value={c}>{c}</option>
           ))}
@@ -253,7 +253,7 @@ function App() {
           ref={forWhomRef}
           style={{ position: 'relative', display: 'inline-block', width: 300, marginTop: 8 }}
         >
-          <div className="forWhom-display" onClick={() => setForWhomDropdownOpen(o => !o)}>
+          <div className="forWhom-display" onClick={() => setForWhomDropdownOpen(o => !o)} style={{color: form.forWhom.length === 0 ? '#999' : '#333'}}>
             {forWhomDisplay || 'За кого платил'}
           </div>
 
