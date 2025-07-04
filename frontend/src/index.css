@@ -347,3 +347,26 @@ tr:last-child td {
   background-color: #fbeaea; 
   color: #800000; 
 }
+
+.exchange-rate-container {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.exchange-rate {
+  margin-right: 8px;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); /* тень для текста */
+}
+
+.exchange-rate-container .edit-btn {
+  color: white; /* делаем иконку белой */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* добавим тень к иконке */
+  background: transparent;
+  border: none;
+  padding: 4px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
