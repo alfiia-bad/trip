@@ -386,14 +386,31 @@ function App() {
 
       {currencyRate !== null && (
         <div className="exchange-rate-container">
-          <h2 className="exchange-rate">В 1 лари {currencyRate.toFixed(2)} рублей</h2>
-          <button
-            className="edit-btn"
-            onClick={handleEditExchangeRate}
-            aria-label="Редактировать курс"
-          >
-            <BiEditAlt />
-          </button>
+          {editingRate ? (
+            <>
+              <input
+                type="text"
+                value={editingRateInput}
+                onChange={handleEditingRateChange}
+                autoFocus
+                style={{ width: 100, marginRight: 8 }}
+                placeholder="Курс"
+              />
+              <button onClick={saveNewRate}>Сохранить</button>
+              <button onClick={() => setEditingRate(false)}>Отмена</button>
+            </>
+          ) : (
+            <>
+              <h2 className="exchange-rate">В 1 лари {currencyRate.toFixed(2)} рублей</h2>
+              <button
+                className="edit-btn"
+                onClick={handleEditExchangeRate}
+                aria-label="Редактировать курс"
+              >
+                <BiEditAlt />
+              </button>
+            </>
+          )}
         </div>
       )}
 
