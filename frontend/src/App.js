@@ -369,6 +369,30 @@ function App() {
           setCurrencies={setCurrencies}
         />
       )}
+      {deleteIndex !== null && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h3>Вы уверены, что хотите удалить строку?</h3>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
+              <button
+                style={{ backgroundColor: '#b00020', color: 'white', flex: 1, marginRight: '0.5rem' }}
+                onClick={confirmDelete}
+              >
+                Удалить
+              </button>
+              <button
+                style={{ backgroundColor: '#ccc', color: '#333', flex: 1, marginLeft: '0.5rem' }}
+                onClick={closeDeleteModal}
+              >
+                Отмена
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+            
     </div>
   );
 }
