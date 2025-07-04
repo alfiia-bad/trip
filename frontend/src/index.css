@@ -78,6 +78,12 @@ input[type="date"] {
   direction: ltr; 
 }
 
+input[type="checkbox"] {
+  width: auto !important;
+  display: inline-block;
+  margin-right: 8px;
+}
+
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.5);
   opacity: 0.6;
