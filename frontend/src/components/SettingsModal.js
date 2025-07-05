@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BiEditAlt, BiTrash } from "react-icons/bi";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import '../index.css';
 
 
@@ -22,10 +23,10 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
   
   const [editingName, setEditingName] = useState(null);
   const [editedName, setEditedName] = useState('');
-  const [exchangeMatrix, setExchangeMatrix] = useState([]);
-
+  const [exchangeMatrix, setExchangeMatrix] = useState([]);      
+  const [defaultCurrency, setDefaultCurrency] = useState(null);
   const [toDelete, setToDelete] = useState(null); 
-
+      
   const confirmDelete = async () => {
     if (!toDelete) return;
 
@@ -112,6 +113,22 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
     }
   };
 
+  useEffect(() => {
+    fetch('/api/default-currency')
+      .then(res => res.json())
+      .then(data => setDefaultCurrency(data.code));
+  }, []);
+
+// при клике «сердечко»
+  const handleSetDefault = async (code) => {
+    await fetch('/api/default-currency', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code })
+    });
+    setDefaultCurrency(code);
+  };
+
   const missingCurrencies = currencies.filter((cur, i) => {
     for (let j = 0; j < currencies.length; j++) {
       if (i === j) continue;
@@ -123,10 +140,16 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
   return (
     <>
       <div className="modal-overlay" onClick={onClose}>
-        <div className="modal" style={{ paddingLeft: 16, paddingRight: 16 }} onClick={(e) => e.stopPropagation()}>
+        <div
+          className="modal"
+          style={{ paddingLeft: 16, paddingRight: 16 }}
+          onClick={(e) => e.stopPropagation()}
+        >
           <div className="modal-header" style={{ paddingLeft: 8, paddingRight: 8 }}>
             <h3>Настройки</h3>
-            <button onClick={onClose} className="close-btn">&times;</button>
+            <button onClick={onClose} className="close-btn">
+              &times;
+            </button>
           </div>
 
           <div>
@@ -140,21 +163,26 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
                       value={editedName}
                       onChange={(e) => setEditedName(e.target.value)}
                     />
-                    <button className="edit-participant-save-btn" onClick={saveParticipantEdit}>Сохранить</button>
+                    <button
+                      className="edit-participant-save-btn"
+                      onClick={saveParticipantEdit}
+                    >
+                      Сохранить
+                    </button>
                   </>
                 ) : (
                   <>
                     <div className="participant-name">{p}</div>
                     <div className="icon-buttons">
-                      <button 
-                        onClick={() => editParticipant(p)} 
+                      <button
+                        onClick={() => editParticipant(p)}
                         className="edit-btn"
                         aria-label={`Редактировать участника ${p}`}
                       >
                         <BiEditAlt />
                       </button>
-                      <button 
-                        onClick={() => promptDeleteParticipant(p)} 
+                      <button
+                        onClick={() => promptDeleteParticipant(p)}
                         className="delete-btn"
                         aria-label={`Удалить участника ${p}`}
                       >
@@ -172,10 +200,21 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
             <h4>Валюты:</h4>
             {currencies.map((c, idx) => (
               <div key={idx} className="settings-row">
-                <span>{c}</span>
+                <div className="currency-code">{c}</div>
                 <div className="icon-buttons">
-                  <button 
-                    onClick={() => promptDeleteCurrency(c)}  
+                  <button
+                    onClick={() => handleSetDefault(c)}
+                    className="favorite-btn"
+                    aria-label={`Сделать ${c} валютой по умолчанию`}
+                  >
+                    {c === defaultCurrency ? (
+                      <FaHeart className="edit-btn" />
+                    ) : (
+                      <FaRegHeart className="delete-btn" />
+                    )}
+                  </button>
+                  <button
+                    onClick={() => promptDeleteCurrency(c)}
                     className="delete-btn"
                     aria-label={`Удалить валюту ${c}`}
                   >
@@ -186,13 +225,15 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
             ))}
             <button onClick={addCurrency}>Добавить валюту</button>
           </div>
-        </div>
-      </div>
 
-      <div style={{ marginTop: 8, color: 'red', fontSize: 14 }}>
-        {missingCurrencies.map(c => (
-          <div key={c}>* Расчеты могут быть неправильные, так как не указан курс валют для "{c}"</div>
-        ))}
+          <div style={{ marginTop: 8, color: 'red', fontSize: 14 }}>
+            {missingCurrencies.map((c) => (
+              <div key={c}>
+                * Расчеты могут быть неправильные, так как не указан курс валют для "{c}"
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Диалог подтверждения удаления */}
@@ -206,15 +247,31 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
                   : `Вы уверены, что хотите удалить валюту "${toDelete.name}"? Действие необратимо`}
               </h3>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginTop: '1rem',
+              }}
+            >
               <button
-                style={{ backgroundColor: '#b00020', color: 'white', flex: 1, marginRight: '0.5rem' }}
+                style={{
+                  backgroundColor: '#b00020',
+                  color: 'white',
+                  flex: 1,
+                  marginRight: '0.5rem',
+                }}
                 onClick={confirmDelete}
               >
                 Удалить
               </button>
               <button
-                style={{ backgroundColor: '#ccc', color: '#333', flex: 1, marginLeft: '0.5rem' }}
+                style={{
+                  backgroundColor: '#ccc',
+                  color: '#333',
+                  flex: 1,
+                  marginLeft: '0.5rem',
+                }}
                 onClick={cancelDelete}
               >
                 Отмена
