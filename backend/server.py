@@ -118,9 +118,13 @@ def handle_currencies():
                     cur.execute("INSERT INTO currencies (code) VALUES (%s) ON CONFLICT DO NOTHING", (data["code"],))
                     return jsonify({"message": "Currency added"}), 201
                 else:
-                    cur.execute("SELECT code FROM currencies ORDER BY code")
-                    rows = cur.fetchall()
-                    return jsonify([r[0] for r in rows])
+                     cur.execute("SELECT id, code FROM currencies ORDER BY id")
+                     rows = cur.fetchall()
+                     currencies = [
+                         { "id": r[0], "code": r[1] }
+                         for r in rows
+                     ]
+                     return jsonify(currencies)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -140,8 +144,8 @@ def get_exchange_matrix():
         with get_conn() as conn:
             with conn.cursor() as cur:
                 # 1) получаем упорядоченный список кодов валют
-                cur.execute("SELECT code FROM currencies ORDER BY code")
-                codes = [r[0] for r in cur.fetchall()]
+                cur.execute("SELECT id, code FROM currencies ORDER BY id")
+                codes = [r[1] for r in cur.fetchall()]
 
                 # 2) вытаскиваем все актуальные курсы
                 cur.execute("SELECT from_code, to_code, rate FROM exchange_rates")
