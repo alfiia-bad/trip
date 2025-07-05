@@ -9,6 +9,14 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
   const [matrix, setMatrix]       = useState([]); 
   const [editingCell, setEditing] = useState(null);
 
+  const missingCurrencies = currencies.filter((cur, i) => {
+    for (let j = 0; j < currencies.length; j++) {
+      if (i === j) continue;
+      if (!matrix[i] || matrix[i][j] == null) return true;
+    }
+    return false;
+  });
+
   // 1) подгружаем матрицу при открытии
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -131,7 +139,14 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
                 );
               })
             )}
-          </div>   
+          </div>  
+
+          <div style={{ marginTop: '1rem', fontSize: '14px', color: 'red' }}>
+            {missingCurrencies.map(c => (
+              <div key={c}>* Расчеты могут быть неправильные, так как не указан курс валют для "{c}"</div>
+            ))}
+          </div>
+            
         </div>
       </div>
     </div>
