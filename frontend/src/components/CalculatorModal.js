@@ -77,11 +77,11 @@ export default function CalculatorModal({ onClose }) {
                       textAlign: 'right'
                     }}
                   />
-                  <span>&nbsp;{from}&nbsp;это&nbsp;</span>
-                  <strong style={{ minWidth: 60, textAlign: 'right', display: 'inline-block' }}>
+                  <span>{from} это </span>
+                  <strong style={{ whiteSpace: 'nowrap', maxWidth: '100%', marginLeft: '4px', marginRight: '4px', textAlign: 'right', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {converted}
                   </strong>
-                  <span>&nbsp;{to}</span>
+                  <span> {to}</span>
                 </div>
               );
             })
