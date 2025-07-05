@@ -49,8 +49,13 @@ function App() {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
     fetchExpenses();
     fetchInitialSettings();
-
   }, []);
+
+  useEffect(() => {
+    if (currencies.length > 0 && !form.currency) {
+      setForm(f => ({ ...f, currency: currencies[0].code }));
+    }
+  }, [currencies]);
 
     // Закрытие мультиселекта по клику вне
   useEffect(() => {
