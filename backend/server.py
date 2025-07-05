@@ -134,6 +134,74 @@ def delete_currency(code):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/exchange-matrix", methods=["GET"])
+def get_exchange_matrix():
+    try:
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                # 1) получаем упорядоченный список кодов валют
+                cur.execute("SELECT code FROM currencies ORDER BY code")
+                codes = [r[0] for r in cur.fetchall()]
+
+                # 2) вытаскиваем все актуальные курсы
+                cur.execute("SELECT from_code, to_code, rate FROM exchange_rates")
+                rows = cur.fetchall()
+
+                # 3) строим словарь-матрицу с 1.0 на диагонали
+                matrix = {
+                    f: {t: (1.0 if f == t else None) for t in codes}
+                    for f in codes
+                }
+                for f, t, rate in rows:
+                    matrix[f][t] = rate
+
+                # 4) отдаем JSON
+                return jsonify({
+                    "currencies": codes,
+                    "matrix": [
+                        [ matrix[f][t] for t in codes ]
+                        for f in codes
+                    ]
+                })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/exchange-rate", methods=["PUT"])
+def update_exchange_rate():
+    """
+    Ожидает JSON { from_code, to_code, rate }.
+    Сохраняет прямой курс и автоматически пересчитывает обратный.
+    """
+    data = request.json or {}
+    f = data.get("from_code")
+    t = data.get("to_code")
+    r = data.get("rate", 0.0)
+
+    if not f or not t or r <= 0:
+        return jsonify({"error": "Неверные параметры"}), 400
+
+    inv = 1.0 / r
+
+    upsert_sql = """
+    INSERT INTO exchange_rates (from_code, to_code, rate)
+      VALUES (%s, %s, %s)
+    ON CONFLICT (from_code, to_code) DO UPDATE
+      SET rate = EXCLUDED.rate
+    """
+
+    try:
+        with get_conn() as conn:
+            with conn.cursor() as cur:
+                # прямой
+                cur.execute(upsert_sql, (f, t, r))
+                # обратный
+                cur.execute(upsert_sql, (t, f, inv))
+                conn.commit()
+        return jsonify({"message": "Курс обновлён"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/api/currency-rate', methods=["GET", "POST"])
 def currency_rate():
     try:
