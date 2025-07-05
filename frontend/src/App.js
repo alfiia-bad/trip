@@ -18,7 +18,7 @@ function MissingRatesWarning({ missingCurrencies }) {
   if (missingCurrencies.length === 0) return null;
 
   return (
-    <div style={{ color: 'red', fontSize: 14, marginLeft: 8, marginTop: 8 }}>
+    <div style={{ color: 'red', fontSize: 14, marginTop: 8 }}>
       {missingCurrencies.map(c => (
         <div key={c}>
           * Расчеты могут быть неправильные, так как не указан курс валют для "{c}"
@@ -150,7 +150,7 @@ function App() {
     who: '',
     what: '',
     amount: '',
-    currency: '',
+    currency: currencies?.[0] || '',
     date: getLocalDateTimeString(), // ← вот здесь
     forWhom: [],
   });
@@ -544,7 +544,7 @@ function App() {
 
       {/* Общая сумма */}
       {currencies && currencies.length > 0 && (
-        <div style={{ marginTop: '1rem', marginLeft: '8px', fontSize: '14px', fontWeight: 'bold', textShadow: '1px 1px 4px rgba(0, 0, 0, 0.5)' }}>
+        <div style={{ marginTop: '1rem', marginLeft: '8px', fontSize: '1.2rem', fontWeight: 'bold', textShadow: '1px 1px 4px rgba(0, 0, 0, 0.5)' }}>
           {currencies.map(currency => {
             const total = expenses
               .filter(e => e.currency === currency)
