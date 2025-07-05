@@ -153,7 +153,7 @@ def get_exchange_matrix():
                     for f in codes
                 }
                 for f, t, rate in rows:
-                    matrix[f][t] = rate
+                    matrix[f][t] = round(rate, 8)
 
                 # 4) отдаем JSON
                 return jsonify({
@@ -181,7 +181,8 @@ def update_exchange_rate():
     if not f or not t or r <= 0:
         return jsonify({"error": "Неверные параметры"}), 400
 
-    inv = 1.0 / r
+    inv = round(1.0 / r, 8)
+    r = round(r, 8)
 
     upsert_sql = """
     INSERT INTO exchange_rates (from_code, to_code, rate)
