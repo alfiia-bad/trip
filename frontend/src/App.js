@@ -14,6 +14,20 @@ function formatDate(dateString) {
   return `${day}.${month}.${year}`;
 }
 
+function MissingRatesWarning({ missingCurrencies }) {
+  if (missingCurrencies.length === 0) return null;
+
+  return (
+    <div style={{ color: 'red', fontSize: 14, marginTop: 8 }}>
+      {missingCurrencies.map(c => (
+        <div key={c}>
+          * Расчеты могут быть неправильные, так как не указан курс валют для "{c}"
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function App() {
   const [expenses, setExpenses] = useState([]);
   const [currencyRate, setCurrencyRate] = useState(null);
