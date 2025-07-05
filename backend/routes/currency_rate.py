@@ -26,7 +26,7 @@ async def update_currency_rate(request: Request):
     data = await request.json()
     from_currency = data.get("from_currency", "GEL")
     to_currency = data.get("to_currency", "RUB")
-    rate = data.get("rate")
+    rate = round(float(data.get("rate")), 8)
 
     if rate is None:
         raise HTTPException(status_code=400, detail="Не указан курс")
