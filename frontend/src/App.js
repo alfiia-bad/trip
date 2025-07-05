@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import mountainImage from './assets/montain2.jpg';
 import './index.css';
 import SettingsModal from './components/SettingsModal'; 
