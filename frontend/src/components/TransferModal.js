@@ -5,11 +5,49 @@ import '../index.css';
 export default function TransferModal({ onClose, rate, onSaveRate }) {
   const [editing, setEditing] = useState(false);
   const [input, setInput] = useState(rate?.toFixed(2) ?? '');
+  const [currencies, setCurrencies] = useState([]);
+  const [matrix, setMatrix]       = useState([]); 
+  const [editingCell, setEditing] = useState(null);
 
+  // 1) подгружаем матрицу при открытии
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+    fetch('/api/exchange-matrix')
+      .then(r => r.json())
+      .then(({ currencies, matrix }) => {
+        setCurrencies(currencies);
+        setMatrix(matrix);
+      });
     return () => { document.body.style.overflow = ''; };
   }, []);
+
+  // 2) сохранить новую величину
+  const saveCell = async () => {
+    const { row, col, value } = editingCell;
+    const from = currencies[row];
+    const to   = currencies[col];
+    const rate = parseFloat(value);
+    if (isNaN(rate) || rate <= 0) {
+      alert('Неверный курс');
+      return;
+    }
+
+    // шлём на бэкенд, который сам обновит и обратный курс
+    await fetch('/api/exchange-rate', {
+      method: 'PUT',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ from_code: from, to_code: to, rate })
+    });
+
+    // локально пересчитываем матрицу
+    setMatrix(m => {
+      const nm = m.map(r => r.slice());
+      nm[row][col] = rate;
+      nm[col][row] = 1 / rate;
+      return nm;
+    });
+    setEditing(null);
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -18,36 +56,49 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
           <h3>Перевод валют</h3>
           <button onClick={onClose} className="close-btn">&times;</button>
         </div>
-        <div style={{ padding: '1rem' }}>
-          {editing
-            ? (
-              <>
-                <input
-                  value={input}
-                  onChange={e => setInput(e.target.value)}
-                  style={{ marginRight: 8 }}
-                />
-                <button onClick={() => { onSaveRate(parseFloat(input)); setEditing(false); }}>
-                  Сохранить
-                </button>
-                <button onClick={() => setEditing(false)} style={{ marginLeft: 8 }}>
-                  Отмена
-                </button>
-              </>
-            )
-            : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span>В 1 лари {rate?.toFixed(2)} рублей</span>
-                <button
-                  onClick={() => setEditing(true)}
-                  className="edit-btn"
-                  aria-label="Редактировать курс"
-                >
-                  <BiEditAlt />
-                </button>
-              </div>
-            )
-          }
+
+        <div style={{ overflowX: 'auto', padding: '1rem' }}>
+          <table className="table-currency">
+            <thead>
+              <tr>
+                <th></th>
+                {currencies.map(c => <th key={c}>{c}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {currencies.map((rowCode, i) => (
+                <tr key={rowCode}>
+                  <th>{rowCode}</th>
+                  {currencies.map((colCode, j) => {
+                    const val = matrix[i]?.[j]?.toFixed(4) ?? '';
+                    const isEditing = editingCell && editingCell.row===i && editingCell.col===j;
+                    return (
+                      <td key={colCode}>
+                        {i === j
+                          ? '1'
+                          : isEditing
+                            ? <>
+                                <input
+                                  value={editingCell.value}
+                                  onChange={e => setEditing(ec => ({...ec, value: e.target.value}))}
+                                  onKeyDown={e => e.key==='Enter' && saveCell()}
+                                />
+                                <button onClick={saveCell}>OK</button>
+                              </>
+                            : <span
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => setEditing({ row:i, col:j, value: val })}
+                              >
+                                {val}
+                              </span>
+                        }
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
