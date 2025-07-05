@@ -238,6 +238,42 @@ def currency_rate():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/default-currency", methods=["GET"])
+def get_default_currency():
+    try:
+        with get_conn() as conn, conn.cursor() as cur:
+            cur.execute("SELECT code FROM default_currency LIMIT 1;")
+            row = cur.fetchone()
+            if row:
+                return jsonify({"code": row[0]})
+            else:
+                # если ещё не установлен — возвращаем первый из currencies
+                cur.execute("SELECT code FROM currencies ORDER BY code LIMIT 1;")
+                first = cur.fetchone()
+                return jsonify({ "code": first[0] if first else None }), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/default-currency", methods=["PUT"])
+def set_default_currency():
+    data = request.json or {}
+    code = data.get("code")
+    if not code:
+        return jsonify({"error": "Не указан code"}), 400
+
+    try:
+        with get_conn() as conn, conn.cursor() as cur:
+            # заменяем старую запись (или вставляем, если пусто)
+            cur.execute("""
+              INSERT INTO default_currency(code)
+                VALUES (%s)
+              ON CONFLICT (code) DO UPDATE SET code = EXCLUDED.code
+            """, (code,))
+            conn.commit()
+        return jsonify({"message": f"Default currency set to {code}"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/")
 def serve_index():
     return send_from_directory(app.static_folder, "index.html")
