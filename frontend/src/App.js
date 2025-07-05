@@ -150,7 +150,7 @@ function App() {
     who: '',
     what: '',
     amount: '',
-    currency: currencies?.[0] || '',
+    currency: '',
     date: getLocalDateTimeString(), // ← вот здесь
     forWhom: [],
   });
