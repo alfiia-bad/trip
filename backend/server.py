@@ -212,7 +212,7 @@ def currency_rate():
                     data = request.json
                     from_currency = data["from_currency"]
                     to_currency = data["to_currency"]
-                    rate = data["rate"]
+                    rate = round(float(data["rate"]), 8)
 
                     cur.execute("""
                         INSERT INTO currency_rates (from_currency, to_currency, rate, updated_at)
