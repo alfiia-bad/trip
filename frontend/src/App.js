@@ -504,57 +504,46 @@ function App() {
                   ))}
                 </tr>
               </thead>
-                  
+                
               <tbody>
-                  
-                {Object.entries(
-                  expenses.reduce((acc, exp) => {
-                    const key = `${exp.who} → ${exp.forWhom}`;
-                    if (!acc[key]) acc[key] = {};
-                    if (!acc[key][exp.currency]) acc[key][exp.currency] = 0;
-                    const amount = parseFloat(exp.amount.replace(',', '.'));
-                    acc[key][exp.currency] += isNaN(amount) ? 0 : amount;
-                    return acc;
-                  }, {})
-                ).map(([key, currencyAmounts], idx) => {
-                  const [who, forWhom] = key.split(' → ');
-                  const text = `${who} платила за ${forWhom}`;
-                  return (
-                    <tr key={idx}>
-                      <td>{text}</td>
-                      {currencies.map(cur => (
-                        <td key={cur}>
-                          {currencyAmounts[cur] ? currencyAmounts[cur].toFixed(2) : '—'}
-                        </td>
-                      ))}
-                      {currencies.map(cur => (
-                        <td key={`total-${cur}`}>
-                          {convertToTotal(cur, currencyAmounts, exchangeMatrix).toFixed(2)}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
-
-                {/* пустая строка */}
-                <tr><td colSpan={1 + currencies.length}>&nbsp;</td></tr>
-              
-                {/* взаимные долги */}
-                {Object.entries(debts).flatMap(([debtor, creds]) =>
-                  Object.entries(creds)
-                    .filter(([, curAmts]) => currencies.some(cur => (curAmts[cur] || 0) > 0))
-                    .map(([creditor, curAmts]) => (
-                      <tr key={`${debtor}-${creditor}`}>
-                        <td>{`${debtor} должна ${creditor}`}</td>
-                        {currencies.map(cur => (
-                          <td key={cur}>
-                            {curAmts[cur] > 0 ? curAmts[cur].toFixed(2) : '—'}
-                          </td>
-                        ))}
-                      </tr>
-                    ))
-                )}      
-              </tbody>     
+                {participants.flatMap((from) =>
+                  participants
+                    .filter(to => to !== from)
+                    .map(to => {
+                      const rowDebts = debts[from]?.[to] || {};
+                      const currencyAmounts = {};
+          
+                      currencies.forEach(cur => {
+                        currencyAmounts[cur] = rowDebts[cur] || 0;
+                      });
+          
+                      const convertedTotals = currencies.map(targetCurrency => {
+                        const total = convertToTotal(targetCurrency, currencyAmounts, exchangeMatrix);
+                        return total.toFixed(2);
+                      });
+          
+                      const isEmpty = Object.values(currencyAmounts).every(v => v === 0);
+                      if (isEmpty) return null;
+          
+                      return (
+                        <tr key={`${from}-${to}`}>
+                          <td>{from} должна {to}</td>
+                          {currencies.map(cur => (
+                            <td key={`${from}-${to}-${cur}`}>
+                              {currencyAmounts[cur] > 0 ? currencyAmounts[cur].toFixed(2) : ''}
+                            </td>
+                          ))}
+                          {convertedTotals.map((total, idx) => (
+                            <td key={`converted-${from}-${to}-${idx}`}>
+                              {parseFloat(total) > 0 ? total : ''}
+                            </td>
+                          ))}
+                        </tr>
+                      );
+                    })
+                )}
+              </tbody>
+   
             </table>
           </div>
         </div>
