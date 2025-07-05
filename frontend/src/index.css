@@ -244,26 +244,18 @@ tr:last-child td {
   border-bottom: none;
 }
 
-/* 1) фиксированная раскладка таблицы: колонки не будут сами «расти» под содержимое */
 .expense-table {
-  table-layout: fixed;
-  width: 100%;
+  width: calc(100% - 16px);   
+  table-layout: auto;         
+  border-collapse: collapse;
 }
 
-/* 2) первая колонка (описание) остаётся без переноса */
-.expense-table th:first-child,
-.expense-table td:first-child {
-  white-space: nowrap;
-  width: 150px;    /* подстройте под вашу максимальную длину «Что происходило» */
-}
-
-/* 3) все остальные колонки (именно ваши валютные) получают одинаковое ограничение и обтекание */
-.expense-table th:not(:first-child),
-.expense-table td:not(:first-child) {
-  max-width: 120px;        /* или 100–150px, как вам удобнее */
-  white-space: normal;     /* разрешаем перенос */
+.expense-table th,
+.expense-table td {
   word-break: break-word;
-  overflow-wrap: break-word;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  text-align: left;
 }
 
 /* Модалка */
