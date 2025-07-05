@@ -88,6 +88,7 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
                               inputMode="decimal"
                               autoFocus
                               value={editingCell.value}
+                              onFocus={e => e.target.select()} 
                               onChange={e => setEditing(ec => ({ ...ec, value: e.target.value }))}
                               onBlur={onBlurInput}
                               onKeyDown={e => {
