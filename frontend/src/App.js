@@ -339,7 +339,7 @@ function App() {
       const currenciesRes = await fetch('/api/currencies');
       if (!currenciesRes.ok) throw new Error('Ошибка загрузки валют');
       const currenciesData = await currenciesRes.json();
-  
+      currenciesData.sort((a, b) => a.id - b.id);
       setParticipants(participantsData);
       setCurrencies(currenciesData);
     } catch (error) {
@@ -434,7 +434,7 @@ function App() {
         <select name="currency" value={form.currency} onChange={handleSelectChange} required>
           <option value="" disabled hidden>Валюта</option>
           {currencies && currencies.map(c => (
-            <option key={c} value={c}>{c}</option>
+            <option key={c.id} value={c.code}>{c.code}</option>
           ))}
         </select>
           
