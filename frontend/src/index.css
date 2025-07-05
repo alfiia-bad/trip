@@ -1010,3 +1010,27 @@ tr:last-child td {
   color: #fff;
   text-decoration: underline;
 }
+
+.table-currency {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 1rem;
+}
+.table-currency th,
+.table-currency td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
+  min-width: 80px;
+}
+.table-currency th {
+  background: #f0f0f0;
+  font-weight: bold;
+}
+.table-currency td span {
+  display: inline-block;
+  width: 100%;
+}
+.table-currency td input {
+  width: 60px;
+}
