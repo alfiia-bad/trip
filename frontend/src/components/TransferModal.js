@@ -76,35 +76,36 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
                   {currencies.map((colCode, j) => {
                     const rawVal = matrix[i]?.[j];
                     const val = rawVal != null ? rawVal.toFixed(4) : '';
-                    const isEditing = editingCell && editingCell.row===i && editingCell.col===j;
+                    const isEditing = editingCell && editingCell.row === i && editingCell.col === j;
                     return (
                       <td key={colCode}>
-                        {i === j
-                          ? '1'
-                          : isEditing
-                            ? <>
-                                <input
-                                  type="text"
-                                  inputMode="decimal"
-                                  autoFocus
-                                  value={editingCell.value}
-                                  onChange={e => setEditing(ec => ({...ec, value: e.target.value}))}
-                                  onBlur={onBlurInput}
-                                  onKeyDown={e => {
-                                    if (e.key === 'Enter') {
-                                      e.target.blur(); // при Enter потеря фокуса — сохранит значение
-                                    }
-                                  }}
-                                  style={{ width: 80, padding: '4px', fontSize: '16px' }}
-                                />
-                              ) : (
-                                <span
-                                  style={{ cursor: 'pointer', color: val ? 'inherit' : '#ccc' }}
-                                  onClick={() => setEditing({ row: i, col: j, value: val || '' })}
-                                >
-                                  {val || '-'}
-                                </span>
-                              )}
+                        {i === j ? (
+                          '1'
+                        ) : isEditing ? (
+                          <>
+                            <input
+                              type="text"
+                              inputMode="decimal"
+                              autoFocus
+                              value={editingCell.value}
+                              onChange={e => setEditing(ec => ({ ...ec, value: e.target.value }))}
+                              onBlur={onBlurInput}
+                              onKeyDown={e => {
+                                if (e.key === 'Enter') {
+                                  e.target.blur();
+                                }
+                              }}
+                              style={{ width: 80, padding: '4px', fontSize: '16px' }}
+                            />
+                          </>
+                        ) : (
+                          <span
+                            style={{ cursor: 'pointer', color: val ? 'inherit' : '#ccc' }}
+                            onClick={() => setEditing({ row: i, col: j, value: val || '' })}
+                          >
+                            {val || '-'}
+                          </span>
+                        )}
                       </td>
                     );
                   })}
