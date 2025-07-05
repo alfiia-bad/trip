@@ -165,6 +165,29 @@ function App() {
     return total;
   }
 
+  function MissingRatesWarning({ missingCurrencies }) {
+    if (missingCurrencies.length === 0) return null;
+    
+    return (
+      <div style={{ color: 'red', fontSize: 14, marginTop: 8 }}>
+        {missingCurrencies.map(c => (
+          <div key={c}>
+            * Расчеты могут быть неправильные, так как не указан курс валют для "{c}"
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  const missingCurrencies = currencies.filter((cur, i) => {
+    // Проверяем в матрице строку i: если хотя бы один курс пустой (кроме диагонали)
+    for (let j = 0; j < currencies.length; j++) {
+      if (i === j) continue;
+      if (!exchangeMatrix[i] || exchangeMatrix[i][j] == null) return true;
+    }
+    return false;
+  });
+
     // Для обычных input'ов: что, сколько, дата
   const handleChange = e => {
     const { name, value } = e.target;
@@ -613,6 +636,10 @@ function App() {
         </div>
       )}
 
+      {missingCurrencies.length > 0 && (
+        <MissingRatesWarning missingCurrencies={missingCurrencies} />
+      )}
+        
       <p className="footer-note">
         Разработано с любовью, вопросы и пожелания в тг 
         <a href="https://t.me/alfeikaa" target="_blank" rel="noopener noreferrer">@alfeikaa</a>
