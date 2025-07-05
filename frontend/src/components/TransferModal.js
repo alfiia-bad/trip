@@ -75,7 +75,7 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
                   <th>{rowCode}</th>
                   {currencies.map((colCode, j) => {
                     const rawVal = matrix[i]?.[j];
-                    const val = rawVal != null ? rawVal.toFixed(4) : '';
+                    const val = rawVal != null ? rawVal.toFixed(3) : '';
                     const isEditing = editingCell && editingCell.row === i && editingCell.col === j;
                     return (
                       <td key={colCode}>
@@ -102,7 +102,11 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
                         ) : (
                           <span
                             style={{ cursor: 'pointer', color: val ? 'inherit' : '#ccc' }}
-                            onClick={() => setEditing({ row: i, col: j, value: val || '' })}
+                            onClick={() => {
+                              const rawVal = matrix[i]?.[j];
+                              const fullVal = rawVal != null ? rawVal.toFixed(8) : '';
+                              setEditing({ row: i, col: j, value: fullVal });
+                            }}
                           >
                             {val || '-'}
                           </span>
