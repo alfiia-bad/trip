@@ -262,6 +262,24 @@ function App() {
     fetchExpenses();
   };
 
+
+  const groupedExpenses = {};
+
+  expenses.forEach(exp => {
+    const key = `${exp.who} платила за ${exp.forWhom}`;
+    const amount = parseFloat(exp.amount.replace(',', '.'));
+    const currency = exp.currency;
+  
+    if (!groupedExpenses[key]) {
+      groupedExpenses[key] = { currencyAmounts: {}, raw: exp };
+      currencies.forEach(cur => {
+        groupedExpenses[key].currencyAmounts[cur] = 0;
+      });
+    }
+  
+    groupedExpenses[key].currencyAmounts[currency] += amount;
+  });
+
   const fetchInitialSettings = async () => {
     try {
       const participantsRes = await fetch('/api/participants');
@@ -506,24 +524,20 @@ function App() {
               </thead>
                 
               <tbody>
-
-              {expenses.map((exp, idx) => {
-                const ppl = exp.forWhom.split(' + ');
-                const amount = parseFloat(exp.amount.replace(',', '.'));
-                const share = amount / ppl.length;
-              
-                const currencyAmounts = {};
-                currencyAmounts[exp.currency] = amount;
+              {Object.entries(groupedExpenses).map(([desc, data], idx) => {
+                const { currencyAmounts } = data;
               
                 return (
-                  <tr key={`exp-${idx}`}>
-                    <td>{`${exp.who} платила за ${exp.forWhom}`}</td>
-                    {currencies.map((cur) => (
-                      <td key={`${idx}-${cur}`}>
-                        {cur === exp.currency ? amount.toFixed(2) : ''}
+                  <tr key={`group-${idx}`}>
+                    <td>{desc}</td>
+              
+                    {currencies.map(cur => (
+                      <td key={`amount-${idx}-${cur}`}>
+                        {currencyAmounts[cur] > 0 ? currencyAmounts[cur].toFixed(2) : ''}
                       </td>
                     ))}
-                    {currencies.map((cur) => (
+              
+                    {currencies.map(cur => (
                       <td key={`conv-${idx}-${cur}`}>
                         {convertToTotal(cur, currencyAmounts, exchangeMatrix).toFixed(2)}
                       </td>
@@ -531,6 +545,7 @@ function App() {
                   </tr>
                 );
               })}
+                
               <tr><td colSpan={1 + currencies.length * 2} style={{ height: 10 }}></td></tr>
 
                   
