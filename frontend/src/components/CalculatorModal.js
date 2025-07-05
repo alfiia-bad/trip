@@ -37,7 +37,8 @@ export default function CalculatorModal({ onClose }) {
   };
 
   const format = v => {
-    const n = parseFloat(v.replace(',', '.'));
+    const str = String(v).replace(',', '.');
+    const n = parseFloat(str);
     return isNaN(n) ? '—' : n.toFixed(2);
   };
 
