@@ -17,15 +17,6 @@ function formatDate(dateString) {
 function App() {
   const [expenses, setExpenses] = useState([]);
   const [currencyRate, setCurrencyRate] = useState(null);
-  const [form, setForm] = useState({
-    who: '',
-    what: '',
-    amount: '',
-    currency: '',
-    date: '',
-    forWhom: []
-  });
-
   const [showSettings, setShowSettings] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [currencies, setCurrencies] = useState([]);
