@@ -49,13 +49,8 @@ function App() {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
     fetchExpenses();
     fetchInitialSettings();
-  }, []);
 
-  useEffect(() => {
-    if (currencies.length > 0 && !form.currency) {
-      setForm(f => ({ ...f, currency: currencies[0].code }));
-    }
-  }, [currencies]);
+  }, []);
 
     // Закрытие мультиселекта по клику вне
   useEffect(() => {
@@ -624,7 +619,7 @@ function App() {
           
                       return (
                         <tr key={`${from}-${to}`}>
-                          <td>Долг у {from} перед {to}</td>
+                          <td>{from} должна {to}</td>
                           {currencies.map(cur => (
                             <td key={`${from}-${to}-${cur}`}>
                               {currencyAmounts[cur] > 0 ? currencyAmounts[cur].toFixed(2) : ''}
