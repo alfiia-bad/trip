@@ -458,36 +458,6 @@ function App() {
         </div>
       )}
 
-      {currencyRate !== null && (
-        <div className="exchange-rate-container">
-          {editingRate ? (
-            <>
-              <input
-                type="text"
-                value={editingRateInput}
-                onChange={handleEditingRateChange}
-                autoFocus
-                style={{ width: 100, marginRight: 8 }}
-                placeholder="Курс"
-              />
-              <button onClick={saveNewRate}>Сохранить</button>
-              <button onClick={() => setEditingRate(false)}>Отмена</button>
-            </>
-          ) : (
-            <>
-              <h2 className="exchange-rate">В 1 лари {currencyRate.toFixed(2)} рублей</h2>
-              <button
-                className="edit-btn"
-                onClick={handleEditExchangeRate}
-                aria-label="Редактировать курс"
-              >
-                <BiEditAlt />
-              </button>
-            </>
-          )}
-        </div>
-      )}
-
       {expenses.length > 0 && participants && currencies && (
         <div style={{ marginTop: '2rem' }}>
           <h2>Расчетный листок</h2>
