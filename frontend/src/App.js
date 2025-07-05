@@ -506,6 +506,34 @@ function App() {
               </thead>
                 
               <tbody>
+
+              {expenses.map((exp, idx) => {
+                const ppl = exp.forWhom.split(' + ');
+                const amount = parseFloat(exp.amount.replace(',', '.'));
+                const share = amount / ppl.length;
+              
+                const currencyAmounts = {};
+                currencyAmounts[exp.currency] = amount;
+              
+                return (
+                  <tr key={`exp-${idx}`}>
+                    <td>{`${exp.who} платила за ${exp.forWhom}`}</td>
+                    {currencies.map((cur) => (
+                      <td key={`${idx}-${cur}`}>
+                        {cur === exp.currency ? amount.toFixed(2) : ''}
+                      </td>
+                    ))}
+                    {currencies.map((cur) => (
+                      <td key={`conv-${idx}-${cur}`}>
+                        {convertToTotal(cur, currencyAmounts, exchangeMatrix).toFixed(2)}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+              <tr><td colSpan={1 + currencies.length * 2} style={{ height: 10 }}></td></tr>
+
+                  
                 {participants.flatMap((from) =>
                   participants
                     .filter(to => to !== from)
