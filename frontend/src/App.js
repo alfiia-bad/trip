@@ -327,7 +327,7 @@ function App() {
         </div> 
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <input name="amount" placeholder="Сколько" inputMode="decimal" pattern="^\d+([.,]\d{0,2})?$" value={form.amount} onChange={handleAmountChange} />
+          <input name="amount" placeholder="Сколько" inputMode="decimal" pattern="^\d+([.,]\d{0,2})?$" value={form.amount} onChange={handleAmountChange} style={{ marginTop: 0, marginBottom: 0 }} />
           <button onClick={() => setShowTransfer(true)} title="Перевод валют" className="settings-icon-btn" aria-label="Перевод валют">
             <FaMoneyBillTransfer size={32} color="#718583" />
           </button>  
