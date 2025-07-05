@@ -11,7 +11,7 @@ export default function CalculatorModal({ onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>Калькулятор переводов</h3>
+          <h3>Калькулятор</h3>
           <button onClick={onClose} className="close-btn">&times;</button>
         </div>
         <div style={{ padding: '1rem' }}>
