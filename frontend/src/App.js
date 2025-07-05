@@ -18,7 +18,7 @@ function MissingRatesWarning({ missingCurrencies }) {
   if (missingCurrencies.length === 0) return null;
 
   return (
-    <div style={{ color: 'red', fontSize: 14, marginTop: 8 }}>
+    <div style={{ color: 'red', fontSize: 14, marginLeft: 8, marginTop: 8 }}>
       {missingCurrencies.map(c => (
         <div key={c}>
           * Расчеты могут быть неправильные, так как не указан курс валют для "{c}"
