@@ -87,10 +87,10 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
                                 <FaSave onClick={saveCell} style={{ cursor: 'pointer', color: '#718583', fontSize: '20px', marginLeft: '8px' }} />
                               </>
                             : <span
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => setEditing({ row:i, col:j, value: val })}
+                                style={{ cursor: 'pointer', color: val ? 'inherit' : '#ccc' }}
+                                onClick={() => setEditing({ row: i, col: j, value: val || '' })}
                               >
-                                {val}
+                                {val || '-'}
                               </span>
                         }
                       </td>
