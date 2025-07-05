@@ -124,6 +124,43 @@ input[type="date"]::placeholder {
   color: #999;
 }
 
+input[type="datetime-local"] {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: white;
+  color: #333;
+  position: relative;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 300px;
+  height: 36px;
+  margin: 8px;
+  display: block;
+  outline: none;
+  box-shadow: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  text-align: left;
+  direction: ltr;
+}
+
+input[type="datetime-local"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+input[type="datetime-local"]::placeholder {
+  color: #999;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+  opacity: 0.6;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
 .app-container input[name="what"],
 .app-container input[name="amount"] {
   height: 36px;               
