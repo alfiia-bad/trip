@@ -624,7 +624,7 @@ function App() {
           
                       return (
                         <tr key={`${from}-${to}`}>
-                          <td>{from} должна {to}</td>
+                          <td>{from} должен {to}</td>
                           {currencies.map(cur => (
                             <td key={`${from}-${to}-${cur}`}>
                               {currencyAmounts[cur] > 0 ? currencyAmounts[cur].toFixed(2) : ''}
