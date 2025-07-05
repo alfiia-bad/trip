@@ -70,18 +70,26 @@ export default function CalculatorModal({ onClose }) {
                     placeholder="0"
                     style={{
                       width: 80,
-                      margin: '0 0.5rem',
+                      marginRight: '0.5rem',
                       padding: '4px 8px',
                       borderRadius: 4,
                       border: '1px solid #ccc',
-                      textAlign: 'right'
+                      textAlign: 'right',
+                      flexShrink: 0
                     }}
                   />
-                  <span>{from} это </span>
-                  <strong style={{ whiteSpace: 'nowrap', maxWidth: '100%', marginLeft: '4px', marginRight: '4px', textAlign: 'right', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {converted}
-                  </strong>
-                  <span> {to}</span>
+
+                  <div
+                    style={{
+                      flex: 1,
+                      minWidth: 0,
+                      wordBreak: 'break-word',
+                      whiteSpace: 'normal'
+                    }}
+                  >
+                    {from} это {converted} {to}
+                  </div>
+
                 </div>
               );
             })
