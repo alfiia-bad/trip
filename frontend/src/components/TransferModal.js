@@ -26,7 +26,7 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
     const { row, col, value } = editingCell;
     const from = currencies[row];
     const to   = currencies[col];
-    const rate = parseFloat(value);
+    const rate = parseFloat(value.replace(',', '.'));
     if (isNaN(rate) || rate <= 0) {
       alert('Неверный курс');
       return;
