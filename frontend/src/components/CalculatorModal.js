@@ -60,7 +60,7 @@ export default function CalculatorModal({ onClose }) {
               const inputVal = inputs[key] ?? '';
               const converted = format(inputVal * rate);
               return (
-                <div key={key} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
+                <div key={key} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start',  marginBottom: '0.5rem' }}>
                   <input
                     type="text"
                     inputMode="decimal"
