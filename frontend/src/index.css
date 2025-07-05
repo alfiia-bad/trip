@@ -1032,10 +1032,14 @@ tr:last-child td {
   background: #718583;
   font-weight: bold;
 }
-.table-currency td span {
-  display: inline-block;
-  width: 100%;
+.table-currency td {
+  position: relative;
 }
-.table-currency td input {
-  width: 60px;
+
+.table-currency td > span,
+.table-currency td > input {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
