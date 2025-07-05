@@ -70,7 +70,8 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
                 <tr key={rowCode}>
                   <th>{rowCode}</th>
                   {currencies.map((colCode, j) => {
-                    const val = matrix[i]?.[j]?.toFixed(4) ?? '';
+                    const rawVal = matrix[i]?.[j];
+                    const val = rawVal != null ? rawVal.toFixed(4) : '';
                     const isEditing = editingCell && editingCell.row===i && editingCell.col===j;
                     return (
                       <td key={colCode}>
