@@ -544,7 +544,7 @@ function App() {
 
       {/* Общая сумма */}
       {currencies && currencies.length > 0 && (
-        <div style={{ marginTop: '1rem', marginLeft: '8px', fontSize: '1.2rem', fontWeight: 'bold', textShadow: '1px 1px 4px rgba(0, 0, 0, 0.5)' }}>
+        <div style={{ marginTop: '1rem', marginLeft: '8px', fontSize: '14px', fontWeight: 'bold', textShadow: '1px 1px 4px rgba(0, 0, 0, 0.5)' }}>
           {currencies.map(currency => {
             const total = expenses
               .filter(e => e.currency === currency)
