@@ -154,6 +154,10 @@ select:invalid {
   color: #999; /* Серый текст, как у placeholder */
 }
 
+.app-container select[name="currency"] {
+  margin: 8px 8px 0 8px;
+}
+
 .forWhom-multiselect {
   margin: 0 8px 8px 8px;
   padding: 0;
