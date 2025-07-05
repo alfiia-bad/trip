@@ -597,10 +597,7 @@ function App() {
                   </tr>
                 );
               })}
-                
-              <tr><td colSpan={1 + currencies.length * 2} style={{ height: 10 }}></td></tr>
-
-                  
+                                
                 {participants.flatMap((from) =>
                   participants
                     .filter(to => to !== from)
