@@ -145,7 +145,7 @@ function App() {
     who: '',
     what: '',
     amount: '',
-    currency: '',
+    currency: currencies?.[0] || '',
     date: getLocalDateTimeString(), // ← вот здесь
     forWhom: [],
   });
@@ -308,7 +308,7 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...form, forWhom: forWhomStr })
     });
-    setForm({ who: '', what: '', amount: '', currency: '', date: new Date().toISOString().slice(0, 10), forWhom: [] });
+    setForm({ who: '', what: '', amount: '', currency: currencies?.[0] || '', date: getLocalDateTimeString(), forWhom: [] });
     fetchExpenses();
   };
 
