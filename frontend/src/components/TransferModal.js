@@ -126,7 +126,7 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
                 if (!rate) return null;
                 return (
                   <div key={`${fromCode}-${toCode}`}>
-                    В 1 {fromCode} будет {+rate.toFixed(4)} {toCode}
+                    В 1 {fromCode} будет {+rate.toFixed(3)} {toCode}
                   </div>
                 );
               })
