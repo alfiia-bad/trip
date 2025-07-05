@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BiEditAlt } from 'react-icons/bi';
-import { FaRegCheckCircle } from 'react-icons/fa';
+import { FaSave } from "react-icons/fa";
 import '../index.css';
 
 export default function TransferModal({ onClose, rate, onSaveRate }) {
@@ -84,7 +84,7 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
                                   onChange={e => setEditing(ec => ({...ec, value: e.target.value}))}
                                   onKeyDown={e => e.key==='Enter' && saveCell()}
                                 />
-                                <FaRegCheckCircle onClick={saveCell} style={{ cursor: 'pointer', color: '#718583', fontSize: '20px', marginLeft: '8px' }} />
+                                <FaSave onClick={saveCell} style={{ cursor: 'pointer', color: '#718583', fontSize: '20px', marginLeft: '8px' }} />
                               </>
                             : <span
                                 style={{ cursor: 'pointer' }}
