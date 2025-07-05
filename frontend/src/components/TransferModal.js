@@ -100,6 +100,20 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
               ))}
             </tbody>
           </table>
+          <div style={{ marginTop: '1rem', fontSize: '14px', color: '#000' }}>
+            {currencies.map((fromCode, i) =>
+              currencies.map((toCode, j) => {
+                if (i === j) return null;
+                const rate = matrix[i]?.[j];
+                if (!rate) return null;
+                return (
+                  <div key={`${fromCode}-${toCode}`}>
+                    В 1 {fromCode} будет {+rate.toFixed(4)} {toCode}
+                  </div>
+                );
+              })
+            )}
+          </div>   
         </div>
       </div>
     </div>
