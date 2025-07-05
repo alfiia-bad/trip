@@ -20,7 +20,7 @@ export default function CalculatorModal({ onClose }) {
         const initial = {};
         currencies.forEach((from, i) =>
           currencies.forEach((to, j) => {
-            if (i !== j) initial[`${from}_${to}`] = '0';
+            if (i !== j) initial[`${from}_${to}`] = '';
           })
         );
         setInputs(initial);
@@ -46,7 +46,7 @@ export default function CalculatorModal({ onClose }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>Калькулятор переводов</h3>
+          <h3>Калькулятор</h3>
           <button onClick={onClose} className="close-btn">&times;</button>
         </div>
 
@@ -60,7 +60,6 @@ export default function CalculatorModal({ onClose }) {
               const converted = format(inputVal * rate);
               return (
                 <div key={key} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
-                  <span>У меня&nbsp;</span>
                   <input
                     type="text"
                     value={inputVal}
