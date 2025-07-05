@@ -124,6 +124,34 @@ function App() {
       date: new Date().toISOString().slice(0, 10)  // YYYY-MM-DD, для input type="date"
     }));
   }, []);
+
+
+  const now = new Date();
+  const localISOTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+                        .toISOString()
+                        .slice(0, 16); // 'YYYY-MM-DDTHH:mm'
+  
+  const [form, setForm] = useState({
+    who: '',
+    what: '',
+    amount: '',
+    currency: '',
+    date: localISOTime,
+    forWhom: [],
+  });
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleString(undefined, {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+
+  const parsedDate = new Date(form.date);
  
   function convertToTotal(targetCurrency, currencyAmounts, matrix) {
     let total = 0;
@@ -382,7 +410,7 @@ function App() {
         </select>
           
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <input type="date" name="date" placeholder="Дата" value={form.date} onChange={handleChange} />
+          <input type="datetime-local" name="date" placeholder="Дата" value={form.date} onChange={handleChange} style={{ marginTop: 0, marginBottom: 0 }} />
           <button onClick={() => setShowCalc(true)} title="Калькулятор переводов" className="settings-icon-btn" aria-label="Калькулятор переводов">
             <BiCalculator size={32} color="#718583" />
           </button>
