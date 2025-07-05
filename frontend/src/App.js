@@ -113,33 +113,8 @@ function App() {
       date: item.date,
       forWhom: forWhomParsed
     });
-  
-    // optionally можно сделать флаг `isEditing`, если ты хочешь редактировать и обновлять существующую строку, а не добавлять новую
   };
-
-  // В useEffect при монтировании
-  useEffect(() => {
-    setForm(f => ({
-      ...f,
-      date: new Date().toISOString().slice(0, 10)  // YYYY-MM-DD, для input type="date"
-    }));
-  }, []);
-
-
-  const now = new Date();
-  const localISOTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-                        .toISOString()
-                        .slice(0, 16); // 'YYYY-MM-DDTHH:mm'
   
-  const [form, setForm] = useState({
-    who: '',
-    what: '',
-    amount: '',
-    currency: '',
-    date: localISOTime,
-    forWhom: [],
-  });
-
   function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleString(undefined, {
@@ -151,6 +126,25 @@ function App() {
     });
   }
 
+  function getLocalDateTimeString() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  const [form, setForm] = useState({
+    who: '',
+    what: '',
+    amount: '',
+    currency: '',
+    date: getLocalDateTimeString(), // ← вот здесь
+    forWhom: [],
+  });
+  
   const parsedDate = new Date(form.date);
  
   function convertToTotal(targetCurrency, currencyAmounts, matrix) {
