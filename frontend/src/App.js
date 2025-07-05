@@ -438,7 +438,7 @@ function App() {
           ))}
         </select>
           
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 8px 0px }}>
           <input type="datetime-local" name="date" placeholder="Дата" value={form.date} onChange={handleChange} style={{ marginTop: 0, marginBottom: 0 }} />
           <button onClick={() => setShowCalc(true)} title="Калькулятор переводов" className="settings-icon-btn" aria-label="Калькулятор переводов">
             <BiCalculator size={32} color="#718583" />
