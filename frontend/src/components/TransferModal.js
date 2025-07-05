@@ -49,6 +49,10 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
     setEditing(null);
   };
 
+  const onBlurInput = () => {
+    saveCell();
+  };
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
@@ -80,19 +84,27 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
                           : isEditing
                             ? <>
                                 <input
+                                  type="text"
+                                  inputMode="decimal"
+                                  autoFocus
                                   value={editingCell.value}
                                   onChange={e => setEditing(ec => ({...ec, value: e.target.value}))}
-                                  onKeyDown={e => e.key==='Enter' && saveCell()}
+                                  onBlur={onBlurInput}
+                                  onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                      e.target.blur(); // при Enter потеря фокуса — сохранит значение
+                                    }
+                                  }}
+                                  style={{ width: 80, padding: '4px', fontSize: '16px' }}
                                 />
-                                <FaSave onClick={saveCell} style={{ cursor: 'pointer', color: '#718583', fontSize: '20px', marginLeft: '8px' }} />
-                              </>
-                            : <span
-                                style={{ cursor: 'pointer', color: val ? 'inherit' : '#ccc' }}
-                                onClick={() => setEditing({ row: i, col: j, value: val || '' })}
-                              >
-                                {val || '-'}
-                              </span>
-                        }
+                              ) : (
+                                <span
+                                  style={{ cursor: 'pointer', color: val ? 'inherit' : '#ccc' }}
+                                  onClick={() => setEditing({ row: i, col: j, value: val || '' })}
+                                >
+                                  {val || '-'}
+                                </span>
+                              )}
                       </td>
                     );
                   })}
