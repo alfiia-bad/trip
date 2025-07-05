@@ -37,6 +37,8 @@ function App() {
   const [editingRateInput, setEditingRateInput] = React.useState('');
   const [showTransfer, setShowTransfer] = useState(false);
   const [showCalc, setShowCalc] = useState(false);
+  const [exchangeMatrix, setExchangeMatrix] = useState({});
+  const [currencyList, setCurrencyList] = useState([]);
 
   useEffect(() => {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
@@ -89,6 +91,23 @@ function App() {
     setDeleteIndex(null);
     fetchExpenses();
   };
+
+  useEffect(() => {
+    fetch("/api/exchange-matrix")
+      .then(res => res.json())
+      .then(data => {
+        const { currencies, matrix } = data;
+        const matrixObj = {};
+        currencies.forEach((from, i) => {
+          matrixObj[from] = {};
+          currencies.forEach((to, j) => {
+            matrixObj[from][to] = matrix[i][j];
+          });
+        });
+        setExchangeMatrix(matrixObj);
+        setCurrencyList(currencies);
+      });
+  }, []);
   
   const handleEdit = (index) => {
     const item = expenses[index];
@@ -113,6 +132,17 @@ function App() {
       date: new Date().toISOString().slice(0, 10)  // YYYY-MM-DD, для input type="date"
     }));
   }, []);
+
+  function convertToTotal(targetCurrency, currencyAmounts, matrix) {
+    let total = 0;
+    for (const [cur, amt] of Object.entries(currencyAmounts)) {
+      const rate = matrix[cur]?.[targetCurrency];
+      if (rate && amt > 0) {
+        total += amt * rate;
+      }
+    }
+    return total;
+  }
 
     // Для обычных input'ов: что, сколько, дата
   const handleChange = e => {
@@ -469,9 +499,14 @@ function App() {
                   {currencies.map((cur, idx) => (
                     <th key={idx}>{cur}</th>
                   ))}
+                  {currencies.map((cur, idx) => (
+                    <th key={`conv-${idx}`}>Всё в {cur}</th>
+                  ))}
                 </tr>
               </thead>
+                  
               <tbody>
+                  
                 {Object.entries(
                   expenses.reduce((acc, exp) => {
                     const key = `${exp.who} → ${exp.forWhom}`;
@@ -490,6 +525,11 @@ function App() {
                       {currencies.map(cur => (
                         <td key={cur}>
                           {currencyAmounts[cur] ? currencyAmounts[cur].toFixed(2) : '—'}
+                        </td>
+                      ))}
+                      {currencies.map(cur => (
+                        <td key={`total-${cur}`}>
+                          {convertToTotal(cur, currencyAmounts, exchangeMatrix).toFixed(2)}
                         </td>
                       ))}
                     </tr>
