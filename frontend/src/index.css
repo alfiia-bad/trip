@@ -136,12 +136,14 @@ input[type="datetime-local"] {
   font-size: 16px;
   width: 300px;
   height: 36px;
-  margin: 8px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   display: block;
   outline: none;
   box-shadow: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   text-align: left;
+  padding-left: 8px;
   direction: ltr;
 }
 
@@ -159,6 +161,13 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   opacity: 0.6;
   cursor: pointer;
   margin-right: 8px;
+}
+
+@supports (-webkit-touch-callout: none) {
+  input[type="datetime-local"] {
+    text-align: left !important;
+    padding-left: 8px !important;
+  }
 }
 
 .app-container input[name="what"],
