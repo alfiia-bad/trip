@@ -37,6 +37,14 @@ export default function CalculatorModal({ onClose }) {
     setInputs(inputs => ({ ...inputs, [key]: value }));
   };
 
+  const missingCurrencies = currencies.filter((cur, i) => {
+    for (let j = 0; j < currencies.length; j++) {
+      if (i === j) continue;
+      if (!matrix[i] || matrix[i][j] == null) return true;
+    }
+    return false;
+  });
+
   const format = v => {
     const str = String(v).replace(',', '.');
     const n = parseFloat(str);
@@ -94,6 +102,15 @@ export default function CalculatorModal({ onClose }) {
               );
             })
           )}
+
+          {missingCurrencies.length > 0 && (
+            <div style={{ marginTop: '1rem', fontSize: '14px', color: 'red' }}>
+              {missingCurrencies.map(c => (
+                <div key={c}>* Расчеты могут быть неправильные, так как не указан курс валют для "{c}"</div>
+              ))}
+            </div>
+          )}
+
         </div>
       </div>
     </div>
