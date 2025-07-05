@@ -110,6 +110,14 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
     }
   };
 
+  const missingCurrencies = currencies.filter((cur, i) => {
+    for (let j = 0; j < currencies.length; j++) {
+      if (i === j) continue;
+      if (!exchangeMatrix[i] || exchangeMatrix[i][j] == null) return true;
+    }
+    return false;
+  }); 
+
   return (
     <>
       <div className="modal-overlay" onClick={onClose}>
@@ -177,6 +185,12 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
             <button onClick={addCurrency}>Добавить валюту</button>
           </div>
         </div>
+      </div>
+
+      <div style={{ marginTop: 8, color: 'red', fontSize: 14 }}>
+        {missingCurrencies.map(c => (
+          <div key={c}>* Расчеты могут быть неправильные, так как не указан курс валют для "{c}"</div>
+        ))}
       </div>
 
       {/* Диалог подтверждения удаления */}
