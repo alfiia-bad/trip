@@ -5,7 +5,7 @@ import SettingsModal from './components/SettingsModal';
 import TransferModal from './components/TransferModal';
 import CalculatorModal from './components/CalculatorModal';
 import { BiEditAlt, BiTrash, BiCalculator } from 'react-icons/bi';
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoMdSettings } from "react-icons/io";
 import { FaMoneyBillTransfer } from 'react-icons/fa6';
 
 function formatDate(dateString) {
@@ -322,7 +322,7 @@ function App() {
             className="settings-icon-btn"
             aria-label="Настройки"  
           >
-            <IoSettingsOutline size={32} color="#718583" />
+            <IoMdSettings size={32} color="#718583" />
           </button>
         </div> 
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
