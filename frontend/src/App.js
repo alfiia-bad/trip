@@ -132,13 +132,14 @@ function App() {
       date: new Date().toISOString().slice(0, 10)  // YYYY-MM-DD, для input type="date"
     }));
   }, []);
-
+ 
   function convertToTotal(targetCurrency, currencyAmounts, matrix) {
     let total = 0;
     for (const [cur, amt] of Object.entries(currencyAmounts)) {
-      const rate = matrix[cur]?.[targetCurrency];
-      if (rate && amt > 0) {
-        total += amt * rate;
+      const rate = matrix[cur]?.[targetCurrency] ?? 1;
+      if (amt > 0) {
+        const converted = +(amt * rate).toFixed(8);
+        total = +(total + converted).toFixed(8);
       }
     }
     return total;
