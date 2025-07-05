@@ -45,14 +45,6 @@ function App() {
     fetchExpenses();
     fetchInitialSettings();
 
-    fetch('/api/currency-rate')
-      .then(res => res.json())
-      .then(data => {
-        if (data.rate) {
-          setCurrencyRate(data.rate);
-        }
-      })
-      .catch(console.error);
   }, []);
 
     // Закрытие мультиселекта по клику вне
