@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BiEditAlt, BiTrash } from "react-icons/bi";
 import '../index.css';
 
+
 export default function SettingsModal({ onClose, participants, setParticipants, currencies, setCurrencies }) {
       useEffect(() => {
         const scrollY = window.scrollY;
@@ -21,6 +22,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
   
   const [editingName, setEditingName] = useState(null);
   const [editedName, setEditedName] = useState('');
+  const [exchangeMatrix, setExchangeMatrix] = useState([]);
 
   const [toDelete, setToDelete] = useState(null); 
 
