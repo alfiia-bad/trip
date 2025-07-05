@@ -164,14 +164,16 @@ function App() {
     );
   }
 
-  const missingCurrencies = currencies.filter((cur, i) => {
-    // Проверяем в матрице строку i: если хотя бы один курс пустой (кроме диагонали)
-    for (let j = 0; j < currencies.length; j++) {
-      if (i === j) continue;
-      if (!exchangeMatrix[i] || exchangeMatrix[i][j] == null) return true;
-    }
-    return false;
-  });
+  const missingCurrencies = useMemo(() => {
+    if (!exchangeMatrix || !currencies) return [];
+    return currencies.filter((cur, i) => {
+      for (let j = 0; j < currencies.length; j++) {
+        if (i === j) continue;
+        if (!exchangeMatrix[i] || exchangeMatrix[i][j] == null) return true;
+      }
+      return false;
+    });
+  }, [exchangeMatrix, currencies]);
 
     // Для обычных input'ов: что, сколько, дата
   const handleChange = e => {
