@@ -258,11 +258,20 @@ tr:last-child td {
 
 .expense-table th,
 .expense-table td {
+  white-space: normal;
   word-break: break-word;
   padding: 0.5rem;
   border: 1px solid #ccc;
   text-align: left;
+  max-width: 300px;
 }
+
+.expense-table {
+  width: max-content; /* Позволяет таблице быть шире контейнера при необходимости */
+  border-collapse: collapse;
+  min-width: 100%;
+}
+
 
 /* Модалка */
 .modal-overlay {
@@ -736,26 +745,7 @@ tr:last-child td {
   border-bottom: none;
 }
 
-.expense-table {
-  width: max-content; /* Позволяет таблице быть шире контейнера при необходимости */
-  border-collapse: collapse;
-  min-width: 100%;
-}
 
-.expense-table th,
-.expense-table td {
-  white-space: nowrap;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  text-align: left;
-}
-
-.expense-table td:nth-child(2) {
-  white-space: normal;      /* Разрешить перенос текста */
-  word-break: break-word;
-  width: 200px;
-  max-width: 200px;
-}
 
 /* Модалка */
 .modal-overlay {
