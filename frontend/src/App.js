@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import mountainImage from './assets/montain2.jpg';
 import './index.css';
 import SettingsModal from './components/SettingsModal'; 
-import { BiEditAlt, BiTrash } from 'react-icons/bi';
+import TransferModal from './components/TransferModal';
+import CalculatorModal from './components/CalculatorModal';
+import { BiEditAlt, BiTrash, BiCalculator } from 'react-icons/bi';
 import { IoSettingsOutline } from "react-icons/io5";
+import { FaMoneyBillTransfer } from 'react-icons/fa6';
 
 function formatDate(dateString) {
   if (!dateString) return '';
@@ -32,6 +35,8 @@ function App() {
   const forWhomRef = useRef(null);
   const [editingRate, setEditingRate] = React.useState(null);
   const [editingRateInput, setEditingRateInput] = React.useState('');
+  const [showTransfer, setShowTransfer] = useState(false);
+  const [showCalc, setShowCalc] = useState(false);
 
   useEffect(() => {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
@@ -321,16 +326,27 @@ function App() {
           </button>
         </div> 
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
-        <input name="amount" placeholder="Сколько" inputMode="decimal" pattern="^\d+([.,]\d{0,2})?$" value={form.amount} onChange={handleAmountChange} />
-        {/* Валюта - селект */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <input name="amount" placeholder="Сколько" inputMode="decimal" pattern="^\d+([.,]\d{0,2})?$" value={form.amount} onChange={handleAmountChange} />
+          <button onClick={() => setShowTransfer(true)} title="Перевод валют" className="settings-icon-btn" aria-label="Перевод валют">
+            <FaMoneyBillTransfer size={32} color="#718583" />
+          </button>  
+        </div>      
+        
         <select name="currency" value={form.currency} onChange={handleSelectChange} required>
           <option value="" disabled hidden>Валюта</option>
           {currencies && currencies.map(c => (
             <option key={c} value={c}>{c}</option>
           ))}
         </select>
-        <input type="date" name="date" placeholder="Дата" value={form.date} onChange={handleChange} />
-                {/* За кого платил - мультиселект */}
+          
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <input type="date" name="date" placeholder="Дата" value={form.date} onChange={handleChange} />
+          <button onClick={() => setShowCalc(true)} title="Калькулятор переводов" className="settings-icon-btn" aria-label="Калькулятор переводов">
+            <BiCalculator size={32} color="#718583" />
+          </button>
+        </div>  
+          
         <div
           className="forWhom-multiselect"
           ref={forWhomRef}
@@ -548,6 +564,23 @@ function App() {
           setCurrencies={setCurrencies}
         />
       )}
+
+      {showTransfer && (
+        <TransferModal
+          rate={currencyRate}
+          onSaveRate={newRate => {
+            setCurrencyRate(newRate);
+            setShowTransfer(false);
+            // а если нужно, запушить на сервер тут
+          }}
+          onClose={() => setShowTransfer(false)}
+        />
+      )}
+      
+      {showCalc && (
+        <CalculatorModal onClose={() => setShowCalc(false)} />
+      )}
+
       {deleteIndex !== null && (
         <div className="modal-overlay">
           <div className="modal">
