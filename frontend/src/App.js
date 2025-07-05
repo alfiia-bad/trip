@@ -574,7 +574,9 @@ function App() {
               </thead>
                 
               <tbody>
-              {Object.entries(groupedExpenses).map(([desc, data], idx) => {
+              {Object.entries(groupedExpenses)
+                .filter(([desc]) => !desc.includes('платила за') && desc.trim() !== '')
+                .map(([desc, data], idx) => {
                 const { currencyAmounts } = data;
               
                 return (
