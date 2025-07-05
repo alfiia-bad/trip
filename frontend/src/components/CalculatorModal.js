@@ -58,7 +58,7 @@ export default function CalculatorModal({ onClose }) {
               const key = `${from}_${to}`;
               const rate = matrix[i]?.[j] ?? 0;
               const inputVal = inputs[key] ?? '';
-              const converted = format(inputVal * rate);
+              const converted = format(parseFloat((inputVal || '').replace(',', '.')) * rate);
               return (
                 <div key={key} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start',  marginBottom: '0.5rem' }}>
                   <input
