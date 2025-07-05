@@ -3,7 +3,6 @@ import { BiEditAlt } from 'react-icons/bi';
 import '../index.css';
 
 export default function TransferModal({ onClose, rate, onSaveRate }) {
-  const [editing, setEditing] = useState(false);
   const [input, setInput] = useState(rate?.toFixed(2) ?? '');
   const [currencies, setCurrencies] = useState([]);
   const [matrix, setMatrix]       = useState([]); 
