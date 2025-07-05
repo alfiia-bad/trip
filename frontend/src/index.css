@@ -1092,3 +1092,12 @@ tr:last-child td {
   height: 100%;
   box-sizing: border-box;
 }
+
+.favorite-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+}
