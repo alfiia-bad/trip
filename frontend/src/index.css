@@ -141,9 +141,11 @@ input[type="datetime-local"] {
   outline: none;
   box-shadow: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  text-align: left;
+  text-align: left !important;
+  text-align-last: left !important;
+  direction: ltr !important;
   padding-left: 8px;
-  direction: ltr;
+  -webkit-writing-mode: horizontal-tb !important;
 }
 
 input[type="datetime-local"]:focus {
@@ -165,7 +167,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 @supports (-webkit-touch-callout: none) {
   input[type="datetime-local"] {
     text-align: left !important;
+    text-align-last: left !important;
     padding-left: 8px !important;
+    direction: ltr !important;
   }
 }
 
