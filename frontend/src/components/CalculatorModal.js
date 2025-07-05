@@ -32,6 +32,7 @@ export default function CalculatorModal({ onClose }) {
   const PATTERN = /^\d*([.,]\d{0,2})?$/;
 
   const handleChange = (key, value) => {
+    const normalized = value.replace(',', '.');
     if (!PATTERN.test(value) && value !== '') return;
     setInputs(inputs => ({ ...inputs, [key]: value }));
   };
@@ -62,6 +63,8 @@ export default function CalculatorModal({ onClose }) {
                 <div key={key} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
                   <input
                     type="text"
+                    inputMode="decimal"
+                    pattern="[0-9]*[.,]?[0-9]*"
                     value={inputVal}
                     onChange={e => handleChange(key, e.target.value)}
                     placeholder="0"
