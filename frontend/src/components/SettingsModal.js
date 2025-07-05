@@ -34,7 +34,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
       const res = await fetch('/api/participants');
       setParticipants(await res.json());
     } else {
-      await fetch(`/api/currencies/${encodeURIComponent(toDelete.name)}`, { method: 'DELETE' });
+      await fetch(`/api/currencies/${encodeURIComponent(toDelete.code)}`, { method: 'DELETE' });
       const res = await fetch('/api/currencies');
       setCurrencies(await res.json());
     }
@@ -50,7 +50,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
   };
 
   const promptDeleteCurrency = (code) => {
-    setToDelete({ type: 'currency', name: code });
+    setToDelete({ type: 'currency', code });
   };
 
   // Редактирование участника
@@ -107,7 +107,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
         body: JSON.stringify({ code: name })
       });
       const res = await fetch('/api/currencies');
-      const data = await res.json();
+      const data = await res.json(); // [{id,code},...]
       setCurrencies(data);
     }
   };
@@ -170,9 +170,9 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
 
           <div style={{ marginTop: '1rem' }}>
             <h4>Валюты:</h4>
-            {currencies.map((c, idx) => (
-              <div key={idx} className="settings-row">
-                <span>{c}</span>
+            {currencies.map(c => (
+              <div key={c.id} className="settings-row">
+                <span>{c.code}</span>
                 <div className="icon-buttons">
                   <button 
                     onClick={() => promptDeleteCurrency(c)}  
