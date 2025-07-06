@@ -269,12 +269,12 @@ button {
 /* Таблица */
 h2 {
   margin: 24px 8px 0 8px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* ← улучшили читаемость */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); 
 }
 
 table {
   border-collapse: collapse;
-  width: calc(100% - 16px); /* ← добавили отступы слева/справа */
+  width: calc(100% - 16px); 
   margin: 8px 8px 0 8px;    
   background: rgba(255, 255, 255, 0.9);
   color: #333;
@@ -284,7 +284,7 @@ table {
 
 .table-wrapper {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch; /* плавный скролл на iOS */
+  -webkit-overflow-scrolling: touch; 
   width: 100%;
 }
 
@@ -303,14 +303,13 @@ th {
   color: white;
 }
 
-tr:last-child td {
-  border-bottom: none;
-}
-
 .expense-table {
   width: calc(100% - 16px);   
   table-layout: auto;         
   border-collapse: collapse;
+  width: max-content; 
+  border-collapse: collapse;
+  min-width: 100%;
 }
 
 .expense-table th,
@@ -323,15 +322,11 @@ tr:last-child td {
   max-width: 300px;
 }
 
-.expense-table {
-  width: max-content; /* Позволяет таблице быть шире контейнера при необходимости */
-  border-collapse: collapse;
-  min-width: 100%;
-}
-
 .debts-table {
-  width: calc(100% - 16px);
-  table-layout: auto;
+  width: calc(100% - 16px);   
+  table-layout: auto;         
+  border-collapse: collapse;
+  width: max-content; 
   border-collapse: collapse;
   min-width: 100%;
 }
@@ -343,7 +338,7 @@ tr:last-child td {
   padding: 0.5rem;
   border: 1px solid #ccc;
   text-align: left;
-  max-width: 300px; /* ограничение максимальной ширины */
+  max-width: 300px; 
 }
 
 

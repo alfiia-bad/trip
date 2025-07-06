@@ -381,34 +381,25 @@ function App() {
 
     debts = {};
 
-    const processed = new Set();
-
-    for (let i = 0; i < participants.length; i++) {
-      const a = participants[i];
-      for (let j = 0; j < participants.length; j++) {
-        if (i === j) continue;
-        const b = participants[j];
-        const key = [a, b].sort().join('|');
-        if (processed.has(key)) continue;
-        processed.add(key);
-        const net = {};
+    participants.forEach(a => {
+      participants.forEach(b => {
+        if (a === b) return;
         currencies.forEach(cur => {
           const aOwesB = debtsRaw[a]?.[b]?.[cur] || 0;
           const bOwesA = debtsRaw[b]?.[a]?.[cur] || 0;
-          net[cur] = aOwesB - bOwesA;
-        });
-        currencies.forEach(target => {
-          const total = convertToTotal(target, net, exchangeMatrix);
-          if (Math.abs(total) > 0.0001) {
-            const from = total > 0 ? a : b;
-            const to   = total > 0 ? b : a;
-            debts[from] ||= {};
-            debts[from][to] ||= {};
-            debts[from][to][target] = Math.abs(total);
+          const net = aOwesB - bOwesA;
+          if (net > 0) {
+            debts[a] = debts[a] || {};
+            debts[a][b] = debts[a][b] || {};
+            debts[a][b][cur] = net;
+          } else if (net < 0) {
+            debts[b] = debts[b] || {};
+            debts[b][a] = debts[b][a] || {};
+            debts[b][a][cur] = -net;
           }
         });
-      }
-    }
+      });
+    });
   }
 
   return (
@@ -546,14 +537,15 @@ function App() {
               {participants.map(from =>
                 participants.map(to => {
                   if (from === to) return null;
-                  const debtEntry = debts[from]?.[to] || {};
+                  const entry = debts[from]?.[to] || {};
+                  const vals = currencies.map(cur => entry[cur] || 0);
+                  // если все суммы нулевые, пропускаем строку
+                  if (vals.every(v => v === 0)) return null;
                   return (
                     <tr key={`${from}->${to}`}>
                       <td>Долг у {from} перед {to}</td>
                       {currencies.map(cur => (
-                        <td key={cur}>
-                          {(debtEntry[cur] || 0).toFixed(2)}
-                        </td>
+                        <td key={cur}>{(entry[cur] || 0).toFixed(2)}</td>
                       ))}
                     </tr>
                   );
@@ -582,6 +574,7 @@ function App() {
           setCurrencies={setCurrencies}
           exchangeMatrix={exchangeMatrix}
           setExchangeMatrix={setExchangeMatrix}
+          defaultCurrency={defaultCurrency}
         />
       )}
 
