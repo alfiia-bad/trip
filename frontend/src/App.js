@@ -449,8 +449,8 @@ function App() {
         
         <select name="currency" value={form.currency} onChange={handleSelectChange} required>
           <option value="" disabled hidden>Валюта</option>
-          {currencies && currencies.map(c => (
-            <option key={c.id} value={c.code}>{c.code}</option>
+          {currencies && currencies.map(code => (
+            <option key={code} value={code}>{code}</option>
           ))}
         </select>
           
