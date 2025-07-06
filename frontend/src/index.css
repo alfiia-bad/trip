@@ -1114,14 +1114,15 @@ tr:last-child td {
   bottom: 120%;
   left: 50%;
   transform: translateX(-50%);
-  background: #222;
-  color: #fff;
+  background: #fff;
+  color: #222;
   padding: 4px 10px;
   border-radius: 6px;
   font-size: 13px;
   white-space: nowrap;
   z-index: 100;
   pointer-events: none;
+  border: 1px solid #ccc;
 }
 
 .favorite-btn:active .custom-tooltip,
