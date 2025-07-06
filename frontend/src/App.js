@@ -348,6 +348,13 @@ function App() {
     setShowSettings(false);
     await fetchInitialSettings();
     await fetchExpenses();
+    const res = await fetch('/api/default-currency');
+    const data = await res.json();
+    setDefaultCurrency(data.code);
+    setForm(f => ({
+      ...f,
+      currency: f.currency || data.code
+    }));
   };
 
   const forWhomDisplay = form.forWhom.length > 0 ? form.forWhom.join(' + ') : '';
@@ -404,7 +411,7 @@ function App() {
       </div>
 
       <div>
-        {/* Кто платил - селект */}
+        
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <select name="who" className="who-select" value={form.who} onChange={handleSelectChange} required>
             <option value="" disabled hidden>Кто платил</option>
@@ -412,12 +419,7 @@ function App() {
               <option key={p} value={p}>{p}</option>
             ))}
           </select>
-          <button
-            onClick={openSettings}
-            title="Настройки"
-            className="settings-icon-btn"
-            aria-label="Настройки"  
-          >
+          <button onClick={openSettings} title="Настройки" className="settings-icon-btn" aria-label="Настройки" >
             <IoMdSettings size={32} color="#718583" />
           </button>
         </div> 
