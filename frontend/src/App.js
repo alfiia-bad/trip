@@ -628,6 +628,8 @@ function App() {
           setParticipants={setParticipants}
           currencies={currencies}
           setCurrencies={setCurrencies}
+          exchangeMatrix={exchangeMatrix}
+          setExchangeMatrix={setExchangeMatrix}
         />
       )}
 
