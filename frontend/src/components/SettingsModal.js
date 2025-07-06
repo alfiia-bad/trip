@@ -85,7 +85,6 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
       const res = await fetch('/api/participants');
       const data = await res.json();
       setParticipants(data);
-      onClose(); 
     }
   };
 

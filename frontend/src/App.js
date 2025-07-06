@@ -45,6 +45,7 @@ function App() {
   const [exchangeMatrix, setExchangeMatrix] = useState({});
   const [currencyList, setCurrencyList] = useState([]);
   const [defaultCurrency, setDefaultCurrency] = useState('');
+  const [missingCurrencies, setMissingCurrencies] = useState([]);
 
   useEffect(() => {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
@@ -95,23 +96,33 @@ function App() {
     fetchExpenses();
   };
 
+  const fetchExchangeMatrix = async () => {
+    const res = await fetch('/api/exchange-matrix');
+    const { currencies, matrix } = await res.json();
+    setCurrencies(currencies);
+    setExchangeMatrix(matrix);
+
+    // вычисляем missingCurrencies
+    const missing = currencies.filter((from, i) =>
+      currencies.some((to, j) => {
+        if (i === j) return false;
+        const rate = matrix[i]?.[j];
+        return rate == null || rate === 0;
+      })
+    );
+    setMissingCurrencies(missing);
+  };
+
+  // при монтировании и после закрытия TransferModal
   useEffect(() => {
-    fetch("/api/exchange-matrix")
-      .then(res => res.json())
-      .then(data => {
-        const { currencies, matrix } = data;
-        const matrixObj = {};
-        currencies.forEach((from, i) => {
-          matrixObj[from] = {};
-          currencies.forEach((to, j) => {
-            matrixObj[from][to] = matrix[i][j];
-          });
-        });
-        setExchangeMatrix(matrixObj);
-        setCurrencyList(currencies);
-      });
+    fetchExchangeMatrix();
   }, []);
   
+  const handleCloseTransfer = () => {
+    setShowTransfer(false);
+    fetchExchangeMatrix(); // обновить курсы и missingCurrencies
+  };
+
   const handleEdit = (index) => {
     const item = expenses[index];
     const forWhomParsed = item.forWhom.split(' + '); // если хранишь как строку
@@ -534,18 +545,41 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {participants.map(from =>
-                participants.map(to => {
-                  if (from === to) return null;
-                  const entry = debts[from]?.[to] || {};
-                  const vals = currencies.map(cur => entry[cur] || 0);
-                  // если все суммы нулевые, пропускаем строку
-                  if (vals.every(v => v === 0)) return null;
+              {participants.map((from, i) =>
+                participants.slice(i + 1).map(to => {
+                  const entryA = debts[from]?.[to] || {};
+                  const entryB = debts[to]?.[from] || {};
+                  const netEntry = {};
+                  currencies.forEach(cur => {
+                    netEntry[cur] = (entryA[cur] || 0) - (entryB[cur] || 0);
+                  });
+                  if (currencies.every(cur => Math.abs(netEntry[cur]) < 0.0001)) return null;
+                  const mainCurrency = currencies[0];
+                  const mainNet = netEntry[mainCurrency];
+
+                  let debtor, creditor, entry;
+                  if (mainNet > 0) {
+                    debtor = from;
+                    creditor = to;
+                    entry = netEntry;
+                  } else {
+                    debtor = to;
+                    creditor = from;
+                    entry = {};
+                    currencies.forEach(cur => {
+                      entry[cur] = -netEntry[cur];
+                    });
+                  }
+
+                  if (currencies.every(cur => Math.abs(entry[cur]) < 0.0001)) return null;
+
                   return (
-                    <tr key={`${from}->${to}`}>
-                      <td>Долг у {from} перед {to}</td>
+                    <tr key={`${debtor}->${creditor}`}>
+                      <td>Долг у {debtor} перед {creditor}</td>
                       {currencies.map(cur => (
-                        <td key={cur}>{(entry[cur] || 0).toFixed(2)}</td>
+                        <td key={cur}>
+                          {convertToTotal(cur, entry, exchangeMatrix).toFixed(2)}
+                        </td>
                       ))}
                     </tr>
                   );
@@ -584,8 +618,9 @@ function App() {
           onSaveRate={newRate => {
             setCurrencyRate(newRate);
             setShowTransfer(false);
+            fetchExchangeMatrix();
           }}
-          onClose={() => setShowTransfer(false)}
+          onClose={handleCloseTransfer}
         />
       )}
       
