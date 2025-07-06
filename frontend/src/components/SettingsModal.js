@@ -202,7 +202,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
                     {c === defaultCurrency ? (
                       <FaHeart className="edit-btn" />
                     ) : (
-                      <FaRegHeart className="delete-btn" />
+                      <FaRegHeart className="heart-fill" />
                     )}
                   </button>
                   <button
