@@ -317,6 +317,12 @@ function App() {
     fetchExpenses();
   };
 
+  useEffect(() => {
+    fetch('/api/default-currency')
+      .then(res => res.json())
+      .then(data => setDefaultCurrency(data.code));
+  }, []);
+
 
   const groupedExpenses = {};
 
