@@ -4,7 +4,7 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import '../index.css';
 
 
-export default function SettingsModal({ onClose, participants, setParticipants, currencies, setCurrencies }) {
+export default function SettingsModal({ onClose, participants, setParticipants, currencies, setCurrencies, exchangeMatrix, setExchangeMatrix }) {
       useEffect(() => {
         const scrollY = window.scrollY;
         document.body.style.position = 'fixed';
