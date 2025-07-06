@@ -37,13 +37,13 @@ export default function CalculatorModal({ onClose }) {
     setInputs(inputs => ({ ...inputs, [key]: value }));
   };
 
-  const missingCurrencies = currencies.filter((cur, i) => {
-    for (let j = 0; j < currencies.length; j++) {
-      if (i === j) continue;
-      if (!matrix[i] || matrix[i][j] == null) return true;
-    }
-    return false;
-  });
+  const missingCurrencies = currencies.filter((from, i) =>
+    currencies.some((to, j) => {
+      if (i === j) return false;
+      const rate = matrix[i]?.[j];
+      return rate == null || rate === 0;
+    })
+  );
 
   const format = v => {
     const str = String(v).replace(',', '.');
