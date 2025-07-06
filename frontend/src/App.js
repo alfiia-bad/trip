@@ -581,29 +581,41 @@ function App() {
         </div>
       )}
 
-      {expenses.length > 0 && participants.length > 0 && currencies.length > 0 && (
-        <div style={{ marginTop: '2rem' }}>
-          <h2>Расчетный листок</h2>
-          <div className="table-wrapper">
-            <table className="expense-table">
-              <thead>
-                <tr>
-                  <th>Должники</th>
-                  {currencies.map(cur => <th key={cur}>Всё в {cur}</th>)}
-                </tr>
-              </thead>
-              <tbody>
-                {summary.map((row, idx) => (
-                  <tr key={idx}>
-                    <td>{row.label}</td>
-                    {currencies.map(cur => (
-                      <td key={cur}>{row.diffByCur[cur].toFixed(2)}</td>
-                    ))}
-                  </tr>
+      {Object.keys(debts).length > 0 && (
+        <div className="debts-summary">
+          <h2>Взаиморасчёты</h2>
+          <table className="debts-table">
+            <thead>
+              <tr>
+                <th>Должник → Кредитор</th>
+                {currencies.map(cur => (
+                  <th key={cur}>Всё в {cur}</th>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </tr>
+            </thead>
+            <tbody>
+              {participants.map(from =>
+                participants.map(to => {
+                  if (from === to) return null;
+      
+                  const debtEntry = debts[from]?.[to] || {};
+                  const isNonZero = Object.values(debtEntry).some(amount => amount > 0.0001);
+                  if (!isNonZero) return null;
+      
+                  return (
+                    <tr key={`${from}->${to}`}>
+                      <td>Долг у {from} перед {to}</td>
+                      {currencies.map(cur => (
+                        <td key={cur}>
+                          {(debtEntry[cur] || 0).toFixed(2)}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </div>
       )}
 
