@@ -329,6 +329,23 @@ tr:last-child td {
   min-width: 100%;
 }
 
+.debts-table {
+  width: calc(100% - 16px);
+  table-layout: auto;
+  border-collapse: collapse;
+  min-width: 100%;
+}
+
+.debts-table th,
+.debts-table td {
+  white-space: normal;
+  word-break: break-word;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  text-align: left;
+  max-width: 300px; /* ограничение максимальной ширины */
+}
+
 
 /* Модалка */
 .modal-overlay {
