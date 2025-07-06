@@ -367,6 +367,10 @@ function App() {
     // Отображение выбранных участников через +
   const forWhomDisplay = form.forWhom.length > 0 ? form.forWhom.join(' + ') : '';
 
+  function convertAmount(amount, fromCurrency, toCurrency) {
+    if (!exchangeMatrix[fromCurrency] || !exchangeMatrix[fromCurrency][toCurrency]) return 0;
+    return amount * exchangeMatrix[fromCurrency][toCurrency];
+  }  
 
   let debts = {};
   if (expenses.length > 0 && participants.length > 0 && currencies.length > 0) {
@@ -384,25 +388,34 @@ function App() {
       });
     });
   
-    // 2) нормализация
-    debts = JSON.parse(JSON.stringify(debtsRaw));
-    currencies.forEach(cur => {
-      participants.forEach(a => {
-        participants.forEach(b => {
-          if (a === b) return;
-          const ab = debtsRaw[a]?.[b]?.[cur] || 0;
-          const ba = debtsRaw[b]?.[a]?.[cur] || 0;
-          const diff = ab - ba;
-          debts[a] ||= {};
-          debts[a][b] ||= {};
-          debts[b] ||= {};
-          debts[b][a] ||= {};
-          debts[a][b][cur] = diff > 0 ? diff : 0;
-          debts[b][a][cur] = diff < 0 ? -diff : 0;
+    debts = {};
+    
+    participants.forEach(from => {
+      debts[from] = {};
+      participants.forEach(to => {
+        if (from === to) return;
+    
+        // Собираем разницу долгов по всем валютам
+        const amountByCurrency = {};
+    
+        currencies.forEach(cur => {
+          const owe = debtsRaw[from]?.[to]?.[cur] || 0;
+          const back = debtsRaw[to]?.[from]?.[cur] || 0;
+          const diff = owe - back;
+    
+          amountByCurrency[cur] = diff; // может быть и отрицательным
+        });
+    
+        // Переводим в каждую целевую валюту
+        currencies.forEach(targetCurrency => {
+          const total = convertToTotal(targetCurrency, amountByCurrency, exchangeMatrix);
+          if (Math.abs(total) > 0.0001) {
+            debts[from][to] ||= {};
+            debts[from][to][targetCurrency] = total;
+          }
         });
       });
-    });
-  }
+    });  
 
   return (
     <div className="app-container">
