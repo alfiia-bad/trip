@@ -22,8 +22,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
       }, []);
   
   const [editingName, setEditingName] = useState(null);
-  const [editedName, setEditedName] = useState('');
-  const [exchangeMatrix, setExchangeMatrix] = useState([]);      
+  const [editedName, setEditedName] = useState(''); 
   const [defaultCurrency, setDefaultCurrency] = useState(null);
   const [toDelete, setToDelete] = useState(null); 
       
