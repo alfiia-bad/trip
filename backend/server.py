@@ -263,8 +263,13 @@ def set_default_currency():
 
     try:
         with get_conn() as conn, conn.cursor() as cur:
+            # Удаляем все старые записи
             cur.execute("DELETE FROM default_currency;")
-            cur.execute("INSERT INTO default_currency(code) VALUES (%s);", (code,))
+            # И вставляем новую
+            cur.execute(
+                "INSERT INTO default_currency(code) VALUES (%s);",
+                (code,)
+            )
             conn.commit()
         return jsonify({"message": f"Default currency set to {code}"})
     except Exception as e:
