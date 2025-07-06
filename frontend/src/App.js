@@ -171,13 +171,18 @@ function App() {
   }
 
   const missingCurrencies = useMemo(() => {
-    if (!exchangeMatrix || !currencies) return [];
+    if (!exchangeMatrix || currencies.length === 0) return [];
   
-    // Создаем карту валют к индексам
-    const currencyIndexMap = currencies.reduce((acc, cur, i) => {
-      acc[cur] = i;
-      return acc;
-    }, {});
+    return currencies.filter(code => {
+      // Для каждой другой валюты проверяем, есть ли курс
+      return currencies.some(otherCode => {
+        if (otherCode === code) return false;
+        const rate = exchangeMatrix[code]?.[otherCode];
+        // если rate null, undefined или 0 — считаем, что курс отсутствует
+        return rate == null || rate === 0;
+      });
+    });
+  }, [exchangeMatrix, currencies]);
   
     return currencies.filter((cur, i) => {
       // Проверяем для каждой валюты, что для каждой другой валюты есть курс в exchangeMatrix
