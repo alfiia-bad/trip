@@ -1100,4 +1100,5 @@ tr:last-child td {
   margin-right: 8px;
   display: inline-flex;
   align-items: center;
+  width: 32px;
 }
