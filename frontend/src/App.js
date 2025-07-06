@@ -423,6 +423,57 @@ function App() {
       });
     });
   }
+
+  function YourComponent({ expenses, participants, currencies, exchangeMatrix, debts }) {
+    // 1) Вспомогательная функция: конвертация amt из fromCur → toCur
+    function convertAmount(amount, fromCur, toCur) {
+      const i = exchangeMatrix.currencies.indexOf(fromCur);
+      const j = exchangeMatrix.currencies.indexOf(toCur);
+      if (i === -1 || j === -1) return 0;
+      return amount * (exchangeMatrix.matrix[i][j] ?? 1);
+    }
+  
+    // 2) Сбор нетто‑долгов по каждой неупорядоченной паре участников
+    const summary = [];
+    for (let i = 0; i < participants.length; i++) {
+      for (let j = i + 1; j < participants.length; j++) {
+        const A = participants[i];
+        const B = participants[j];
+        const ab = debts[A]?.[B] || {};
+        const ba = debts[B]?.[A] || {};
+  
+        // для каждой валюты считаем |A→B − B→A|
+        const diffByCur = {};
+        currencies.forEach(cur => {
+          const sumAB = Object.entries(ab)
+            .reduce((s, [fromCur, amt]) => s + convertAmount(amt, fromCur, cur), 0);
+          const sumBA = Object.entries(ba)
+            .reduce((s, [fromCur, amt]) => s + convertAmount(amt, fromCur, cur), 0);
+          diffByCur[cur] = +Math.abs(sumAB - sumBA).toFixed(2);
+        });
+  
+        // пропускаем, если во всех валютах ноль
+        if (!currencies.some(cur => diffByCur[cur] > 0)) continue;
+  
+        // определяем направление долга по первой ненулевой валюте
+        let debtor = A, creditor = B;
+        for (const cur of currencies) {
+          const sumAB = Object.entries(ab)
+            .reduce((s, [fromCur, amt]) => s + convertAmount(amt, fromCur, cur), 0);
+          const sumBA = Object.entries(ba)
+            .reduce((s, [fromCur, amt]) => s + convertAmount(amt, fromCur, cur), 0);
+          if (sumAB !== sumBA) {
+            [debtor, creditor] = sumAB > sumBA ? [A, B] : [B, A];
+            break;
+          }
+        }
+  
+        summary.push({
+          label: `Долг у ${debtor} перед ${creditor}`,
+          diffByCur
+        });
+      }
+    }
   
 
   return (
@@ -583,89 +634,33 @@ function App() {
       )}
 
       {expenses.length > 0 && participants && currencies && (
-        <div style={{ marginTop: '2rem' }}>
-          <h2>Расчетный листок</h2>
-          <div className="table-wrapper">
-            <table className="expense-table">
-              <thead>
-                <tr>
-                  <th>Что происходило</th>
-                  {currencies.map((cur, idx) => (
-                    <th key={idx}>{cur}</th>
-                  ))}
-                  {currencies.map((cur, idx) => (
-                    <th key={`conv-${idx}`}>Всё в {cur}</th>
-                  ))}
-                </tr>
-              </thead>
-                
-              <tbody>
-              {Object.entries(groupedExpenses)
-                .filter(([desc]) => !desc.includes('платила за') && desc.trim() !== '')
-                .map(([desc, data], idx) => {
-                const { currencyAmounts } = data;
-              
-                return (
-                  <tr key={`group-${idx}`}>
-                    <td>{desc}</td>
-              
+          <div style={{ marginTop: '2rem' }}>
+            <h2>Расчетный листок</h2>
+            <div className="table-wrapper">
+              <table className="expense-table">
+                <thead>
+                  <tr>
+                    <th>Должники</th>
                     {currencies.map(cur => (
-                      <td key={`amount-${idx}-${cur}`}>
-                        {currencyAmounts[cur] > 0 ? currencyAmounts[cur].toFixed(2) : ''}
-                      </td>
-                    ))}
-              
-                    {currencies.map(cur => (
-                      <td key={`conv-${idx}-${cur}`}>
-                        {convertToTotal(cur, currencyAmounts, exchangeMatrix).toFixed(2)}
-                      </td>
+                      <th key={cur}>Всё в {cur}</th>
                     ))}
                   </tr>
-                );
-              })}
-                                
-                {participants.flatMap((from) =>
-                  participants
-                    .filter(to => to !== from)
-                    .map(to => {
-                      const rowDebts = debts[from]?.[to] || {};
-                      const currencyAmounts = {};
-          
-                      currencies.forEach(cur => {
-                        currencyAmounts[cur] = rowDebts[cur] || 0;
-                      });
-          
-                      const convertedTotals = currencies.map(targetCurrency => {
-                        const total = convertToTotal(targetCurrency, currencyAmounts, exchangeMatrix);
-                        return total.toFixed(2);
-                      });
-          
-                      const isEmpty = Object.values(currencyAmounts).every(v => v === 0);
-                      if (isEmpty) return null;
-          
-                      return (
-                        <tr key={`${from}-${to}`}>
-                          <td>Долг у {from} перед {to}</td>
-                          {currencies.map(cur => (
-                            <td key={`${from}-${to}-${cur}`}>
-                              {currencyAmounts[cur] > 0 ? currencyAmounts[cur].toFixed(2) : ''}
-                            </td>
-                          ))}
-                          {convertedTotals.map((total, idx) => (
-                            <td key={`converted-${from}-${to}-${idx}`}>
-                              {parseFloat(total) > 0 ? total : ''}
-                            </td>
-                          ))}
-                        </tr>
-                      );
-                    })
-                )}
-              </tbody>
-   
-            </table>
+                </thead>
+                <tbody>
+                  {summary.map((row, idx) => (
+                    <tr key={idx}>
+                      <td>{row.label}</td>
+                      {currencies.map(cur => (
+                        <td key={cur}>{row.diffByCur[cur].toFixed(2)}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      }
 
       {missingCurrencies.length > 0 && (
         <MissingRatesWarning missingCurrencies={missingCurrencies} />
