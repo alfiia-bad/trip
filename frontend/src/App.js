@@ -395,6 +395,10 @@ function App() {
         });
       });
     });  
+<<<<<<< HEAD
+=======
+  }
+>>>>>>> 23da8cf (а)
 
   return (
     <div className="app-container">
