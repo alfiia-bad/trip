@@ -576,11 +576,11 @@ function App() {
 
       {Object.keys(debts).length > 0 && (
         <div className="debts-summary">
-          <h2>Взаиморасчёты</h2>
+          <h2>Расчетный листок</h2>
           <table className="debts-table">
             <thead>
               <tr>
-                <th>Должник → Кредитор</th>
+                <th>Должнички</th>
                 {currencies.map(cur => (
                   <th key={cur}>Всё в {cur}</th>
                 ))}
