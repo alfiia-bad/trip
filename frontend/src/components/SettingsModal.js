@@ -37,6 +37,16 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
       await fetch(`/api/currencies/${encodeURIComponent(toDelete.name)}`, { method: 'DELETE' });
       const res = await fetch('/api/currencies');
       setCurrencies(await res.json());
+
+      // Если удаляем дефолтную валюту — сбрасываем её на бэке
+      if (toDelete.name === defaultCurrency) {
+        await fetch('/api/default-currency', {
+          method: 'DELETE'
+        });
+        setDefaultCurrency('');
+      }
+      // ОБЯЗАТЕЛЬНО обновляем матрицу курсов и missingCurrencies!
+      if (fetchExchangeMatrix) await fetchExchangeMatrix();
     }
 
     setToDelete(null);
@@ -190,6 +200,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
                     onClick={() => handleSetDefault(c)}
                     className="favorite-btn"
                     aria-label={`Сделать ${c} валютой по умолчанию`}
+                    title="валюта по умолчанию" // <-- добавлен хинт
                   >
                     {c === defaultCurrency ? (
                       <FaHeart className="heart-filled" />

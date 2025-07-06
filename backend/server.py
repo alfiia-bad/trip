@@ -129,7 +129,11 @@ def delete_currency(code):
     try:
         with get_conn() as conn:
             with conn.cursor() as cur:
+                # Удаляем валюту
                 cur.execute("DELETE FROM currencies WHERE code = %s", (code,))
+                # Если она была дефолтной — удаляем из default_currency
+                cur.execute("DELETE FROM default_currency WHERE code = %s", (code,))
+                conn.commit()
                 return jsonify({"message": "Currency deleted"})
     except Exception as e:
         return jsonify({"error": str(e)}), 500

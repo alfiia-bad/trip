@@ -354,6 +354,7 @@ function App() {
     setShowSettings(false);
     await fetchInitialSettings();
     await fetchExpenses();
+    await fetchExchangeMatrix(); // <--- обязательно обновить курсы и missingCurrencies!
     const res = await fetch('/api/default-currency');
     const data = await res.json();
     setDefaultCurrency(data.code);
@@ -387,24 +388,20 @@ function App() {
     });
 
     debts = {};
-
+    const main = currencies[0]; // базовая валюта, например 'Лари' или 'GEL'
     participants.forEach(a => {
       participants.forEach(b => {
         if (a === b) return;
-        currencies.forEach(cur => {
-          const aOwesB = debtsRaw[a]?.[b]?.[cur] || 0;
-          const bOwesA = debtsRaw[b]?.[a]?.[cur] || 0;
-          const net = aOwesB - bOwesA;
-          if (net > 0) {
-            debts[a] = debts[a] || {};
-            debts[a][b] = debts[a][b] || {};
-            debts[a][b][cur] = net;
-          } else if (net < 0) {
-            debts[b] = debts[b] || {};
-            debts[b][a] = debts[b][a] || {};
-            debts[b][a][cur] = -net;
-          }
-        });
+        const a2b = convertToTotal(main, debtsRaw[a]?.[b] || {}, exchangeMatrix);
+        const b2a = convertToTotal(main, debtsRaw[b]?.[a] || {}, exchangeMatrix);
+        const net = a2b - b2a;
+        if (net > 0) {
+          debts[a] = debts[a] || {};
+          debts[a][b] = { [main]: net };
+        } else if (net < 0) {
+          debts[b] = debts[b] || {};
+          debts[b][a] = { [main]: -net };
+        }
       });
     });
   }
@@ -531,58 +528,60 @@ function App() {
       {Object.keys(debts).length > 0 && (
         <div className="debts-summary">
           <h2>Расчетный листок</h2>
-          <table className="debts-table">
-            <thead>
-              <tr>
-                <th>Должнички</th>
-                {currencies.map(cur => (
-                  <th key={cur}>Всё в {cur}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {participants.map((from, i) =>
-                participants.slice(i + 1).map(to => {
-                  const entryA = debts[from]?.[to] || {};
-                  const entryB = debts[to]?.[from] || {};
-                  const netEntry = {};
-                  currencies.forEach(cur => {
-                    netEntry[cur] = (entryA[cur] || 0) - (entryB[cur] || 0);
-                  });
-                  if (currencies.every(cur => Math.abs(netEntry[cur]) < 0.0001)) return null;
-                  const mainCurrency = currencies[0];
-                  const mainNet = netEntry[mainCurrency];
-
-                  let debtor, creditor, entry;
-                  if (mainNet > 0) {
-                    debtor = from;
-                    creditor = to;
-                    entry = netEntry;
-                  } else {
-                    debtor = to;
-                    creditor = from;
-                    entry = {};
+          <div className="table-wrapper">
+            <table className="debts-table">
+              <thead>
+                <tr>
+                  <th>Должнички</th>
+                  {currencies.map(cur => (
+                    <th key={cur}>Всё в {cur}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {participants.map((from, i) =>
+                  participants.slice(i + 1).map(to => {
+                    const entryA = debts[from]?.[to] || {};
+                    const entryB = debts[to]?.[from] || {};
+                    const netEntry = {};
                     currencies.forEach(cur => {
-                      entry[cur] = -netEntry[cur];
+                      netEntry[cur] = (entryA[cur] || 0) - (entryB[cur] || 0);
                     });
-                  }
+                    if (currencies.every(cur => Math.abs(netEntry[cur]) < 0.0001)) return null;
+                    const mainCurrency = currencies[0];
+                    const mainNet = netEntry[mainCurrency];
 
-                  if (currencies.every(cur => Math.abs(entry[cur]) < 0.0001)) return null;
+                    let debtor, creditor, entry;
+                    if (mainNet > 0) {
+                      debtor = from;
+                      creditor = to;
+                      entry = netEntry;
+                    } else {
+                      debtor = to;
+                      creditor = from;
+                      entry = {};
+                      currencies.forEach(cur => {
+                        entry[cur] = -netEntry[cur];
+                      });
+                    }
 
-                  return (
-                    <tr key={`${debtor}->${creditor}`}>
-                      <td>Долг у {debtor} перед {creditor}</td>
-                      {currencies.map(cur => (
-                        <td key={cur}>
-                          {convertToTotal(cur, entry, exchangeMatrix).toFixed(2)}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+                    if (currencies.every(cur => Math.abs(entry[cur]) < 0.0001)) return null;
+
+                    return (
+                      <tr key={`${debtor}->${creditor}`}>
+                        <td>Долг у {debtor} перед {creditor}</td>
+                        {currencies.map(cur => (
+                          <td key={cur}>
+                            {convertToTotal(cur, entry, exchangeMatrix).toFixed(2)}
+                          </td>
+                        ))}
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
