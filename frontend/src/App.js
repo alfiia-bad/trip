@@ -366,8 +366,9 @@ function App() {
 
   let debts = {};
   if (expenses.length > 0 && participants.length > 0 && currencies.length > 0) {
-    // 1) raw‑долги
     const debtsRaw = {};
+
+    // 1. Считаем, кто кому сколько должен по валютам
     expenses.forEach(exp => {
       const ppl = exp.forWhom.split(' + ');
       const share = parseFloat(exp.amount.replace(',', '.')) / ppl.length;
@@ -379,31 +380,39 @@ function App() {
           (debtsRaw[person][exp.who][exp.currency] || 0) + share;
       });
     });
-  
+
     debts = {};
-    
-    participants.forEach(from => {
-      debts[from] = {};
-      participants.forEach(to => {
-        if (from === to) return;
-        const amountByCurrency = {};
+
+    // 2. Чистим взаимные долги (обрабатываем каждую пару один раз)
+    for (let i = 0; i < participants.length; i++) {
+      const a = participants[i];
+      for (let j = i + 1; j < participants.length; j++) {
+        const b = participants[j];
+
+        const combinedByCurrency = {};
         currencies.forEach(cur => {
-          const owe = debtsRaw[from]?.[to]?.[cur] || 0;
-          const back = debtsRaw[to]?.[from]?.[cur] || 0;
-          const diff = owe - back;
-          amountByCurrency[cur] = diff; 
+          const aOwesB = debtsRaw[a]?.[b]?.[cur] || 0;
+          const bOwesA = debtsRaw[b]?.[a]?.[cur] || 0;
+          combinedByCurrency[cur] = aOwesB - bOwesA;
         });
+
+        // Пробуем найти валюту, где можно выразить суммарный долг
         currencies.forEach(targetCurrency => {
-          const total = convertToTotal(targetCurrency, amountByCurrency, exchangeMatrix);
+          const total = convertToTotal(targetCurrency, combinedByCurrency, exchangeMatrix);
           if (Math.abs(total) > 0.0001) {
+            const from = total > 0 ? a : b;
+            const to = total > 0 ? b : a;
+            const finalAmount = Math.abs(total);
+
+            debts[from] ||= {};
             debts[from][to] ||= {};
-            debts[from][to][targetCurrency] = total;
+            debts[from][to][targetCurrency] = finalAmount;
           }
         });
-      });
-    });  
+      }
+    }
   }
-
+  
   return (
     <div className="app-container">
       <div className="header">
