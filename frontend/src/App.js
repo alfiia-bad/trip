@@ -660,7 +660,7 @@ function App() {
             </div>
           </div>
         );
-      }
+      )}
 
       {missingCurrencies.length > 0 && (
         <MissingRatesWarning missingCurrencies={missingCurrencies} />
