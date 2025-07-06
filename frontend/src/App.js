@@ -184,26 +184,6 @@ function App() {
     });
   }, [exchangeMatrix, currencies]);
   
-    return currencies.filter((cur, i) => {
-      // Проверяем для каждой валюты, что для каждой другой валюты есть курс в exchangeMatrix
-      for (let j = 0; j < currencies.length; j++) {
-        if (i === j) continue;
-  
-        // Если для пары отсутствует курс (null или undefined или 0)
-        if (
-          !exchangeMatrix[i] || 
-          exchangeMatrix[i][j] == null ||
-          exchangeMatrix[i][j] === 0
-        ) {
-          // Чтобы не показывать предупреждение для валют, которые нигде не используются,
-          // можно добавить проверку, что в расходах эта валюта действительно есть
-          // Но если это не нужно - просто возвращаем true
-          return true;
-        }
-      }
-      return false;
-    });
-  }, [exchangeMatrix, currencies]);
 
     // Для обычных input'ов: что, сколько, дата
   const handleChange = e => {
