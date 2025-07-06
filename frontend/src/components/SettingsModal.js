@@ -194,7 +194,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
                     aria-label={`Сделать ${c} валютой по умолчанию`}
                   >
                     {c === defaultCurrency ? (
-                      <FaHeart className="edit-btn" />
+                      <FaHeart className="heart-filled" />
                     ) : (
                       <FaRegHeart className="heart-fill" />
                     )}
