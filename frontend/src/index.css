@@ -888,15 +888,6 @@ tr:last-child td {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.settings-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  height: 40px;
-  margin-bottom: 0.5rem;
-}
-
 .participant-name {
   width: 150px;
   overflow: hidden;
@@ -925,12 +916,6 @@ tr:last-child td {
   max-width: 300px;
   width: calc(100% - 1rem);
   display: block;
-}
-
-.icon-buttons {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .exchange-rate .edit-btn {
@@ -1148,4 +1133,13 @@ tr:last-child td {
   justify-content: center;
   width: 28px;
   height: 28px;
+}
+
+.currency-code {
+  min-width: 60px;
+  font-weight: 500;
+  font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
