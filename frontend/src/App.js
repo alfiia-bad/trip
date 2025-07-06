@@ -174,7 +174,6 @@ function App() {
     if (!exchangeMatrix || currencies.length === 0) return [];
   
     return currencies.filter(code => {
-      // Для каждой другой валюты проверяем, есть ли курс
       return currencies.some(otherCode => {
         if (otherCode === code) return false;
         const rate = exchangeMatrix[code]?.[otherCode];
@@ -184,8 +183,6 @@ function App() {
     });
   }, [exchangeMatrix, currencies]);
   
-
-    // Для обычных input'ов: что, сколько, дата
   const handleChange = e => {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
@@ -193,20 +190,16 @@ function App() {
 
   const handleAmountChange = (e) => {
     const raw = e.target.value;
-    
-    // Разрешаем ввод: 123, 5.4, 5,44, 0.99
     if (/^\d*([.,]\d{0,2})?$/.test(raw) || raw === '') {
       setForm(f => ({ ...f, amount: raw }));
     }
   };
 
-  // Для select "Кто платил" и "Валюта"
   const handleSelectChange = e => {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
   };
 
-  // Для чекбоксов "За кого платил"
   const toggleForWhom = (name) => {
     setForm(f => {
       const current = Array.isArray(f.forWhom) ? f.forWhom : [];
@@ -218,28 +211,23 @@ function App() {
     });
   };
   
-  // Открыть поле ввода курса
   const handleEditExchangeRate = () => {
     setEditingRateInput(currencyRate.toString().replace('.', ','));
     setEditingRate(true);
   };
   
-  // Обработка изменения в input курса
   const handleEditingRateChange = (e) => {
     const val = e.target.value;
-    // Разрешаем цифры, точку или запятую, максимум 2 знака после запятой
     if (/^\d*([.,]\d{0,2})?$/.test(val) || val === '') {
       setEditingRateInput(val);
     }
   };
   
-  // Сохранение нового курса с валидацией
   const saveNewRate = async () => {
     if (!editingRateInput) {
       alert('Введите курс');
       return;
     }
-    // Заменяем запятую на точку для парсинга
     const normalized = editingRateInput.replace(',', '.');
     const parsed = parseFloat(normalized);
   
@@ -248,7 +236,6 @@ function App() {
       return;
     }
   
-    // Сохраняем
     try {
       const response = await fetch('/api/currency-rate', {
         method: 'PUT', // PUT, т.к. в бэке используется PUT
@@ -291,7 +278,6 @@ function App() {
       return;
     }
 
-        // Превращаем массив forWhom в строку через " + "
     const forWhomStr = form.forWhom.join(' + ');
 
     await fetch('/api/expenses', {
@@ -364,7 +350,6 @@ function App() {
     await fetchExpenses();
   };
 
-    // Отображение выбранных участников через +
   const forWhomDisplay = form.forWhom.length > 0 ? form.forWhom.join(' + ') : '';
 
   function convertAmount(amount, fromCurrency, toCurrency) {
@@ -394,19 +379,13 @@ function App() {
       debts[from] = {};
       participants.forEach(to => {
         if (from === to) return;
-    
-        // Собираем разницу долгов по всем валютам
         const amountByCurrency = {};
-    
         currencies.forEach(cur => {
           const owe = debtsRaw[from]?.[to]?.[cur] || 0;
           const back = debtsRaw[to]?.[from]?.[cur] || 0;
           const diff = owe - back;
-    
-          amountByCurrency[cur] = diff; // может быть и отрицательным
+          amountByCurrency[cur] = diff; 
         });
-    
-        // Переводим в каждую целевую валюту
         currencies.forEach(targetCurrency => {
           const total = convertToTotal(targetCurrency, amountByCurrency, exchangeMatrix);
           if (Math.abs(total) > 0.0001) {
@@ -473,41 +452,13 @@ function App() {
           </div>
 
           {forWhomDropdownOpen && participants && (
-            <div style={{
-              position: 'absolute',
-              top: '100%',
-              left: 0,
-              zIndex: 10,
-              background: 'white',
-              border: '1px solid #ccc',
-              borderRadius: 8,
-              maxHeight: 150,
-              overflowY: 'auto',
-              width: '100%',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
-            }}>
+            <div style={{ position: 'absolute', top: '100%', left: 0, zIndex: 10, background: 'white', border: '1px solid #ccc', borderRadius: 8, maxHeight: 150, overflowY: 'auto', width: '100%', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
               {participants.map(p => (
                 <label
                   key={p}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '0.5rem',
-                    justifyContent: 'flex-start',
-                    cursor: 'pointer',
-                    gap: '0.5rem'
-                  }}
+                  style={{ display: 'flex', alignItems: 'center', padding: '0.5rem', justifyContent: 'flex-start', cursor: 'pointer', gap: '0.5rem' }}
                 >
-                  <input
-                    type="checkbox"
-                    checked={form.forWhom.includes(p)}
-                    onChange={() => toggleForWhom(p)}
-                    style={{ 
-                      margin: 0,
-                      marginRight: '0.5rem',
-                      flexShrink: 0 
-                    }}
-                  />
+                  <input type="checkbox" checked={form.forWhom.includes(p)} onChange={() => toggleForWhom(p)} style={{ margin: 0, marginRight: '0.5rem', flexShrink: 0 }} />
                   <span style={{ textAlign: 'left' }}>{p}</span>
                 </label>
               ))}
@@ -541,11 +492,7 @@ function App() {
                 <td>{formatDate(e.date)}</td>
                 <td>{e.forWhom}</td>
                       <td>
-                        <button
-                          className="delete-btn icon-btn table-delete-btn"
-                          onClick={() => openDeleteModal(i)}
-                          title="Удалить"
-                        >
+                        <button className="delete-btn icon-btn table-delete-btn" onClick={() => openDeleteModal(i)} title="Удалить" >
                           <BiTrash />
                         </button>
                       </td>
@@ -555,7 +502,6 @@ function App() {
         </table>
       </div>
 
-      {/* Общая сумма */}
       {currencies && currencies.length > 0 && (
         <div style={{ marginTop: '1rem', marginLeft: '8px', fontSize: '14px', fontWeight: 'bold', textShadow: '1px 1px 4px rgba(0, 0, 0, 0.5)' }}>
           {currencies.map(currency => {
@@ -639,7 +585,6 @@ function App() {
           onSaveRate={newRate => {
             setCurrencyRate(newRate);
             setShowTransfer(false);
-            // а если нужно, запушить на сервер тут
           }}
           onClose={() => setShowTransfer(false)}
         />
