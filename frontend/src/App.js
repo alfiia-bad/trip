@@ -367,7 +367,6 @@ function App() {
   if (expenses.length > 0 && participants.length > 0 && currencies.length > 0) {
     const debtsRaw = {};
 
-    // 1. Считаем, кто кому сколько должен по валютам
     expenses.forEach(exp => {
       const ppl = exp.forWhom.split(' + ');
       const share = parseFloat(exp.amount.replace(',', '.')) / ppl.length;
@@ -382,7 +381,6 @@ function App() {
 
     debts = {};
 
-    // 2. Чистим взаимные долги (обрабатываем каждую пару один раз)
     const processed = new Set();
 
     for (let i = 0; i < participants.length; i++) {
@@ -390,21 +388,15 @@ function App() {
       for (let j = 0; j < participants.length; j++) {
         if (i === j) continue;
         const b = participants[j];
-
-        // создаём ключ, не зависящий от порядка, чтобы пару не обрабатывать дважды
         const key = [a, b].sort().join('|');
         if (processed.has(key)) continue;
         processed.add(key);
-
-        // считаем чистый баланс a vs b по каждой валюте
         const net = {};
         currencies.forEach(cur => {
           const aOwesB = debtsRaw[a]?.[b]?.[cur] || 0;
           const bOwesA = debtsRaw[b]?.[a]?.[cur] || 0;
           net[cur] = aOwesB - bOwesA;
         });
-
-        // конвертируем этот баланс в каждую валюту и заносим в итог
         currencies.forEach(target => {
           const total = convertToTotal(target, net, exchangeMatrix);
           if (Math.abs(total) > 0.0001) {
@@ -554,11 +546,7 @@ function App() {
               {participants.map(from =>
                 participants.map(to => {
                   if (from === to) return null;
-      
                   const debtEntry = debts[from]?.[to] || {};
-                  const isNonZero = Object.values(debtEntry).some(amount => amount > 0.0001);
-                  if (!isNonZero) return null;
-      
                   return (
                     <tr key={`${from}->${to}`}>
                       <td>Долг у {from} перед {to}</td>
@@ -586,7 +574,7 @@ function App() {
       </p>
 
       {showSettings && participants && currencies && (
-        <SettingsModal
+        <SettingsModal 
           onClose={closeSettings}
           participants={participants}
           setParticipants={setParticipants}

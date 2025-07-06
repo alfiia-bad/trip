@@ -4,7 +4,7 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import '../index.css';
 
 
-export default function SettingsModal({ onClose, participants, setParticipants, currencies, setCurrencies, exchangeMatrix, setExchangeMatrix }) {
+export default function SettingsModal({ onClose, participants, setParticipants, currencies, setCurrencies, exchangeMatrix, setExchangeMatrix, defaultCurrency: defaultCurrencyProp }) {
       useEffect(() => {
         const scrollY = window.scrollY;
         document.body.style.position = 'fixed';
@@ -23,7 +23,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
   
   const [editingName, setEditingName] = useState(null);
   const [editedName, setEditedName] = useState(''); 
-  const [defaultCurrency, setDefaultCurrency] = useState(null);
+  const [defaultCurrency, setDefaultCurrency] = useState(defaultCurrencyProp);
   const [toDelete, setToDelete] = useState(null); 
       
   const confirmDelete = async () => {
@@ -43,8 +43,10 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
   };
   const cancelDelete = () => setToDelete(null);
 
+    useEffect(() => {
+      setDefaultCurrency(defaultCurrencyProp);
+    }, [defaultCurrencyProp]);
 
-  // Вместо прямого удаления теперь открываем диалог
   const promptDeleteParticipant = (name) => {
     setToDelete({ type: 'participant', name });
   };
@@ -53,7 +55,6 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
     setToDelete({ type: 'currency', name: code });
   };
 
-  // Редактирование участника
   const editParticipant = (name) => {
     setEditingName(name);
     setEditedName(name);
@@ -81,7 +82,6 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name })
       });
-      // Обновляем участников
       const res = await fetch('/api/participants');
       const data = await res.json();
       setParticipants(data);
@@ -89,7 +89,6 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
     }
   };
 
-  // Удаление валюты
   const deleteCurrency = async (currency) => {
     await fetch(`/api/currencies/${currency}`, { method: 'DELETE' });
     const res = await fetch('/api/currencies');
@@ -97,7 +96,6 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
     setCurrencies(data);
   };
 
-  // Добавление валюты
   const addCurrency = async () => {
     const name = prompt('Введите название валюты');
     if (name) {
@@ -112,7 +110,6 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
     }
   };
 
-// при клике «сердечко»
   const handleSetDefault = async (code) => {
     await fetch('/api/default-currency', {
       method: 'PUT',
