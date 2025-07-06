@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BiEditAlt } from 'react-icons/bi';
 import { FaSave } from "react-icons/fa";
 import '../index.css';
@@ -9,13 +9,16 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
   const [matrix, setMatrix]       = useState([]); 
   const [editingCell, setEditing] = useState(null);
 
-  const missingCurrencies = currencies.filter((cur, i) => {
-    for (let j = 0; j < currencies.length; j++) {
-      if (i === j) continue;
-      if (!matrix[i] || matrix[i][j] == null) return true;
-    }
-    return false;
-  });
+  const missingCurrencies = useMemo(() => {
+    if (currencies.length === 0) return [];
+    return currencies.filter((from, i) =>
+      currencies.some((to, j) => {
+        if (i === j) return false;
+        const rate = matrix[i]?.[j];
+        return rate == null || rate === 0;
+      })
+    );
+  }, [currencies, matrix]);
 
   // 1) подгружаем матрицу при открытии
   useEffect(() => {
@@ -141,12 +144,16 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
             )}
           </div>  
 
-          <div style={{ marginTop: '1rem', fontSize: '14px', color: 'red' }}>
-            {missingCurrencies.map(c => (
-              <div key={c}>* Расчеты могут быть неправильные, так как не указан курс валют для "{c}"</div>
-            ))}
-          </div>
-            
+          {missingCurrencies.length > 0 && (
+            <div style={{ marginTop: '1rem', fontSize: '14px', color: 'red' }}>
+              {missingCurrencies.map(c => (
+                <div key={c}>
+                  * Расчеты могут быть неправильные,так как не указан курс валют для "{c}"
+                </div>
+              ))}
+            </div>
+          )}
+     
         </div>
       </div>
     </div>
