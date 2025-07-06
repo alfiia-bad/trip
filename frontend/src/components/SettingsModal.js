@@ -200,13 +200,13 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
                     onClick={() => handleSetDefault(c)}
                     className="favorite-btn"
                     aria-label={`Сделать ${c} валютой по умолчанию`}
-                    title="валюта по умолчанию" // <-- добавлен хинт
                   >
                     {c === defaultCurrency ? (
                       <FaHeart className="heart-filled" />
                     ) : (
                       <FaRegHeart className="heart-fill" />
                     )}
+                    <span className="custom-tooltip">валюта по умолчанию</span>
                   </button>
                   <button
                     onClick={() => promptDeleteCurrency(c)}

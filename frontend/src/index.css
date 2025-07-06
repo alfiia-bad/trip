@@ -1101,6 +1101,29 @@ tr:last-child td {
   width: 20px;
   height: 20px;
   padding: 0;
+  position: relative;
+}
+
+.favorite-btn .custom-tooltip {
+  display: none;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.favorite-btn:active .custom-tooltip,
+.favorite-btn:focus .custom-tooltip,
+.favorite-btn:hover .custom-tooltip {
+  display: block;
 }
 
 .heart-fill,
@@ -1125,4 +1148,26 @@ tr:last-child td {
 
 .heart-filled {
   color: #718583;;
+}
+
+@keyframes pulse-outline {
+  0% {
+    box-shadow: 0 0 0 0 rgba(113, 133, 131, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(113, 133, 131, 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(113, 133, 131, 0.5);
+  }
+}
+
+.add-expense-btn {
+  box-shadow: none;
+}
+
+.add-expense-btn.pulse-outline {
+  box-shadow: 0 0 0 0 rgba(113, 133, 131, 0.5);
+  animation: pulse-outline 1.8s infinite;
+  transition: box-shadow 0.3s;
 }

@@ -470,7 +470,12 @@ function App() {
             </div>
           )}
         </div>
-        <button onClick={handleSubmit}>Добавить в список</button>
+        <button
+          onClick={handleSubmit}
+          className={`add-expense-btn${isFormValid() ? ' pulse-outline' : ''}`}
+        >
+          Добавить в список
+        </button>
       </div>
 
       <h2>Таблица расходов</h2>
