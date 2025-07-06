@@ -181,19 +181,6 @@ function App() {
     return total;
   }
 
-  const missingCurrencies = useMemo(() => {
-    if (!exchangeMatrix || currencies.length === 0) return [];
-  
-    return currencies.filter(code => {
-      return currencies.some(otherCode => {
-        if (otherCode === code) return false;
-        const rate = exchangeMatrix[code]?.[otherCode];
-        // если rate null, undefined или 0 — считаем, что курс отсутствует
-        return rate == null || rate === 0;
-      });
-    });
-  }, [exchangeMatrix, currencies]);
-  
   const handleChange = e => {
     const { name, value } = e.target;
     setForm(f => ({ ...f, [name]: value }));
