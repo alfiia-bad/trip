@@ -1090,6 +1090,10 @@ tr:last-child td {
   box-sizing: border-box;
 }
 
+.table-currency tr:last-child td {
+  border-bottom: 1px solid #ccc;
+}
+
 .favorite-btn {
   background: none;
   border: none;
@@ -1170,4 +1174,13 @@ tr:last-child td {
   box-shadow: 0 0 0 0 rgba(113, 133, 131, 0.5);
   animation: pulse-outline 1.8s infinite;
   transition: box-shadow 0.3s;
+}
+
+.add-expense-btn.invalid {
+  background-color: #e0e0e0 !important;
+  color: #888 !important;
+  border: 1px solid #bfc6c6 !important;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 1;
 }

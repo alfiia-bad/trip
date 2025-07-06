@@ -88,13 +88,8 @@ export default function TransferModal({ onClose, rate, onSaveRate }) {
                     const rawVal = matrix[i]?.[j];
                     const val = rawVal != null ? rawVal.toFixed(3) : '';
                     const isEditing = editingCell && editingCell.row === i && editingCell.col === j;
-                    // Добавляем нижний бордер для нижних ячеек (последняя строка)
-                    const isLastRow = i === currencies.length - 1;
                     return (
-                      <td
-                        key={colCode}
-                        style={isLastRow ? { borderBottom: '2px solid #718583' } : undefined}
-                      >
+                      <td key={colCode}>
                         {i === j ? (
                           '1'
                         ) : isEditing ? (
