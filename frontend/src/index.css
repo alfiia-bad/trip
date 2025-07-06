@@ -1122,3 +1122,13 @@ tr:last-child td {
 .heart-fill:hover {
   background-color: #d5d5d5;
 }
+
+.heart-filled {
+  color: red;
+  font-size: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
