@@ -113,12 +113,6 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
     }
   };
 
-  useEffect(() => {
-    fetch('/api/default-currency')
-      .then(res => res.json())
-      .then(data => setDefaultCurrency(data.code));
-  }, []);
-
 // при клике «сердечко»
   const handleSetDefault = async (code) => {
     await fetch('/api/default-currency', {
