@@ -294,7 +294,6 @@ function App() {
       .then(res => res.json())
       .then(data => {
         setDefaultCurrency(data.code);
-        // если форма ещё инициализирована — сразу проставляем валюту
         setForm(f => ({ ...f, currency: data.code }));
       })
       .catch(console.error);
@@ -384,35 +383,42 @@ function App() {
     debts = {};
 
     // 2. Чистим взаимные долги (обрабатываем каждую пару один раз)
+    const processed = new Set();
+
     for (let i = 0; i < participants.length; i++) {
       const a = participants[i];
-      for (let j = i + 1; j < participants.length; j++) {
+      for (let j = 0; j < participants.length; j++) {
+        if (i === j) continue;
         const b = participants[j];
 
-        const combinedByCurrency = {};
+        // создаём ключ, не зависящий от порядка, чтобы пару не обрабатывать дважды
+        const key = [a, b].sort().join('|');
+        if (processed.has(key)) continue;
+        processed.add(key);
+
+        // считаем чистый баланс a vs b по каждой валюте
+        const net = {};
         currencies.forEach(cur => {
           const aOwesB = debtsRaw[a]?.[b]?.[cur] || 0;
           const bOwesA = debtsRaw[b]?.[a]?.[cur] || 0;
-          combinedByCurrency[cur] = aOwesB - bOwesA;
+          net[cur] = aOwesB - bOwesA;
         });
 
-        // Пробуем найти валюту, где можно выразить суммарный долг
-        currencies.forEach(targetCurrency => {
-          const total = convertToTotal(targetCurrency, combinedByCurrency, exchangeMatrix);
+        // конвертируем этот баланс в каждую валюту и заносим в итог
+        currencies.forEach(target => {
+          const total = convertToTotal(target, net, exchangeMatrix);
           if (Math.abs(total) > 0.0001) {
             const from = total > 0 ? a : b;
-            const to = total > 0 ? b : a;
-            const finalAmount = Math.abs(total);
-
+            const to   = total > 0 ? b : a;
             debts[from] ||= {};
             debts[from][to] ||= {};
-            debts[from][to][targetCurrency] = finalAmount;
+            debts[from][to][target] = Math.abs(total);
           }
         });
       }
     }
   }
-  
+
   return (
     <div className="app-container">
       <div className="header">
