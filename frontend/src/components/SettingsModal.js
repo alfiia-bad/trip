@@ -4,7 +4,7 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import '../index.css';
 
 
-export default function SettingsModal({ onClose, participants, setParticipants, currencies, setCurrencies, exchangeMatrix, setExchangeMatrix, defaultCurrency: defaultCurrencyProp }) {
+export default function SettingsModal({ onClose, participants, setParticipants, currencies, setCurrencies, exchangeMatrix, setExchangeMatrix, defaultCurrency: defaultCurrencyProp, fetchExchangeMatrix }) {
       useEffect(() => {
         const scrollY = window.scrollY;
         document.body.style.position = 'fixed';
@@ -106,6 +106,9 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
       const res = await fetch('/api/currencies');
       const data = await res.json();
       setCurrencies(data);
+      if (fetchExchangeMatrix) {
+        fetchExchangeMatrix(); // обновить курсы и уведомления на главной
+      }
     }
   };
 

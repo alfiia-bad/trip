@@ -99,8 +99,18 @@ function App() {
   const fetchExchangeMatrix = async () => {
     const res = await fetch('/api/exchange-matrix');
     const { currencies, matrix } = await res.json();
+
+    // Преобразуем массив matrix в объект
+    const matrixObj = {};
+    currencies.forEach((from, i) => {
+      matrixObj[from] = {};
+      currencies.forEach((to, j) => {
+        matrixObj[from][to] = matrix[i][j];
+      });
+    });
+
     setCurrencies(currencies);
-    setExchangeMatrix(matrix);
+    setExchangeMatrix(matrixObj);
 
     // вычисляем missingCurrencies
     const missing = currencies.filter((from, i) =>
@@ -174,8 +184,7 @@ function App() {
     for (const [cur, amt] of Object.entries(currencyAmounts)) {
       const rate = matrix[cur]?.[targetCurrency] ?? 1;
       if (amt > 0) {
-        const converted = +(amt * rate).toFixed(8);
-        total = +(total + converted).toFixed(8);
+        total += amt * rate;
       }
     }
     return total;
@@ -596,6 +605,7 @@ function App() {
           exchangeMatrix={exchangeMatrix}
           setExchangeMatrix={setExchangeMatrix}
           defaultCurrency={defaultCurrency}
+          fetchExchangeMatrix={fetchExchangeMatrix} // <-- добавить
         />
       )}
 
