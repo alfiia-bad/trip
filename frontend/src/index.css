@@ -1100,5 +1100,25 @@ tr:last-child td {
   margin-right: 8px;
   display: inline-flex;
   align-items: center;
-  width: 32px;
+  width: 28px;
+}
+
+.heart-fill {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #e0e0e0;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  width: 28px;
+  height: 28px;
+}
+
+.heart-fill:hover {
+  background-color: #d5d5d5;
 }
