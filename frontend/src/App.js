@@ -44,6 +44,7 @@ function App() {
   const [showCalc, setShowCalc] = useState(false);
   const [exchangeMatrix, setExchangeMatrix] = useState({});
   const [currencyList, setCurrencyList] = useState([]);
+  const [defaultCurrency, setDefaultCurrency] = useState('');
 
   useEffect(() => {
     document.documentElement.style.setProperty('--mountain-image', `url(${mountainImage})`);
@@ -52,10 +53,10 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (currencies.length > 0 && !form.currency) {
-      setForm(f => ({ ...f, currency: currencies[0].code }));
+    if (currencies.length > 0 && defaultCurrency) {
+      setForm(f => ({ ...f, currency: defaultCurrency }));
     }
-  }, [currencies]);
+  }, [currencies, defaultCurrency]);
 
     // Закрытие мультиселекта по клику вне
   useEffect(() => {
@@ -320,9 +321,13 @@ function App() {
   useEffect(() => {
     fetch('/api/default-currency')
       .then(res => res.json())
-      .then(data => setDefaultCurrency(data.code));
+      .then(data => {
+        setDefaultCurrency(data.code);
+        // если форма ещё инициализирована — сразу проставляем валюту
+        setForm(f => ({ ...f, currency: data.code }));
+      })
+      .catch(console.error);
   }, []);
-
 
   const groupedExpenses = {};
 
