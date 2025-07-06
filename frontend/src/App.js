@@ -424,58 +424,6 @@ function App() {
     });
   }
 
-  function YourComponent({ expenses, participants, currencies, exchangeMatrix, debts }) {
-    // 1) Вспомогательная функция: конвертация amt из fromCur → toCur
-    function convertAmount(amount, fromCur, toCur) {
-      const i = exchangeMatrix.currencies.indexOf(fromCur);
-      const j = exchangeMatrix.currencies.indexOf(toCur);
-      if (i === -1 || j === -1) return 0;
-      return amount * (exchangeMatrix.matrix[i][j] ?? 1);
-    }
-  
-    // 2) Сбор нетто‑долгов по каждой неупорядоченной паре участников
-    const summary = [];
-    for (let i = 0; i < participants.length; i++) {
-      for (let j = i + 1; j < participants.length; j++) {
-        const A = participants[i];
-        const B = participants[j];
-        const ab = debts[A]?.[B] || {};
-        const ba = debts[B]?.[A] || {};
-  
-        // для каждой валюты считаем |A→B − B→A|
-        const diffByCur = {};
-        currencies.forEach(cur => {
-          const sumAB = Object.entries(ab)
-            .reduce((s, [fromCur, amt]) => s + convertAmount(amt, fromCur, cur), 0);
-          const sumBA = Object.entries(ba)
-            .reduce((s, [fromCur, amt]) => s + convertAmount(amt, fromCur, cur), 0);
-          diffByCur[cur] = +Math.abs(sumAB - sumBA).toFixed(2);
-        });
-  
-        // пропускаем, если во всех валютах ноль
-        if (!currencies.some(cur => diffByCur[cur] > 0)) continue;
-  
-        // определяем направление долга по первой ненулевой валюте
-        let debtor = A, creditor = B;
-        for (const cur of currencies) {
-          const sumAB = Object.entries(ab)
-            .reduce((s, [fromCur, amt]) => s + convertAmount(amt, fromCur, cur), 0);
-          const sumBA = Object.entries(ba)
-            .reduce((s, [fromCur, amt]) => s + convertAmount(amt, fromCur, cur), 0);
-          if (sumAB !== sumBA) {
-            [debtor, creditor] = sumAB > sumBA ? [A, B] : [B, A];
-            break;
-          }
-        }
-  
-        summary.push({
-          label: `Долг у ${debtor} перед ${creditor}`,
-          diffByCur
-        });
-      }
-    }
-  
-
   return (
     <div className="app-container">
       <div className="header">
@@ -633,33 +581,30 @@ function App() {
         </div>
       )}
 
-      {expenses.length > 0 && participants && currencies && (
-          <div style={{ marginTop: '2rem' }}>
-            <h2>Расчетный листок</h2>
-            <div className="table-wrapper">
-              <table className="expense-table">
-                <thead>
-                  <tr>
-                    <th>Должники</th>
+      {expenses.length > 0 && participants.length > 0 && currencies.length > 0 && (
+        <div style={{ marginTop: '2rem' }}>
+          <h2>Расчетный листок</h2>
+          <div className="table-wrapper">
+            <table className="expense-table">
+              <thead>
+                <tr>
+                  <th>Должники</th>
+                  {currencies.map(cur => <th key={cur}>Всё в {cur}</th>)}
+                </tr>
+              </thead>
+              <tbody>
+                {summary.map((row, idx) => (
+                  <tr key={idx}>
+                    <td>{row.label}</td>
                     {currencies.map(cur => (
-                      <th key={cur}>Всё в {cur}</th>
+                      <td key={cur}>{row.diffByCur[cur].toFixed(2)}</td>
                     ))}
                   </tr>
-                </thead>
-                <tbody>
-                  {summary.map((row, idx) => (
-                    <tr key={idx}>
-                      <td>{row.label}</td>
-                      {currencies.map(cur => (
-                        <td key={cur}>{row.diffByCur[cur].toFixed(2)}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
-        );
+        </div>
       )}
 
       {missingCurrencies.length > 0 && (
