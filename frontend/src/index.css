@@ -772,6 +772,14 @@ select:invalid {
   height: 100%;
 }
 
+.forWhom-multiselect input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0 0.5rem 0 0;
+}
+
 button {
   margin: 0.5rem;
   padding: 0.5rem 1rem;
@@ -1251,7 +1259,7 @@ tr:last-child td {
 
 .add-expense-btn.pulse-outline {
   box-shadow: 0 0 0 0 rgba(176, 0, 32, 0.5);
-  animation: pulse-outline 1.8s infinite;
+  animation: pulse-outline 2s infinite;
   transition: box-shadow 0.3s;
 }
 

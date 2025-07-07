@@ -482,7 +482,7 @@ function App() {
           Добавить в список
         </button>
           {isFormValid() && (
-            <span className="add-expense-hint"> {'\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0жмакни, чтоб добавить'} </span>
+            <span className="add-expense-hint"> { ' '.repeat(20) }жмакни, чтоб добавить </span>
           )}
       </div>
 
