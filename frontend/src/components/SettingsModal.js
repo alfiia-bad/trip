@@ -170,17 +170,19 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
                     <div className="icon-buttons">
                       <button
                         onClick={() => editParticipant(p)}
-                        className="edit-btn"
+                        className="edit-btn tooltip-parent"
                         aria-label={`Редактировать участника ${p}`}
                       >
                         <BiEditAlt />
+                        <span className="custom-tooltip">редактировать участника</span>
                       </button>
                       <button
                         onClick={() => promptDeleteParticipant(p)}
-                        className="delete-btn"
+                        className="delete-btn tooltip-parent"
                         aria-label={`Удалить участника ${p}`}
                       >
                         <BiTrash />
+                        <span className="custom-tooltip">удалить участника</span>
                       </button>
                     </div>
                   </>
@@ -210,10 +212,11 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
                   </button>
                   <button
                     onClick={() => promptDeleteCurrency(c)}
-                    className="delete-btn"
+                    className="delete-btn tooltip-parent"
                     aria-label={`Удалить валюту ${c}`}
                   >
                     <BiTrash />
+                    <span className="custom-tooltip">удаление валюты</span>
                   </button>
                 </div>
               </div>

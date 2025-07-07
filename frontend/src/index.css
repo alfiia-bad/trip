@@ -341,6 +341,14 @@ th {
   max-width: 300px; 
 }
 
+.debts-table__cell--default {
+  font-weight: bold;
+  color: #000;
+}
+
+.debts-table__cell--other {
+  color: #888;
+}
 
 /* Модалка */
 .modal-overlay {
@@ -475,6 +483,10 @@ th {
   width: auto;
   line-height: 1;
   align-self: flex-end;
+}
+
+.calculator-modal__converted {
+  font-weight: bold;
 }
 
 .edit-btn {
@@ -1131,6 +1143,58 @@ tr:last-child td {
   display: block;
 }
 
+/* Скрываем подсказку по умолчанию */
+.custom-tooltip-parent .custom-tooltip {
+  display: none;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #222;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  z-index: 100;
+  pointer-events: none;
+  border: 1px solid #ccc;
+}
+
+/* Показываем при hover/focus/active */
+.custom-tooltip-parent:hover .custom-tooltip,
+.custom-tooltip-parent:focus .custom-tooltip,
+.custom-tooltip-parent:active .custom-tooltip {
+  display: block;
+}
+
+.tooltip-parent {
+  position: relative; /* чтобы абсолютный тултип позиционировался относительно кнопки */
+}
+
+.tooltip-parent .custom-tooltip {
+  display: none;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #222;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  z-index: 100;
+  pointer-events: none;
+  border: 1px solid #ccc;
+}
+
+.tooltip-parent:hover .custom-tooltip,
+.tooltip-parent:focus .custom-tooltip,
+.tooltip-parent:active .custom-tooltip {
+  display: block;
+}
+
 .heart-fill,
 .heart-filled {
   font-size: 1.4rem;
@@ -1177,6 +1241,13 @@ tr:last-child td {
   transition: box-shadow 0.3s;
 }
 
+.add-expense-btn.valid {
+  background-color: #b00020;
+  color: #fff;            
+  border: none;
+  cursor: pointer;
+}
+
 .add-expense-btn.invalid {
   background-color: #e0e0e0 !important;
   color: #888 !important;
@@ -1184,4 +1255,26 @@ tr:last-child td {
   cursor: not-allowed;
   box-shadow: none;
   opacity: 1;
+}
+
+/* Мигание подсказки */
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.add-expense-hint {
+  font-weight: bold;
+  font-size: 20px;
+  color: #b00020;
+  background: transparent;
+  animation: blink 1s step-start infinite;
+  /* Чтобы текст не смещался при мигании, можно заменить opacity на visibility:
+     animation: blink 1s infinite;
+     @keyframes blink { 0%,50%{ visibility: visible; } 51%,100%{ visibility: hidden; } }
+  */
 }

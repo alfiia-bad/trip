@@ -66,9 +66,17 @@ export default function CalculatorModal({ onClose }) {
               const key = `${from}_${to}`;
               const rate = matrix[i]?.[j] ?? 0;
               const inputVal = inputs[key] ?? '';
-              const converted = format(parseFloat((inputVal || '').replace(',', '.')) * rate);
+              const converted = format(parseFloat(inputVal.replace(',', '.')) * rate);
               return (
-                <div key={key} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center',  marginBottom: '0.5rem' }}>
+                <div
+                  key={key}
+                  style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    marginBottom: '0.5rem'
+                  }}
+                >
                   <input
                     type="text"
                     inputMode="decimal"
@@ -95,9 +103,12 @@ export default function CalculatorModal({ onClose }) {
                       whiteSpace: 'normal'
                     }}
                   >
-                    {from} это {converted} {to}
+                    {from} это{' '}
+                    <strong className="calculator-modal__converted">
+                      {converted}
+                    </strong>{' '}
+                    {to}
                   </div>
-
                 </div>
               );
             })

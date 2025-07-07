@@ -421,14 +421,14 @@ function App() {
               <option key={p} value={p}>{p}</option>
             ))}
           </select>
-          <button onClick={openSettings} title="Настройки" className="settings-icon-btn" aria-label="Настройки" >
+          <button onClick={openSettings} title="Настройки" className="settings-icon-btn custom-tooltip-parent" aria-label="Настройки" >
             <IoMdSettings size={32} color="#718583" />
           </button>
         </div> 
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <input name="amount" placeholder="Сколько" inputMode="decimal" pattern="^\d+([.,]\d{0,2})?$" value={form.amount} onChange={handleAmountChange} style={{ marginTop: 0, marginBottom: 0 }} />
-          <button onClick={() => setShowTransfer(true)} title="Перевод валют" className="settings-icon-btn" aria-label="Перевод валют">
+          <button onClick={() => setShowTransfer(true)} title="Перевод валют" className="settings-icon-btn custom-tooltip-parent" aria-label="Перевод валют">
             <FaMoneyBillTransfer size={32} color="#718583" />
           </button>  
         </div>      
@@ -442,7 +442,7 @@ function App() {
           
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '8px 0px' }}>
           <input type="datetime-local" name="date" placeholder="Дата" value={form.date} onChange={handleChange} style={{ marginTop: 0, marginBottom: 0 }} />
-          <button onClick={() => setShowCalc(true)} title="Калькулятор переводов" className="settings-icon-btn" aria-label="Калькулятор переводов">
+          <button onClick={() => setShowCalc(true)} title="Калькулятор переводов" className="settings-icon-btn custom-tooltip-parent" aria-label="Калькулятор переводов">
             <BiCalculator size={32} color="#718583" />
           </button>
         </div>  
@@ -478,6 +478,11 @@ function App() {
         >
           Добавить в список
         </button>
+          {isFormValid() && (
+            <span className="add-expense-hint">
+              ← жмакни, чтоб добавить
+            </span>
+          )}
       </div>
 
       <h2>Таблица расходов</h2>
@@ -571,17 +576,26 @@ function App() {
                         entry[cur] = -netEntry[cur];
                       });
                     }
-
                     if (currencies.every(cur => Math.abs(entry[cur]) < 0.0001)) return null;
 
                     return (
                       <tr key={`${debtor}->${creditor}`}>
                         <td>Долг у {debtor} перед {creditor}</td>
-                        {currencies.map(cur => (
-                          <td key={cur}>
-                            {convertToTotal(cur, entry, exchangeMatrix).toFixed(2)}
-                          </td>
-                        ))}
+                        {currencies.map(cur => {
+                          const amount = convertToTotal(cur, entry, exchangeMatrix).toFixed(2);
+                          return (
+                            <td
+                              key={cur}
+                              className={
+                                cur === defaultCurrency
+                                  ? 'debts-table__cell--default'
+                                  : 'debts-table__cell--other'
+                              }
+                            >
+                              {amount}
+                            </td>
+                          );
+                        })}
                       </tr>
                     );
                   })
@@ -590,7 +604,7 @@ function App() {
             </table>
           </div>
         </div>
-      )}
+      )}      
 
       {missingCurrencies.length > 0 && (
         <MissingRatesWarning missingCurrencies={missingCurrencies} />
