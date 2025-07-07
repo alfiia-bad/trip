@@ -423,6 +423,7 @@ function App() {
           </select>
           <button onClick={openSettings} title="Настройки" className="settings-icon-btn custom-tooltip-parent" aria-label="Настройки" >
             <IoMdSettings size={32} color="#718583" />
+            <span className="custom-tooltip">Настройки</span>
           </button>
         </div> 
         <input name="what" placeholder="За что платил" value={form.what} onChange={handleChange} />
@@ -430,6 +431,7 @@ function App() {
           <input name="amount" placeholder="Сколько" inputMode="decimal" pattern="^\d+([.,]\d{0,2})?$" value={form.amount} onChange={handleAmountChange} style={{ marginTop: 0, marginBottom: 0 }} />
           <button onClick={() => setShowTransfer(true)} title="Перевод валют" className="settings-icon-btn custom-tooltip-parent" aria-label="Перевод валют">
             <FaMoneyBillTransfer size={32} color="#718583" />
+            <span className="custom-tooltip">Перевод валют</span>
           </button>  
         </div>      
         
@@ -444,6 +446,7 @@ function App() {
           <input type="datetime-local" name="date" placeholder="Дата" value={form.date} onChange={handleChange} style={{ marginTop: 0, marginBottom: 0 }} />
           <button onClick={() => setShowCalc(true)} title="Калькулятор переводов" className="settings-icon-btn custom-tooltip-parent" aria-label="Калькулятор переводов">
             <BiCalculator size={32} color="#718583" />
+            <span className="custom-tooltip">Калькулятор переводов</span>
           </button>
         </div>  
           
@@ -479,9 +482,7 @@ function App() {
           Добавить в список
         </button>
           {isFormValid() && (
-            <span className="add-expense-hint">
-              ← жмакни, чтоб добавить
-            </span>
+            <span className="add-expense-hint"> {'\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0жмакни, чтоб добавить'} </span>
           )}
       </div>
 

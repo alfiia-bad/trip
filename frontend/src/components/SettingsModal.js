@@ -216,7 +216,7 @@ export default function SettingsModal({ onClose, participants, setParticipants, 
                     aria-label={`Удалить валюту ${c}`}
                   >
                     <BiTrash />
-                    <span className="custom-tooltip">удаление валюты</span>
+                    <span className="custom-tooltip">удалить валюту</span>
                   </button>
                 </div>
               </div>
